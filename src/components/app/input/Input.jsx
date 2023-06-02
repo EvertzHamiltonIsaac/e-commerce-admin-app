@@ -1,17 +1,17 @@
 import React from "react";
 
-const Input = ({labelValue, Id, type = 'text', placeholder, classNameInput = "form-control", classNameLabel = 'form-label'}) => {
+const Input = ({labelValue, Id, type = 'text', placeholder, classNameInput, classNameLabel = 'form-label'}) => {
   return (
-    <div className="mb-3">
-      <label htmlFor={`${Id && Id}`} className={`${classNameLabel}`}>
-        {labelValue && labelValue}
-      </label>
+    <div className="form-floating mb-3">
       <input
         type={`${type}`}
-        className={`${classNameInput}`}
-        id={`${Id && Id}`}
-        placeholder={`${placeholder && placeholder}`}
+        className={`form-control ${classNameInput}`}
+        id={`${Id}`}
+        placeholder={`${labelValue}`}
       />
+      <label htmlFor={`${labelValue}`} className={`${classNameLabel}`}>
+        {labelValue && labelValue}
+      </label>
     </div>
   );
 };

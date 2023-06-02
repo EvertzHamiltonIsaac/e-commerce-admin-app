@@ -1,12 +1,19 @@
 .form-login-container {
     background-color: var(--color-white);
-    max-width: 35em;
+    max-width: 30em;
     min-width: 20em;
-    margin-top: 10em;
+    margin-top: 15em;
+}
+
+.form-backdrop-filter {
+    backdrop-filter: blur(0.5em);
+    min-Height: 100vh;
+    width: 100%;
+    padding: 1em 1em 1em 1em;
 }
 
 .form-login-background {
     background-image: url("../../../public/wave.svg");
-    background-repeat: repeat;
-    /* filter: blur(1em); */
+    background-repeat: no-repeat;
+    background-size: cover;
 }
