@@ -1,3 +1,9 @@
+:root{
+  --color-red-wine: #7B241C;
+  --color-red-wine-darker: #641E16;
+  --color-white: #FFFFFF;
+}
+
 body{
   font-family: 'Roboto', sans-serif;
 }

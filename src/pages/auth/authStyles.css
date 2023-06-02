@@ -1,0 +1,12 @@
+.form-login-container {
+    background-color: var(--color-white);
+    max-width: 35em;
+    min-width: 20em;
+    margin-top: 10em;
+}
+
+.form-login-background {
+    background-image: url("../../../public/wave.svg");
+    background-repeat: repeat;
+    /* filter: blur(1em); */
+}
