@@ -64,6 +64,7 @@ const Login = () => {
             type="submit"
             value="Login"
             className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
+            style={{border: 'none'}}
           />
           <Link to={'forgot-password'} className="text-muted">
             Forgot password?
@@ -72,7 +73,7 @@ const Login = () => {
 
         <div className="d-flex align-items-center justify-content-center pb-4">
           <p className="mb-0 me-2">Don't have an account?</p>
-          <Link to={''} style={{color: 'red'}}>Create new</Link>
+          <Link to={''} style={{color: '#393B44'}}>Create new</Link>
         </div>
       </form>
     </LoginContainer>

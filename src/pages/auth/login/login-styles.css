@@ -21,10 +21,10 @@
   background: #fccb90;
   
   /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to right, #f8312c, #d60c08);
+  background: -webkit-linear-gradient(to right, #393B44, #393B44);
   
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: linear-gradient(to right, #f8312c, #d60c08);
+  background: linear-gradient(to right, #393B44, #393B44);
   }
   
   @media (min-width: 768px) {

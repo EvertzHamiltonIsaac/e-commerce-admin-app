@@ -17,7 +17,7 @@ import React from 'react';
  * @param {ILoginContainer} props - reference to props of LoginContainer
  */
 
-const LoginContainer = ({ children, image, title, rightMessageTitle, rightMessage, widthImage = 185, backgroundColor = "#eee" }) => {
+const LoginContainer = ({ children, image, title, rightMessageTitle, rightMessage, widthImage = 185, backgroundColor = "#CCCCCC" }) => {
   // console.log(rightMessageTitle);
   return (
     <article className="h-100 gradient-form" style={{ backgroundColor: backgroundColor, minHeight: '100vh' }}>
