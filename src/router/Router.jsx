@@ -1,7 +1,7 @@
 import React from 'react'
 import { BrowserRouter as BsRouter, Routes, Route } from 'react-router-dom'
 import Dashboard from '../pages/dashboard/Dashboard'
-import Login from '../pages/auth/Login'
+import Login from '../pages/auth/login/Login'
 import ResetPassword from '../pages/auth/ResetPassword'
 import ForgotPassword from '../pages/auth/ForgotPassword'
 import MainLayout from '../components/Layout/MainLayout'
