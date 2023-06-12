@@ -65,7 +65,7 @@ const Login = () => {
             value="Login"
             className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
           />
-          <Link to={''} className="text-muted">
+          <Link to={'forgot-password'} className="text-muted">
             Forgot password?
           </Link>
         </div>
