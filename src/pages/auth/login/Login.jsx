@@ -42,7 +42,13 @@ const Login = () => {
   };
 
   return (
-    <LoginContainer title="Sign In" rightMessageTitle="Welcome to Ginger Admin" rightMessage={message} image="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp">
+    <LoginContainer 
+    title="Sign In" 
+    rightMessageTitle="Welcome to Ginger Admin" 
+    rightMessage={message} 
+    image="public\Mesa de trabajo 1.png"
+    rightImage="public\Mesa de trabajo 1.png"
+    >
       <form onSubmit={handleOnSubmit}>
         <p>Please login to your account</p>
         {

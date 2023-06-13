@@ -7,6 +7,7 @@ import React from 'react';
  * @property {string} title
  * @property {string} rightMessageTitle
  * @property {string} rightMessage
+ * @property {string} rightImage
  * @property {number} widthImage
  * @property {string} backgroundColor
  * @property {ReactNode} children 
@@ -17,7 +18,7 @@ import React from 'react';
  * @param {ILoginContainer} props - reference to props of LoginContainer
  */
 
-const LoginContainer = ({ children, image, title, rightMessageTitle, rightMessage, widthImage = 185, backgroundColor = "#eee" }) => {
+const LoginContainer = ({ children, image, rightImage, title, rightMessageTitle, rightMessage, widthImage = 185, backgroundColor = "#CCCCCC" }) => {
   // console.log(rightMessageTitle);
   return (
     <article className="h-100 gradient-form" style={{ backgroundColor: backgroundColor, minHeight: '100vh' }}>
@@ -42,7 +43,7 @@ const LoginContainer = ({ children, image, title, rightMessageTitle, rightMessag
                 <div className="col-lg-6 d-flex align-items-center justify-content-center gradient-custom-2">
                   <div className="text-white px-3 py-4 p-md-5 mx-md-4" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '.9em'}}>
                     <div style={{width: '250px', backgroundColor: 'white', borderRadius: '1em'}}>
-                      <img  style={{width:'100%'}} src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" alt="logo" />
+                      <img  style={{width:'100%'}} src={`${rightImage}`} alt="" />
                     </div>
                     <h4 className="mb-4">{rightMessageTitle}</h4>
                     <p className="small mb-0 text-center">

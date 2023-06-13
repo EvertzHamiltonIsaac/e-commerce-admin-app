@@ -42,7 +42,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <LoginContainer title="Reset Password">
+    <LoginContainer title="Reset Password" image="\Mesa de trabajo 1.png" rightImage="\Mesa de trabajo 1.png">
       <form onSubmit={handleOnSubmit}>
         <p>Fill in both fields</p>
         {

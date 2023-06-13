@@ -34,7 +34,13 @@ const ForgotPassword = () => {
   };
 
   return (
-    <LoginContainer title="Forgot your Password?" rightMessageTitle="Recover your Password">
+    <LoginContainer 
+    title="Forgot your Password?"
+     rightMessageTitle="Recover your Password"
+     image="\Mesa de trabajo 1.png"
+     rightImage="\Mesa de trabajo 1.png"
+     >
+
       <form onSubmit={handleOnSubmit}>
         <p>Please enter you e-mail to send reset password mail</p>
         {

@@ -2,63 +2,56 @@ import { Button, Layout, Menu, theme } from "antd";
 import { useState } from "react";
 import { ItemsLayout } from "../../utils/ItemsLayout";
 import './layoutStyles.css';
-
+import { Outlet } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
-
+import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai"
+import { IoIosNotifications } from "react-icons/io"
 
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { token: { colorBgContainer }, } = theme.useToken();
-
+  //! En la linea 33 debes hacer una logica para que coja la inicial del primer nombre y el primer apellido.
+  //! Centrarlo un poco mas tambien.
   console.log(ItemsLayout);
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed} style={{backgroundColor: 'var(--color-black-main)'}}>
-        <div className="logo" style={{
-          display: 'flex', 
-          justifyContent: 'center', 
-          gap: `${collapsed === false ? '1em' : '0em'}`, 
-          alignItems: 'center',
-          backgroundColor: 'var(--color-red-wine)',
-          padding: '2.5em'
-          }}>
-          <div style={{ width: '50px', backgroundColor: 'white', padding: '5px', borderRadius: '.5em' }}><img style={{ width: '100%' }} src="https://companieslogo.com/img/orig/AMZN-e9f942e4.png?t=1632523695" alt="Imagen" /></div>
-          <div style={{width: `${collapsed ? '0em' : 'auto'}`, overflow: 'hidden', transition: 'width 1s ease'}}>
-            <h6>Ginger Admin</h6>
-          </div>
+      <Sider trigger={null} collapsible collapsed={collapsed} style={{ backgroundColor: 'var(--color-black-main)' }}>
+        <div className="logo">
+          <span>Hola</span>
+          {/* <img style={{ width: '160px'}} src="public\Mesa de trabajo 7.png" alt="Imagen" /> */}
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={[""]} items={ItemsLayout} className="admin__options"/>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={[""]} items={ItemsLayout} className="admin__options" />
       </Sider>
       <Layout>
-        <Header
-          style={{
-            padding: 0,
-            backgroundColor: 'white'
-            // background: colorBgContainer,
-          }}
-        >
-          <Button
-            type="text"
-            // icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
+        <Header className="layout-header">
+          <Button className="layout-header-sider-button" icon={collapsed ? <AiOutlineMenuUnfold /> : <AiOutlineMenuFold />} onClick={() => setCollapsed(!collapsed)} />
+
+          <div className="layout-header-user-info-container">
+            <div className="header-notification-icon-container position-relative">
+              <IoIosNotifications className="fs-4"/>
+              <span className="badge rounded-circle p-1 position-absolute">3</span>
+            </div>
+
+            <div className="header-user-info-img-container">
+              <img src="public\persona-e1533759204552.jpg" alt="" />
+            </div>
+            <div className="header-user-info-container">
+              <h6>Evertz Hamilton</h6>
+              <p>EvertzHamilton@gmail.com</p>
+            </div>
+          </div>
+
         </Header>
         <Content
           style={{
             margin: "24px 16px",
             padding: 24,
             minHeight: 280,
-            // background: colorBgContainer,
             backgroundColor: 'white'
           }}
         >
-          Content
+          <Outlet />
         </Content>
       </Layout>
     </Layout>

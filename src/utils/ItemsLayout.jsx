@@ -1,119 +1,102 @@
 import { UploadOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { AiOutlineDashboard } from 'react-icons/ai';
-
+import { AiFillDashboard } from 'react-icons/ai';
+import { FaClipboardList, FaStore, FaTruckLoading, FaUsers, FaTruckMoving,FaBlogger } from "react-icons/fa";
+import { MdShelves } from 'react-icons/md';
+import {BiCategoryAlt} from 'react-icons/bi'
+import {IoMdColorPalette} from 'react-icons/io'
 export const ItemsLayout = [
   {
     key: "",
-    icon: <AiOutlineDashboard/>,
+    icon: <AiFillDashboard/>,
     label: "DashBoard",
   },
   {
     key: "customers",
-    icon: <VideoCameraOutlined />,
+    icon: <FaUsers/> ,
     label: "Customers",
   },
   {
     key: "catalog",
-    icon: <UploadOutlined />,
+    icon: <MdShelves />,
     label: "Catelog",
     children: [
       {
-        key: "products",
-        icon: <VideoCameraOutlined />,
+        key: "add-products",
+        icon: <FaTruckLoading />,
         label: "Add Product",
       },
       {
         key: "list-product",
-        icon: <VideoCameraOutlined />,
+        icon: <FaClipboardList />,
         label: "Product List",
       },
       {
-        key: "brand",
-        icon: <VideoCameraOutlined />,
+        key: "brand", //! Ojo a esta.
+        icon: <FaStore />,
         label: "Brand",
       },
       {
         key: "list-brand",
-        icon: <VideoCameraOutlined />,
+        icon: <FaClipboardList />,
         label: "Bran List",
       },
       {
         key: "category",
-        icon: <VideoCameraOutlined />,
+        icon: <BiCategoryAlt />,
         label: "Category",
       },
       {
         key: "list-category",
-        icon: <VideoCameraOutlined />,
+        icon: <FaClipboardList />,
         label: "Category List",
       },
       {
         key: "color",
-        icon: <VideoCameraOutlined />,
+        icon: <IoMdColorPalette />,
         label: "Color",
       },
       {
         key: "list-color",
-        icon: <VideoCameraOutlined />,
+        icon: <FaClipboardList />,
         label: "Color List",
       },
     ]
   },
   {
     key: "orders",
-    icon: <VideoCameraOutlined />,
+    icon: <FaTruckMoving />,
     label: "Orders",
   },
   {
     key: "blog",
-    icon: <UploadOutlined />,
+    icon: <FaBlogger />,
     label: "Blogs",
     children: [
       {
-        key: "products",
+        key: "add-blog",
         icon: <VideoCameraOutlined />,
-        label: "Add Product",
+        label: "Add Blog",
       },
       {
-        key: "list-product",
-        icon: <VideoCameraOutlined />,
-        label: "Product List",
+        key: "list-blog",
+        icon: <FaClipboardList />,
+        label: "Blog List",
       },
       {
-        key: "brand",
-        icon: <VideoCameraOutlined />,
-        label: "Brand",
+        key: "add-blog-category",
+        icon: <BiCategoryAlt />,
+        label: "Add Blog Category",
       },
       {
-        key: "list-brand",
-        icon: <VideoCameraOutlined />,
-        label: "Bran List",
-      },
-      {
-        key: "category",
-        icon: <VideoCameraOutlined />,
-        label: "Category",
-      },
-      {
-        key: "list-category",
-        icon: <VideoCameraOutlined />,
-        label: "Category List",
-      },
-      {
-        key: "color",
-        icon: <VideoCameraOutlined />,
-        label: "Color",
-      },
-      {
-        key: "list-color",
-        icon: <VideoCameraOutlined />,
-        label: "Color List",
+        key: "blog-category-list",
+        icon: <FaClipboardList />,
+        label: "Blog Category List",
       },
     ]
   },
   {
     key: "enquiries",
-    icon: <VideoCameraOutlined />,
+    icon: <FaClipboardList />,
     label: "Enquiries",
   },
 ];
