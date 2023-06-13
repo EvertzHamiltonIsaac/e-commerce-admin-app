@@ -1,8 +1,141 @@
 import React from 'react'
+import './style.css'
+import CardHeader from '../../components/pages/dashboard/dashboardCardHeader/CardHeader'
+import GraphicColumns from '../../components/pages/dashboard/dashboardGraphic/GraphicColumns'
+import { Table } from 'antd';
 
 const Dashboard = () => {
+
+  const CardHeaderInfo = [
+    {
+      title: 'Total',
+      amount: 1000,
+      comparedText: 'compared to Abril 2021',
+      porcent: 47.7
+    },
+    {
+      title: 'Total',
+      amount: 2000,
+      comparedText: 'compared to Abril 2021',
+      porcent: 47.7
+    },
+    {
+      title: 'Total',
+      amount: 3000,
+      comparedText: 'compared to Abril 2021',
+      porcent: 47.7
+    },
+  ]
+  const data = [
+    {
+      type: 'Jan',
+      sales: 38,
+    },
+    {
+      type: 'Feb',
+      sales: 52,
+    },
+    {
+      type: 'Mar',
+      sales: 61,
+    },
+    {
+      type: 'Apr',
+      sales: 145,
+    },
+    {
+      type: 'May',
+      sales: 48,
+    },
+    {
+      type: 'Jun',
+      sales: 38,
+    },
+    {
+      type: 'Jul',
+      sales: 38,
+    },
+    {
+      type: 'Aug',
+      sales: 38,
+    },
+    {
+      type: 'Sep',
+      sales: 38,
+    },
+    {
+      type: 'Oct',
+      sales: 38,
+    },
+    {
+      type: 'Nov',
+      sales: 38,
+    },
+    {
+      type: 'Dec',
+      sales: 38,
+    },
+  ];
+
+  const config = {
+    data,
+    xField: 'type',
+    yField: 'sales',
+    label: {
+      // 可手动配置 label 数据标签位置
+      position: 'middle',
+      // 'top', 'bottom', 'middle',
+      // 配置样式
+      style: {
+        fill: '#FFFFFF',
+        opacity: 0.6,
+      },
+    },
+    xAxis: {
+      label: {
+        autoHide: true,
+        autoRotate: false,
+      },
+    },
+    meta: {
+      type: {
+        alias: '类别',
+      },
+      sales: {
+        alias: '销售额',
+      },
+    },
+  };
+
   return (
-    <div>Dashboard</div>
+    <section className="dashboard">
+      <section className="dashboardHeader">
+        <article className="dashboardHeader__title">
+          <h2>Dashboard</h2>
+        </article>
+        <article className="dashboardHeader__card-container">
+          {
+            CardHeaderInfo.map((item, index) => (
+              <CardHeader
+                title={`${item.title}`}
+                amount={item.amount}
+                comparedText={`${item.comparedText}`}
+                porcent={item.porcent}
+              />
+            )) 
+          }
+        </article>
+      </section>
+      <section className='mt-4'>
+        <h3 className='mb-5'>Income Statics</h3>
+        <article>
+          <GraphicColumns config={config}/>
+        </article>
+      </section>
+      <section className='mt-4'>
+          <h3 className='mb-4'>Recent Orders</h3>
+      </section>
+    </section>
   )
 }
 

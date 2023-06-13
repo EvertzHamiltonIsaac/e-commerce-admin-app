@@ -13,7 +13,6 @@ const MainLayout = () => {
   const { token: { colorBgContainer }, } = theme.useToken();
   //! En la linea 33 debes hacer una logica para que coja la inicial del primer nombre y el primer apellido.
   //! Centrarlo un poco mas tambien.
-  console.log(ItemsLayout);
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed} style={{ backgroundColor: 'var(--color-black-main)' }}>
@@ -29,7 +28,7 @@ const MainLayout = () => {
 
           <div className="layout-header-user-info-container">
             <div className="header-notification-icon-container position-relative">
-              <IoIosNotifications className="fs-4"/>
+              <IoIosNotifications className="fs-4" />
               <span className="badge rounded-circle p-1 position-absolute">3</span>
             </div>
 

@@ -1,0 +1,7 @@
+.dashboardHeader__card-container{
+  display: flex;
+  justify-content: space-between;
+  flex-grow: 0;
+  /*! Reparar esto flex-wrap: wrap; */
+  gap: .5em;
+}
