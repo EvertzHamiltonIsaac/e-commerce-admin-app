@@ -46,8 +46,8 @@ const Login = () => {
     title="Sign In" 
     rightMessageTitle="Welcome to Ginger Admin" 
     rightMessage={message} 
-    image="public\Mesa de trabajo 1.png"
-    rightImage="public\Mesa de trabajo 1.png"
+    image="/Mesa de trabajo 1.png"
+    rightImage="/Mesa de trabajo 1.png"
     >
       <form onSubmit={handleOnSubmit}>
         <p>Please login to your account</p>
@@ -71,7 +71,7 @@ const Login = () => {
             value="Login"
             className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
           />
-          <Link to={'forgot-password'} className="text-muted">
+          <Link to={'/auth/forgot-password'} className="text-muted">
             Forgot password?
           </Link>
         </div>

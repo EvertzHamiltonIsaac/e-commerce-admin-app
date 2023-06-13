@@ -11,7 +11,7 @@ const Router = () => {
     <BsRouter>
         <Routes>
             <Route path='/auth'>
-                <Route index element={<Login/>}/>
+                <Route path='sign-in' element={<Login/>}/>
                 <Route path='reset-password' element={<ResetPassword/>}/>
                 <Route path='forgot-password' element={<ForgotPassword/>}/>
             </Route>
