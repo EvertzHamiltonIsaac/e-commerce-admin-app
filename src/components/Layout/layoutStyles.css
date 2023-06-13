@@ -1,12 +1,16 @@
 main{
     overflow-y: scroll;
     background-color: transparent !important;
+    height: 85vh;
+}
+
+main::-webkit-scrollbar{
+    width: 0;
 }
 
 h6{
     margin: 0 !important;
 }
-
 
 .trigger{
     padding: 0 24px;
