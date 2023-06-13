@@ -1,12 +1,7 @@
-import {
-  MenuFoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import { useState } from "react";
-import './layoutStyles.css'
+import { ItemsLayout } from "../../utils/ItemsLayout";
+import './layoutStyles.css';
 
 const { Header, Sider, Content } = Layout;
 
@@ -15,33 +10,25 @@ const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { token: { colorBgContainer }, } = theme.useToken();
-  
+
+  console.log(ItemsLayout);
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "nav 1",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "nav 2",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "nav 3",
-            },
-          ]}
-        />
+      <Sider trigger={null} collapsible collapsed={collapsed} style={{backgroundColor: 'var(--color-black-main)'}}>
+        <div className="logo" style={{
+          display: 'flex', 
+          justifyContent: 'center', 
+          gap: `${collapsed === false ? '1em' : '0em'}`, 
+          alignItems: 'center',
+          backgroundColor: 'var(--color-red-wine)',
+          padding: '2.5em'
+          }}>
+          <div style={{ width: '50px', backgroundColor: 'white', padding: '5px', borderRadius: '.5em' }}><img style={{ width: '100%' }} src="https://companieslogo.com/img/orig/AMZN-e9f942e4.png?t=1632523695" alt="Imagen" /></div>
+          <div style={{width: `${collapsed ? '0em' : 'auto'}`, overflow: 'hidden', transition: 'width 1s ease'}}>
+            <h6>Ginger Admin</h6>
+          </div>
+        </div>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={[""]} items={ItemsLayout} className="admin__options"/>
       </Sider>
       <Layout>
         <Header

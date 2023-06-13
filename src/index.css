@@ -2,6 +2,8 @@
   --color-red-wine: #7B241C;
   --color-red-wine-darker: #641E16;
   --color-white: #FFFFFF;
+  --color-black-main: #393B44;
+  --color-gray-main: #CCCCCC;
 }
 *{
   margin: 0;
