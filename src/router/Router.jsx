@@ -14,6 +14,7 @@ import BrandList from '../pages/catelog/brand/list-brand/BrandList'
 import ProductList from '../pages/catelog/product/list-product/ProductList'
 import CategoryList from '../pages/catelog/category/list-category/CategoryList'
 import ColorList from '../pages/catelog/color/list-color/ColorList'
+import AddBlog from '../pages/blog/add-blog/AddBlog'
 
 const Router = () => {
   return (
@@ -30,7 +31,7 @@ const Router = () => {
           <Route index element={<Dashboard />} />
 
           {/* Blog pages */}
-          <Route path='add-blog' element={<Dashboard />} />
+          <Route path='add-blog' element={<AddBlog />} />
           <Route path='list-blog' element={<BlogList />} />
           <Route path='add-blog-category' element={<Dashboard />} />
           <Route path='blog-category-list' element={<BlogCategoryList />} />
