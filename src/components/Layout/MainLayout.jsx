@@ -2,15 +2,31 @@ import { Button, Layout, Menu, theme } from "antd";
 import { useState } from "react";
 import { ItemsLayout } from "../../utils/ItemsLayout";
 import './layoutStyles.css';
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai"
 import { IoIosNotifications } from "react-icons/io"
 
+/**
+   * @typedef {Object} IHandleOnClick
+   * @property {string} key
+   * 
+   * @param {IHandleOnClick} key 
+   */
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { token: { colorBgContainer }, } = theme.useToken();
+  const navigate = useNavigate();
+
+  const handleOnClick = ({key}) => {
+    if(key === 'signout'){
+      //! Nada Todavia
+    }else{
+      navigate(key);
+    }
+  };
+  
   //! En la linea 33 debes hacer una logica para que coja la inicial del primer nombre y el primer apellido.
   //! Centrarlo un poco mas tambien.
   return (
@@ -20,7 +36,16 @@ const MainLayout = () => {
           <span>Hola</span>
           {/* <img style={{ width: '160px'}} src="public\Mesa de trabajo 7.png" alt="Imagen" /> */}
         </div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={[""]} items={ItemsLayout} className="admin__options" />
+        <Menu 
+        
+        theme="dark" 
+        mode="inline" 
+        defaultSelectedKeys={[""]} 
+        items={ItemsLayout} 
+        className="admin__options" 
+        onClick={(key) => handleOnClick(key)}
+
+        />
       </Sider>
       <Layout>
         <Header className="layout-header">
