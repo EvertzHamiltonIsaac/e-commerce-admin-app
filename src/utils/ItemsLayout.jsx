@@ -1,5 +1,5 @@
 import { UploadOutlined, VideoCameraOutlined } from "@ant-design/icons";
-import { AiFillDashboard } from 'react-icons/ai';
+import { AiFillDashboard, AiFillPlusCircle } from 'react-icons/ai';
 import { FaClipboardList, FaStore, FaTruckLoading, FaUsers, FaTruckMoving,FaBlogger } from "react-icons/fa";
 import { MdShelves } from 'react-icons/md';
 import {BiCategoryAlt} from 'react-icons/bi'
@@ -38,7 +38,7 @@ export const ItemsLayout = [
       {
         key: "list-brand",
         icon: <FaClipboardList />,
-        label: "Bran List",
+        label: "Brand List",
       },
       {
         key: "category",
@@ -74,7 +74,7 @@ export const ItemsLayout = [
     children: [
       {
         key: "add-blog",
-        icon: <VideoCameraOutlined />,
+        icon: <AiFillPlusCircle />,
         label: "Add Blog",
       },
       {

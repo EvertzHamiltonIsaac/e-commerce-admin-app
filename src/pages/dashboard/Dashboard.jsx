@@ -113,25 +113,30 @@ const config = {
 
 const columns = [
   {
+    title: 'No.',
+    dataIndex: 'key',
+  },
+  {
     title: 'Name',
     dataIndex: 'name',
   },
   {
-    title: 'Age',
-    dataIndex: 'age',
+    title: 'Product',
+    dataIndex: 'product',
   },
   {
-    title: 'Address',
-    dataIndex: 'address',
+    title: 'Status',
+    dataIndex: 'status',
   },
+
 ];
 const dataTable = [];
 for (let i = 0; i < 46; i++) {
   dataTable.push({
     key: i,
     name: `Edward King ${i}`,
-    age: 32,
-    address: `London, Park Lane no. ${i}`,
+    product: `product ${i}`,
+    status: `London, Park Lane no. ${i}`,
   });
 }
 
@@ -168,6 +173,9 @@ const Dashboard = () => {
           <article>
             <TableComponent data={dataTable} columns={columns}/>
           </article>
+      </section>
+      <section className='mt-4'>
+          <h3 className="mb-4">Recent Reviews</h3>
       </section>
     </section>
   )
