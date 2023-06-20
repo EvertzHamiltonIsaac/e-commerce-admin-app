@@ -31,10 +31,9 @@ const MainLayout = () => {
   //! Centrarlo un poco mas tambien.
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed} style={{ backgroundColor: 'var(--color-black-main)' }}>
-        <div className="logo">
-          <span>Hola</span>
-          {/* <img style={{ width: '160px'}} src="public\Mesa de trabajo 7.png" alt="Imagen" /> */}
+      <Sider className="shadow-sm" trigger={null} collapsible collapsed={collapsed} style={{ backgroundColor: 'var(--color-blue-secundary)' }}>
+        <div className="logo shadow-sm p-1">
+          <img className={`${collapsed ? '' : 'logo_image_none_collapsed'}`} src={`${collapsed ? '' : '/logo_column.png'}`} alt="Imagen" onClick={() => setCollapsed(!collapsed)} />
         </div>
         <Menu 
         
@@ -42,15 +41,13 @@ const MainLayout = () => {
         mode="inline" 
         defaultSelectedKeys={[""]} 
         items={ItemsLayout} 
-        className="admin__options" 
+        className="admin__options mt-1" 
         onClick={(key) => handleOnClick(key)}
 
         />
       </Sider>
       <Layout>
-        <Header className="layout-header">
-          <Button className="layout-header-sider-button" icon={collapsed ? <AiOutlineMenuUnfold /> : <AiOutlineMenuFold />} onClick={() => setCollapsed(!collapsed)} />
-
+        <Header className="layout-header shadow-sm">
           <div className="layout-header-user-info-container">
             <div className="header-notification-icon-container position-relative">
               <IoIosNotifications className="fs-4" />
@@ -58,7 +55,7 @@ const MainLayout = () => {
             </div>
 
             <div className="header-user-info-img-container">
-              <img src="public\persona-e1533759204552.jpg" alt="" />
+              <img src="/persona-e1533759204552.jpg" alt="" />
             </div>
             <div className="header-user-info-container">
               <h6>Evertz Hamilton</h6>

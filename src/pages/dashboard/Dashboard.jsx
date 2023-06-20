@@ -110,7 +110,6 @@ const config = {
 };
 
 //! Data for Table 
-
 const columns = [
   {
     title: 'No.',
@@ -130,6 +129,7 @@ const columns = [
   },
 
 ];
+
 const dataTable = [];
 for (let i = 0; i < 46; i++) {
   dataTable.push({

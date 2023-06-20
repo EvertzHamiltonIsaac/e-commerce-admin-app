@@ -27,6 +27,7 @@ h6{
 .ant-layout{
     min-height: 100vh;
 }
+
 .ant-layout-sider {
     flex: 0 0 250px !important;
     max-width: 250px !important;
@@ -35,24 +36,30 @@ h6{
 }
 
 .ant-layout-sider-collapsed{
-    flex: 0 0 65px !important;
-    max-width: 65px !important;
-    min-width: 65px !important;
-    width: 65px !important;
+    flex: 0 0 100px !important;
+    max-width: 100px !important;
+    min-width: 100px !important;
+    width: 100px !important;
 }
 
 .logo{
-    width: '100%';
-    height: 55px;
-    justify-items: start;
+    width: 100%;
+    height: 90px;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    margin: 0;
-    
-    background-color: var(--color-red-wine-darker);
+    background-color: var(--color-blue-secundary);
+}
+
+.logo_image_none_collapsed{
+    width: 50%;
+    background-color: white;
+    border-radius: 1em;
+    cursor: pointer;
 }
 
 .admin__options{
-    background-color: var(--color-black-main);
+    background-color: var(--color-blue-secundary);
 }
 
 .ant-menu-title-content {
@@ -61,7 +68,7 @@ h6{
 
 .ant-layout-header{
     line-height: 0px !important;
-    height: 55px !important;
+    height: 80px !important;
 }
 
 .ant-menu-item-icon{
@@ -69,23 +76,23 @@ h6{
 }
 
 .ant-menu-item-active{
-    background-color: var(--color-red-wine) !important;
+    background-color: var(--color-blue-main) !important;
 }
 
 .ant-menu-submenu-active{
-    background-color: var(--color-red-wine) !important;
+    background-color: var(--color-blue-main) !important;
 }
 
 .ant-menu-item-selected{
-    background-color: var(--color-red-wine) !important;
+    background-color: var(--color-blue-main) !important;
 }
 
 .layout-header{
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
     width: 100%;
     padding: 0;
-    background-color: var(--color-black-main);
+    background-color: var(--color-blue-main);
 }
 
 .layout-header-sider-button{
@@ -94,7 +101,7 @@ h6{
     /* background-color: #1890ff; */
     color: white;
 
-    background-color: var(--color-black-main);
+    background-color: var(--color-blue-secundary);
     width: 35px !important;
     height: 50px;
     
@@ -110,7 +117,7 @@ h6{
 
 .layout-header-sider-button:hover{
     color: #fff !important;
-    background-color: var(--color-red-wine);
+    background-color: var(--color-blue-main);
 }
 
 .layout-header-user-info-container{
@@ -148,7 +155,7 @@ h6{
 }
 
 .badge{
-    background-color: var(--color-red-wine);
+    background-color: var(--color-blue-secundary);
     top: -9px;
     right: -6px;
 }
