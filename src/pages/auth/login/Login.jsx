@@ -44,10 +44,11 @@ const Login = () => {
   return (
     <LoginContainer 
     title="Sign In" 
+    backgroundColor="#EEEEEE"
     rightMessageTitle="Welcome to Ginger Admin" 
     rightMessage={message} 
-    image="public\Mesa de trabajo 1.png"
-    rightImage="public\Mesa de trabajo 1.png"
+    image="/logo_column.png"
+    rightImage="/logo_column.png"
     >
       <form onSubmit={handleOnSubmit}>
         <p>Please login to your account</p>
@@ -78,7 +79,7 @@ const Login = () => {
 
         <div className="d-flex align-items-center justify-content-center pb-4">
           <p className="mb-0 me-2">Don't have an account?</p>
-          <Link to={''} style={{color: 'red'}}>Create new</Link>
+          <Link to={''} style={{color: 'var(--color-blue-main)'}}>Create new</Link>
         </div>
       </form>
     </LoginContainer>

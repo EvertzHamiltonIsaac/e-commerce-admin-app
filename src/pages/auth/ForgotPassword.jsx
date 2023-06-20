@@ -35,10 +35,12 @@ const ForgotPassword = () => {
 
   return (
     <LoginContainer 
-    title="Forgot your Password?"
+     title="Forgot your Password?"
+     backgroundColor="#EEEEEE"
      rightMessageTitle="Recover your Password"
-     image="\Mesa de trabajo 1.png"
-     rightImage="\Mesa de trabajo 1.png"
+     rightMessage="Don't worry, it happens to the best of us. Please enter your email address below, and we'll send you a link to reset your password. Make sure to check your spam folder if you don't receive it within a few minutes."
+     image="/logo_column.png"
+     rightImage="/logo_column.png"
      >
 
       <form onSubmit={handleOnSubmit}>
@@ -68,7 +70,7 @@ const ForgotPassword = () => {
         <div className="d-flex align-items-center justify-content-center pb-4">
           <div className="d-flex align-items-center justify-content-center pb-4">
             <p className="mb-0 me-2">Don't have an account?</p>
-            <Link to={''} style={{ color: 'red' }}>Create new</Link>
+            <Link to={''} style={{ color: 'var(--color-blue-main)' }}>Create new</Link>
           </div>
         </div>
       </form>

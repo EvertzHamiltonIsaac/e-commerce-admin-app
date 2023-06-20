@@ -45,7 +45,7 @@ const LoginContainer = ({ children, image, rightImage, title, rightMessageTitle,
                     <div style={{width: '250px', backgroundColor: 'white', borderRadius: '1em'}}>
                       <img  style={{width:'100%'}} src={`${rightImage}`} alt="" />
                     </div>
-                    <h4 className="mb-4">{rightMessageTitle}</h4>
+                    <h4 className="mb-1">{rightMessageTitle}</h4>
                     <p className="small mb-0 text-center">
                       {rightMessage}
                     </p>
