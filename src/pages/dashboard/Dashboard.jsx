@@ -184,9 +184,9 @@ const Dashboard = () => {
         </article>
       </section>
       </div>
-      <section className='mt-4'>
+      {/* <section className='mt-4'>
           <h3 className="mb-4">Recent Reviews</h3>
-      </section>
+      </section> */}
     </section>
   )
 }

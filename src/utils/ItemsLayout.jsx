@@ -68,7 +68,7 @@ export const ItemsLayout = [
     label: "Orders",
   },
   {
-    key: "blog",
+    key: "blogs",
     icon: <FaBlogger />,
     label: "Blogs",
     children: [

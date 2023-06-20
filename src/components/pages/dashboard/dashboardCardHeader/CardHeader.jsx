@@ -19,8 +19,8 @@ const CardHeader = ({ title, amount, comparedText, porcent, className }) => {
         {title}
       </header>
       <div className='cardHeader_body'>
-        {amount}
-        <span>{porcent}</span>
+        ${amount}
+        <span>% {porcent}</span>
       </div>
       <footer className='cardHeader_footer'>
         {comparedText}
