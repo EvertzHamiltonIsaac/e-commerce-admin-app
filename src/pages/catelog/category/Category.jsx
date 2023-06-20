@@ -1,7 +1,6 @@
 import React from 'react'
 import TableComponent from '../../../components/app/table/Table'
 
-
 const columns = [
   {
     title: 'No.',
@@ -31,11 +30,10 @@ for (let i = 0; i < 46; i++) {
     status: `London, Park Lane no. ${i}`,
   });
 }
-
-const BlogList = () => {
+const Category = () => {
   return (
-    <section className="blog-list">
-      <h3>Blog List</h3>
+    <section className="category-list">
+      <h3>Categories</h3>
       <article>
         <TableComponent data={dataTable} columns={columns} />
       </article>
@@ -43,4 +41,4 @@ const BlogList = () => {
   )
 }
 
-export default BlogList
+export default Category

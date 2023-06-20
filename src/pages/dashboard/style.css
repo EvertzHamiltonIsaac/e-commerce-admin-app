@@ -1,7 +1,35 @@
-.dashboardHeader__card-container{
-  display: flex;
-  justify-content: space-between;
-  flex-grow: 0;
-  /*! Reparar esto flex-wrap: wrap; */
-  gap: .5em;
+.dashboard{
+  width: 1440px;
+  max-width: 100%;
+  margin: auto;
 }
+
+.dashboardHeader{
+  width: 100%;
+  height: auto;
+  margin: auto;
+  /* background-color: aqua; */
+}
+
+.dashboardHeader__card-container{
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2em;
+  /*! Reparar esto flex-wrap: wrap; */
+}
+
+
+.dashboard_graph_orders {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+  gap: 1em;
+  flex-wrap: wrap;
+}
+
+/* .dashboard_graph {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+} */

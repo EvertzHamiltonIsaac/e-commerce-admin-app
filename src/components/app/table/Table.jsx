@@ -1,6 +1,7 @@
 import React from 'react'
 import { Table } from 'antd';
 import { useState } from 'react';
+import './styleTable.css'
 
 /**
  * 
@@ -60,6 +61,7 @@ const TableComponent = ({ data=[], columns=[] }) => {
 
   return (
     <Table 
+    className=''
     rowSelection={rowSelection} 
     columns={columns} 
     dataSource={data} 

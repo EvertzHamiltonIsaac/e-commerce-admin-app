@@ -1,5 +1,5 @@
 import React from 'react'
-import TableComponent from '../../../../components/app/table/Table'
+import TableComponent from '../../../components/app/table/Table'
 
 const columns = [
   {
@@ -31,10 +31,10 @@ for (let i = 0; i < 46; i++) {
   });
 }
 
-const ColorList = () => {
+const BlogCategory = () => {
   return (
-    <section className="color-list">
-      <h3>Colors</h3>
+    <section className="blog-category-list">
+      <h3>Blog Category List</h3>
       <article>
         <TableComponent data={dataTable} columns={columns} />
       </article>
@@ -42,4 +42,4 @@ const ColorList = () => {
   )
 }
 
-export default ColorList
+export default BlogCategory

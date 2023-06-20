@@ -1,5 +1,5 @@
 import React from 'react'
-import TableComponent from '../../../../components/app/table/Table'
+import TableComponent from '../../../components/app/table/Table'
 
 const columns = [
   {
@@ -31,7 +31,7 @@ for (let i = 0; i < 46; i++) {
   });
 }
 
-const ProductList = () => {
+const Products = () => {
   return (
     <section className="product-list">
       <h3>Products</h3>
@@ -42,4 +42,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default Products

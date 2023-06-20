@@ -21,45 +21,45 @@ export const ItemsLayout = [
     label: "Catelog",
     children: [
       {
-        key: "add-products",
+        key: "products",
         icon: <FaTruckLoading />,
-        label: "Add Product",
+        label: "Products",
       },
-      {
-        key: "list-product",
-        icon: <FaClipboardList />,
-        label: "Product List",
-      },
+      // {
+      //   key: "list-product",
+      //   icon: <FaClipboardList />,
+      //   label: "Product List",
+      // },
       {
         key: "brand", //! Ojo a esta.
         icon: <FaStore />,
         label: "Brand",
       },
-      {
-        key: "list-brand",
-        icon: <FaClipboardList />,
-        label: "Brand List",
-      },
+      // {
+      //   key: "list-brand",
+      //   icon: <FaClipboardList />,
+      //   label: "Brand List",
+      // },
       {
         key: "category",
         icon: <BiCategoryAlt />,
         label: "Category",
       },
-      {
-        key: "list-category",
-        icon: <FaClipboardList />,
-        label: "Category List",
-      },
+      // {
+      //   key: "list-category",
+      //   icon: <FaClipboardList />,
+      //   label: "Category List",
+      // },
       {
         key: "color",
         icon: <IoMdColorPalette />,
         label: "Color",
       },
-      {
-        key: "list-color",
-        icon: <FaClipboardList />,
-        label: "Color List",
-      },
+      // {
+      //   key: "list-color",
+      //   icon: <FaClipboardList />,
+      //   label: "Color List",
+      // },
     ]
   },
   {
@@ -73,25 +73,25 @@ export const ItemsLayout = [
     label: "Blogs",
     children: [
       {
-        key: "add-blog",
-        icon: <AiFillPlusCircle />,
-        label: "Add Blog",
+        key: "blog",
+        icon: <FaBlogger />,
+        label: "Blogs",
       },
+      // {
+      //   key: "list-blog",
+      //   icon: <FaClipboardList />,
+      //   label: "Blog List",
+      // },
       {
-        key: "list-blog",
-        icon: <FaClipboardList />,
-        label: "Blog List",
-      },
-      {
-        key: "add-blog-category",
+        key: "blog-category",
         icon: <BiCategoryAlt />,
-        label: "Add Blog Category",
+        label: "Blog Categories",
       },
-      {
-        key: "blog-category-list",
-        icon: <FaClipboardList />,
-        label: "Blog Category List",
-      },
+      // {
+      //   key: "blog-category-list",
+      //   icon: <FaClipboardList />,
+      //   label: "Blog Category List",
+      // },
     ]
   },
   {

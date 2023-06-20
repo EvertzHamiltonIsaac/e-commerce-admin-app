@@ -83,6 +83,13 @@ const config = {
   data: dataGraphic,
   xField: 'type',
   yField: 'sales',
+  color: ({type}) => {
+    //!Para poner colores condicionados en la grafica.
+    // if(type === 'jan' || type === 'Feb'){
+    //   return "#000000";
+    // }
+    return "#2596be"
+  },
   label: {
     // 可手动配置 label 数据标签位置
     position: 'middle',
@@ -144,11 +151,11 @@ const Dashboard = () => {
 
   return (
     <section className="dashboard">
-      <section className="dashboardHeader">
+      <section className="dashboardHeader mb-4">
         <article className="dashboardHeader__title">
           <h2>Dashboard</h2>
         </article>
-        <article className="dashboardHeader__card-container">
+        <article className="dashboardHeader__card-container mt-3">
           {
             CardHeaderInfo.map((item, index) => (
               <CardHeader
@@ -157,23 +164,26 @@ const Dashboard = () => {
                 amount={item.amount}
                 comparedText={`${item.comparedText}`}
                 porcent={item.porcent}
+                className='shadow-sm mx-auto'
               />
             )) 
           }
-        </article>
+        </article>        
       </section>
-      <section className='mt-4'>
-        <h3 className='mb-5'>Income Statics</h3>
-        <article>
-          <GraphicColumns config={config}/>
-        </article>
-      </section>
-      <section className='mt-4'>
+      <div className='dashboard_graph_orders'>
+      <section className='mt-3 p-4 bg-white rounded'>
           <h3 className='mb-4'>Recent Orders</h3>
           <article>
             <TableComponent data={dataTable} columns={columns}/>
           </article>
       </section>
+      <section className='mt-3 p-4 bg-white rounded'>
+        <h3 className='mb-5 '>Income Statics</h3>
+        <article className='dashboard_graph' style={{}}>
+          <GraphicColumns config={config}/>
+        </article>
+      </section>
+      </div>
       <section className='mt-4'>
           <h3 className="mb-4">Recent Reviews</h3>
       </section>
