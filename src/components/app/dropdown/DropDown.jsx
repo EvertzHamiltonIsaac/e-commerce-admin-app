@@ -1,40 +1,39 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react";
+import { Link } from "react-router-dom";
+import "./dropdownStyle.css"
 
 /**
  * @typedef {Object} Iitems
  * @property {string} className
  * @property {string} title
- * @property {string} href 
+ * @property {string} href
  * @property {boolean} isSeparator
- * 
+ * @property {Function} onClick
+ *
  * @typedef {Object} IDropdown
  * @property {Iitems[]} items
- * 
+ *
  * @param {IDropdown} props
  */
 
 const DropDown = ({ items }) => {
-  console.log(items);
+  // console.log(items);
   return (
-    <section className='dropdown'>
-      <ul className="dropdown-menu show">
-        {
-          items.map((item, index) => (
-            <li key={index} style={{padding: '10px', width: '100%'}}>
-              {
-                item?.isSeparator 
-                ? 
-                (<hr className="dropdown-divider" />)
-                :
-                (<Link className={`${item?.className}`} to={`${item?.href}`}>{item?.title}</Link>)
-              }
-            </li>
-          ))
-        }
-      </ul>
-    </section>
-  )
-}
+    <ul className="dropdown_container shadow-sm">
+      {items.map((item, index) => (
+        <li key={index} className={`${item?.isSeparator ? '' : 'dropdown_item'}`}>
+          {item?.isSeparator ? (
+            <div style={{backgroundColor: 'var(--color-gray-main)', height:'1px'}}></div>
+            // <hr className="dropdown-divider" />
+          ) : (
+            <Link className={`${item?.className}`} to={`${item?.href}`}>
+              {item?.title}
+            </Link>
+          )}
+        </li>
+      ))}
+    </ul>
+  );
+};
 
-export default DropDown
+export default DropDown;
