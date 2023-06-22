@@ -1,12 +1,13 @@
-import { Button, Layout, Menu, theme } from "antd";
+import { Layout, Menu, theme } from "antd";
 import { useState } from "react";
-import { ItemsLayout } from "../../utils/ItemsLayout";
-import "./layoutStyles.css";
 import { Outlet, useNavigate } from "react-router-dom";
-const { Header, Sider, Content } = Layout;
-import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
-import { IoIosNotifications } from "react-icons/io";
+import { ItemsLayout } from "../../utils/ItemsLayout";
 import DropDown from "../app/dropdown/DropDown";
+import "./layoutStyles.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser } from "@fortawesome/free-regular-svg-icons";
+import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+const { Header, Sider, Content } = Layout;
 
 /**
  * @typedef {Object} IHandleOnClick
@@ -17,22 +18,25 @@ import DropDown from "../app/dropdown/DropDown";
 
 const DropDownItems = [
   {
-    className: "",
+    className: "dropdown_item_link",
     title: "View Profile",
     href: "",
     isSeparator: false,
+    icon: <FontAwesomeIcon icon={faUser}/>
   },
   {
     className: "",
     title: "",
     href: "",
     isSeparator: true,
+    icon: ''
   },
   {
-    className: "",
+    className: "dropdown_item_link",
     title: "Sign Out",
     href: "",
     isSeparator: false,
+    icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />
   },
 ];
 
@@ -82,7 +86,7 @@ const MainLayout = () => {
       </Sider>
       <Layout>
         <Header className="layout-header shadow-sm">
-          <div className="layout-header-user-info-container dropdown">
+          <div className="layout-header-user-info-container dropdown user-select-none">
             
             {/* <div className="header-notification-icon-container position-relative">
               <IoIosNotifications className="fs-4" />
@@ -111,8 +115,7 @@ const MainLayout = () => {
             {
               showDropDown && <DropDown items={DropDownItems} />
             }
-          </div>
-          
+          </div>   
         </Header>
 
         <Content
