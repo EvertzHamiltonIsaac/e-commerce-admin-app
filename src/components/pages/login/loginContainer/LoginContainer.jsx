@@ -1,4 +1,5 @@
 import React from 'react';
+import './LoginContainerStyles.css'
 
 /**
  * Props of Login Container
@@ -40,7 +41,7 @@ const LoginContainer = ({ children, image, rightImage, title, rightMessageTitle,
                     {children}
                   </div>
                 </div>
-                <div className="col-lg-6 d-flex align-items-center justify-content-center gradient-custom-2">
+                <div className="col-lg-6 d-flex align-items-center justify-content-center gradient-custom-2 container_information">
                   <div className="text-white px-3 py-4 p-md-5 mx-md-4" style={{display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '.9em'}}>
                     <div style={{width: '250px', backgroundColor: 'white', borderRadius: '1em'}}>
                       <img  style={{width:'100%'}} src={`${rightImage}`} alt="" />

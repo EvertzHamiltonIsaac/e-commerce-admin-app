@@ -16,15 +16,27 @@
   align-self: flex-end;
 }
 
+.erros_validations{
+  font-size: 15px;
+  /* height: 20px; */
+  overflow: hidden;
+  transition: height 500ms ease;
+}
+
+.erros_validations div {
+  color: red;
+  /* text-align: center; */
+}
+
 .gradient-custom-2 {
   /* fallback for old browsers */
   background: #fccb90;
   
   /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to right, #2596be, #2596be);
+  background: -webkit-linear-gradient(to right, #021e43, #021e43);
   
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: linear-gradient(to right, #2596be, #2596be);
+  background: linear-gradient(to right, #021e43, #021e43);
   }
   
   @media (min-width: 768px) {

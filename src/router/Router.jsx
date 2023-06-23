@@ -14,6 +14,7 @@ import Enquiries from "../pages/enquiries/Enquiries";
 import Orders from "../pages/orders/Orders";
 import Blog from "../pages/blog/blog/Blog";
 import BlogCategory from "../pages/blog/blog-category/BlogCategory";
+import ProtecterRoutes from "../components/protectedRoutes/ProtecterRoutes";
 
 const Router = () => {
   return (
@@ -24,34 +25,37 @@ const Router = () => {
           <Route path="reset-password" element={<ResetPassword />} />
           <Route path="forgot-password" element={<ForgotPassword />} />
         </Route>
-        <Route path="/" element={<MainLayout />}>
-          {/* Dashboard */}
-          <Route index element={<Dashboard />} />
 
-          {/* Customers */}
-          <Route path="customers" element={<Customers />} />
+        <Route element={<ProtecterRoutes/>}>
+          <Route path="/" element={<MainLayout />}>
+            {/* Dashboard */}
+            <Route index element={<Dashboard />} />
 
-          {/* Product */}
-          <Route path="products" element={<Products />} />
+            {/* Customers */}
+            <Route path="customers" element={<Customers />} />
 
-          {/* Brand */}
-          <Route path="brand" element={<Brand />} />
+            {/* Product */}
+            <Route path="products" element={<Products />} />
 
-          {/* Category */}
-          <Route path="category" element={<Category />} />
+            {/* Brand */}
+            <Route path="brand" element={<Brand />} />
 
-          {/* Color */}
-          <Route path="color" element={<Color />} />
+            {/* Category */}
+            <Route path="category" element={<Category />} />
 
-          {/* Orders */}
-          <Route path="orders" element={<Orders />} />
+            {/* Color */}
+            <Route path="color" element={<Color />} />
 
-          {/* Blog pages */}
-          <Route path="blog" element={<Blog />} />
-          <Route path="blog-category" element={<BlogCategory />} />
+            {/* Orders */}
+            <Route path="orders" element={<Orders />} />
 
-          {/* Enquiries */}
-          <Route path="enquiries" element={<Enquiries />} />
+            {/* Blog pages */}
+            <Route path="blog" element={<Blog />} />
+            <Route path="blog-category" element={<BlogCategory />} />
+
+            {/* Enquiries */}
+            <Route path="enquiries" element={<Enquiries />} />
+          </Route>
         </Route>
       </Routes>
     </BsRouter>

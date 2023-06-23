@@ -9,6 +9,7 @@ import React from "react";
  * @property {string} classNameInput
  * @property {string} classNameLabel
  * @property {string} name
+ * @property {string} value
  * @property {Function} onChange
  */
 
@@ -17,21 +18,18 @@ import React from "react";
  * @param {IPropsInput} props - reference to props of Input
  */
 
-const Input = ({labelValue, Id, type = 'text', classNameInput, classNameLabel = 'form-label', name, onChange}) => {
+const Input = ({labelValue, Id, type = 'text', classNameInput, classNameLabel = 'form-label', name, onChange, value}) => {
   
-  const handleOnChange = (event) => {
-    onChange(event.target);
-  };
-
   return (
-    <div className="form-floating mb-3">
+    <div className="form-floating mb-1">
       <input
         type={`${type}`}
         className={`form-control ${classNameInput}`}
         id={`${Id}`}
         placeholder={`${labelValue}`}
         name={name}
-        onChange={handleOnChange}
+        onChange={onChange}
+        value={value}
       />
       <label htmlFor={`${labelValue}`} className={`${classNameLabel}`}>
         {labelValue && labelValue}

@@ -1,0 +1,1 @@
+export const URL = 'https://ginger-final-project.onrender.com/api/v1/'

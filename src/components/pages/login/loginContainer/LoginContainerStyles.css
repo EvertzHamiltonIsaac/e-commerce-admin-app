@@ -1,0 +1,13 @@
+.container_information {
+
+    transition: width 500ms ease;
+}
+
+@media (max-width: 991px) {
+    .container_information {
+        background-color: red;
+        width: 0;
+        overflow: hidden;
+        transition: width 500ms ease;
+    }
+}
