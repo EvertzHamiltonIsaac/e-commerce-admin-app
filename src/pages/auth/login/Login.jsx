@@ -101,8 +101,8 @@ const Login = () => {
       backgroundColor="#EEEEEE"
       rightMessageTitle="Welcome to Ginger Admin"
       rightMessage={message}
-      image="/logo_column.png"
-      rightImage="/logo_column.png"
+      image="/Logo_CL.png"
+      rightImage="/Logo_CL.png"
     >
       <form onSubmit={formik.handleSubmit}>
         <p>Please login to your account</p>

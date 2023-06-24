@@ -8,9 +8,12 @@ const data = {
   email: null,
   phone: null,
 }
+
+const getUserDataFromLocalStorage = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+
 const userDefaultState = {
   message: null,
-  data: data,
+  data: getUserDataFromLocalStorage,
   sessionToken: null,
 };
 

@@ -1,0 +1,16 @@
+
+.icons-hover-update{
+    transition: color 500ms ease;
+}
+
+.icons-hover-delete{
+    transition: color 500ms ease;
+}
+
+.icons-hover-delete:hover{
+    color: var(--color-red-main);
+}
+
+.icons-hover-update:hover{
+    color: var(--color-yellow-main);
+}

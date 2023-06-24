@@ -58,6 +58,13 @@ h6 {
     cursor: pointer;
 }
 
+.logo_image_collapsed {
+    width: 70%;
+    background-color: white;
+    border-radius: 1em;
+    cursor: pointer;
+}
+
 .admin__options {
     background-color: var(--color-blue-secundary);
 }

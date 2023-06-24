@@ -69,8 +69,8 @@ const MainLayout = () => {
       >
         <div className="logo shadow-sm p-1">
           <img
-            className={`${collapsed ? "" : "logo_image_none_collapsed"}`}
-            src={`${collapsed ? "" : "/logo_column.png"}`}
+            className={`${collapsed ? "logo_image_collapsed" : "logo_image_none_collapsed"}`}
+            src={`${collapsed ? "/Logo.png" : "/Logo_CL.png"}`}
             alt="Imagen"
             onClick={() => setCollapsed(!collapsed)}
           />

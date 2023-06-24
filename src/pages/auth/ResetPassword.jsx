@@ -47,8 +47,8 @@ const ResetPassword = () => {
     backgroundColor="#EEEEEE"
     rightMessageTitle="Reset your password"
     rightMessage="To reset your password, please enter your new password below. Make sure to choose a strong password that is at least 8 characters long and includes a combination of letters, numbers, and special characters."
-    image="/logo_column.png" 
-    rightImage="/logo_column.png"
+    image="/Logo_CL.png" 
+    rightImage="/Logo_CL.png"
     >
       <form onSubmit={handleOnSubmit}>
         <p>Fill in both fields</p>

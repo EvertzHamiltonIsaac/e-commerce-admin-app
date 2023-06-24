@@ -3,6 +3,8 @@
   --color-blue-secundary: #00377a;
   --color-white: #FFFFFF;
   --color-gray-main: #CCCCCC;
+  --color-yellow-main: #FBA20C;
+  --color-red-main: #922B21;
 }
 *{
   margin: 0;

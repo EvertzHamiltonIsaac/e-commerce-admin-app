@@ -39,8 +39,8 @@ const ForgotPassword = () => {
      backgroundColor="#EEEEEE"
      rightMessageTitle="Recover your Password"
      rightMessage="Don't worry, it happens to the best of us. Please enter your email address below, and we'll send you a link to reset your password. Make sure to check your spam folder if you don't receive it within a few minutes."
-     image="/logo_column.png"
-     rightImage="/logo_column.png"
+     image="/Logo_CL.png"
+     rightImage="/Logo_CL.png"
      >
 
       <form onSubmit={handleOnSubmit}>
