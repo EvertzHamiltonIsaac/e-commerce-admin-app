@@ -73,7 +73,7 @@ const Products = () => {
   }, []);
 
   const productState = useSelector((state) => state.products.products.data);
-  console.log(productState);
+  // console.log(productState);
 
   const productsData = [];
   for (let i = 0; i < productState?.length; i++) {

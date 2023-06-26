@@ -88,7 +88,7 @@ const config = {
     // if(type === 'jan' || type === 'Feb'){
     //   return "#000000";
     // }
-    return "#2596be"
+    return "#00377a"
   },
   label: {
     // 可手动配置 label 数据标签位置

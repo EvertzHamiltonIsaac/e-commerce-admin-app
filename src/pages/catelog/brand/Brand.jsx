@@ -1,5 +1,6 @@
 import React from 'react'
 import TableComponent from '../../../components/app/table/Table'
+import { useDispatch, useSelector } from 'react-redux';
 
 const columns = [
   {
@@ -32,6 +33,8 @@ for (let i = 0; i < 46; i++) {
 }
 
 const Brand = () => {
+
+  
   return (
     <section className="brand-list">
       <h3>Brands</h3>
