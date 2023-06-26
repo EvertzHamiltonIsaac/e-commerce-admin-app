@@ -82,11 +82,11 @@ export const ItemsLayout = [
       //   icon: <FaClipboardList />,
       //   label: "Blog List",
       // },
-      {
-        key: "blog-category",
-        icon: <BiCategoryAlt />,
-        label: "Blog Categories",
-      },
+      // {
+      //   key: "blog-category",
+      //   icon: <BiCategoryAlt />,
+      //   label: "Blog Categories",
+      // },
       // {
       //   key: "blog-category-list",
       //   icon: <FaClipboardList />,

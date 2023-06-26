@@ -1,45 +1,61 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import TableComponent from '../../../components/app/table/Table'
 import { useDispatch, useSelector } from 'react-redux';
+import { getBrands } from "../../../features/brand/brandSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 
 const columns = [
-  {
-    title: 'No.',
-    dataIndex: 'key',
-  },
+  // {
+  //   title: 'No.',
+  //   dataIndex: 'key',
+  // },
   {
     title: 'Name',
     dataIndex: 'name',
+    sorter: (a, b) => a.name.length - b.name.length
   },
+  // {
+  //   title: 'Product',
+  //   dataIndex: 'product',
+  // },
+  // {
+  //   title: 'Status',
+  //   dataIndex: 'status',
+  // },
   {
-    title: 'Product',
-    dataIndex: 'product',
+    title: "Actions",
+    dataIndex: "actions",
   },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-  },
-
 ];
-
-const dataTable = [];
-for (let i = 0; i < 46; i++) {
-  dataTable.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: `product ${i}`,
-    status: `London, Park Lane no. ${i}`,
-  });
-}
 
 const Brand = () => {
 
-  
+  const dispatch = useDispatch();
+  useEffect(() => {dispatch(getBrands())}, []);
+  const brandState = useSelector((state) => state.brands.brands.data);
+  // console.log(brandState);
+  const brandsData = [];
+  for (let i = 0; i < brandState?.length; i++) {
+    brandsData.push({
+      key: i + 1,
+      name: brandState[i].title,
+      actions: (
+        <React.Fragment>
+          <div className="fs-5 d-flex gap-2" style={{cursor: 'pointer', color: 'var(--color-blue-main)'}}>
+            <FontAwesomeIcon icon={faPenToSquare} className="icons-hover-update"/>
+            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete"/>
+          </div>
+        </React.Fragment>
+      ),
+    });
+  }
   return (
     <section className="brand-list">
       <h3>Brands</h3>
       <article>
-        <TableComponent data={dataTable} columns={columns} />
+        <TableComponent data={brandsData} columns={columns} />
       </article>
     </section>
   )

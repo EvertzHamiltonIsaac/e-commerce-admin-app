@@ -51,7 +51,6 @@ const Router = () => {
 
             {/* Blog pages */}
             <Route path="blog" element={<Blog />} />
-            <Route path="blog-category" element={<BlogCategory />} />
 
             {/* Enquiries */}
             <Route path="enquiries" element={<Enquiries />} />

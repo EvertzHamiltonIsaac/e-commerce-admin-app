@@ -3,6 +3,7 @@ import {URL} from "../../utils/BaseURL"
 
 const getProducts = async () => {
     const res = await axios.get(`${URL}product/`);
+
     return res.data
 };
 

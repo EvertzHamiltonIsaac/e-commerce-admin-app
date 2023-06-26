@@ -9,6 +9,8 @@ export const getBrands = createAsyncThunk("brand/", async (thunkAPI) => {
   }
 }); 
 
+
+
 const initialState = {
     brands: [],
     isError: false,
