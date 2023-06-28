@@ -4,6 +4,7 @@ import { FaClipboardList, FaStore, FaTruckLoading, FaUsers, FaTruckMoving,FaBlog
 import { MdShelves } from 'react-icons/md';
 import {BiCategoryAlt} from 'react-icons/bi'
 import {IoMdColorPalette} from 'react-icons/io'
+
 export const ItemsLayout = [
   {
     key: "",
@@ -71,28 +72,28 @@ export const ItemsLayout = [
     key: "blogs",
     icon: <FaBlogger />,
     label: "Blogs",
-    children: [
-      {
-        key: "blog",
-        icon: <FaBlogger />,
-        label: "Blogs",
-      },
-      // {
-      //   key: "list-blog",
-      //   icon: <FaClipboardList />,
-      //   label: "Blog List",
-      // },
-      // {
-      //   key: "blog-category",
-      //   icon: <BiCategoryAlt />,
-      //   label: "Blog Categories",
-      // },
-      // {
-      //   key: "blog-category-list",
-      //   icon: <FaClipboardList />,
-      //   label: "Blog Category List",
-      // },
-    ]
+    // children: [
+    //   // {
+    //   //   key: "blog",
+    //   //   icon: <FaBlogger />,
+    //   //   label: "Blogs",
+    //   // },
+    //   // {
+    //   //   key: "list-blog",
+    //   //   icon: <FaClipboardList />,
+    //   //   label: "Blog List",
+    //   // },
+    //   // {
+    //   //   key: "blog-category",
+    //   //   icon: <BiCategoryAlt />,
+    //   //   label: "Blog Categories",
+    //   // },
+    //   // {
+    //   //   key: "blog-category-list",
+    //   //   icon: <FaClipboardList />,
+    //   //   label: "Blog Category List",
+    //   // },
+    // ]
   },
   {
     key: "enquiries",

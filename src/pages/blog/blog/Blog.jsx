@@ -1,13 +1,18 @@
-import React, {useState} from "react";
-import TableComponent from "../../../components/app/table/Table";
-import Input from "../../../components/app/input/Input";
+import { InboxOutlined } from "@ant-design/icons";
+import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Upload, message } from "antd";
+import Modal from "antd/es/modal/Modal";
+import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
-import { InboxOutlined } from "@ant-design/icons";
-import { message, Upload } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import Input from "../../../components/app/input/Input";
 import Select from "../../../components/app/select/Select";
-import Modal from "antd/es/modal/Modal";
+import TableComponent from "../../../components/app/table/Table";
+import { getBlogs } from "../../../features/blog/blogSlice";
+// import 'react-quill/dist/quill.snow.css';
 const { Dragger } = Upload;
 
 const props = {
@@ -30,35 +35,6 @@ const props = {
   },
 };
 
-const columns = [
-  {
-    title: "No.",
-    dataIndex: "key",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Product",
-    dataIndex: "product",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-  },
-];
-
-const dataTable = [];
-for (let i = 0; i < 46; i++) {
-  dataTable.push({
-    key: i,
-    name: `Edward King ${i}`,
-    product: `product ${i}`,
-    status: `London, Park Lane no. ${i}`,
-  });
-}
-
 //! Options of Select HardCode.
 const OptionSelect = [
   {
@@ -77,29 +53,86 @@ const OptionSelect = [
     title: "5",
   },
 ];
+const BlogsColumns = [
+  {
+    title: "Title",
+    dataIndex: "title",
+  },
+  {
+    title: "Description",
+    dataIndex: "description",
+  },
+  {
+    title: "Category",
+    dataIndex: "category",
+  },
+  {
+    title: "Dislikes",
+    dataIndex: "dislikes",
+  },
+  {
+    title: "Likes",
+    dataIndex: "likes",
+  },
+  {
+    title: "Actions",
+    dataIndex: "actions",
+  },
+];
 
 const Blog = () => {
+  const dispatch = useDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const blogState = useSelector((state) => state.blogs.blogs.data);
+
+  const blogsData = [];
+  for (let i = 0; i < blogState?.length; i++) {
+    blogsData.push({
+      key: i + 1,
+      title: blogState[i]?.title,
+      description: blogState[i]?.description,
+      category: blogState[i]?.category,
+      dislikes: blogState[i]?.dislikes.length,
+      likes: blogState[i]?.likes.length,
+      actions: (
+        <React.Fragment>
+          <div className="fs-5 d-flex gap-2" style={{cursor: 'pointer', color: 'var(--color-blue-main)'}}>
+            <FontAwesomeIcon icon={faPenToSquare} className="icons-hover-update"/>
+            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete"/>
+          </div>
+        </React.Fragment>
+      ),
+    });
+  }
 
   const handleOnChange = (e) => {
     console.log(e.target.value);
   };
-
   const handleCancelModal = () => {
-    setIsOpenModal(false)
-  }
+    setIsOpenModal(false);
+  };
+
+  useEffect(() => {
+    dispatch(getBlogs());
+  }, []);
 
   return (
     <section className="blog-list">
       <article>
         <h3>Blogs</h3>
-        <button type="button" class="btn btn-success" onClick={() => setIsOpenModal(true)}>Right</button>
+        <button
+          type="button"
+          className="btn btn-success"
+          onClick={() => setIsOpenModal(true)}
+        >
+          Right
+        </button>
         <div>
-          <TableComponent data={dataTable} columns={columns} />
+          <TableComponent data={blogsData} columns={BlogsColumns} />
         </div>
       </article>
       {/* Esto es el Modal */}
-
       <Modal open={isOpenModal} onCancel={handleCancelModal}>
         <article>
           <h3>Add Blog</h3>
@@ -134,7 +167,6 @@ const Blog = () => {
           </div>
         </article>
       </Modal>
-
     </section>
   );
 };

@@ -1,16 +1,23 @@
-
-.icons-hover-update{
-    transition: color 500ms ease;
+.dropzone_container{
+    /* background-color: red; */
+    cursor: pointer;
+    border: 1px dashed var(--color-blue-main);
+    height: auto;
+    border-radius: 4px;
+    margin-top: 3.2em   ;
 }
 
-.icons-hover-delete{
-    transition: color 500ms ease;
+.dropzone{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #EEEEEE;
+    transition: background-color 500ms ease;
 }
 
-.icons-hover-delete:hover{
-    color: var(--color-red-main);
-}
-
-.icons-hover-update:hover{
-    color: var(--color-yellow-main);
+.dropzone:hover{
+    background-color: #FFFFFF;
 }

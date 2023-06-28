@@ -10,12 +10,16 @@ import React from "react";
  * @property {string} className
  * @property {string} placeholder
  * @property {(event) => {}} onChange
+ * @property {string} name
+ * @property {string} id
+ * @property {string} value
+ *
  * 
  * @param {ISelectProp} props
  */
-const Select = ({options, className, placeholder, onChange}) => {
+const Select = ({options, className, placeholder, onChange, name ='', id='', value=''}) => {
   return (
-    <select className={className} aria-label="Default select example" onChange={onChange && onChange}>
+    <select value={value} id={id} name={name} className={className} aria-label="Default select example" onChange={onChange && onChange}>
       <option value="">{placeholder != '' ? placeholder : 'Choose an Option'}</option>
       {
         options?.map((option, index) => (

@@ -11,6 +11,7 @@ import React from "react";
  * @property {string} name
  * @property {string} value
  * @property {Function} onChange
+ * @property {Function} onBlur
  */
 
 /**
@@ -18,7 +19,7 @@ import React from "react";
  * @param {IPropsInput} props - reference to props of Input
  */
 
-const Input = ({labelValue, Id, type = 'text', classNameInput, classNameLabel = 'form-label', name, onChange, value}) => {
+const Input = ({labelValue, Id, type = 'text', classNameInput, classNameLabel = 'form-label', name, onChange, value, onBlur}) => {
   
   return (
     <div className="form-floating mb-1">
@@ -30,6 +31,7 @@ const Input = ({labelValue, Id, type = 'text', classNameInput, classNameLabel = 
         name={name}
         onChange={onChange}
         value={value}
+        onBlur={onBlur}
       />
       <label htmlFor={`${labelValue}`} className={`${classNameLabel}`}>
         {labelValue && labelValue}
