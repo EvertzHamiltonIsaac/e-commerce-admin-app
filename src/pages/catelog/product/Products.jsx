@@ -16,29 +16,10 @@ import Select from "../../../components/app/select/Select";
 import TableComponent from "../../../components/app/table/Table";
 import { getBrands } from "../../../features/brand/brandSlice";
 import { getColors } from "../../../features/color/colorSlice";
-import { getProducts } from "../../../features/product/productSlice";
+import { getProducts, createProducts } from "../../../features/product/productSlice";
 import { getProductCategories } from "../../../features/productCategory/product.categorySlice";
 import "./productStyles.css";
-
-// const props = {
-//   name: "file",
-//   multiple: true,
-//   action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-//   onChange(info) {
-//     const { status } = info.file;
-//     if (status !== "uploading") {
-//       console.log(info.file, info.fileList);
-//     }
-//     if (status === "done") {
-//       message.success(`${info.file.name} file uploaded successfully.`);
-//     } else if (status === "error") {
-//       message.error(`${info.file.name} file upload failed.`);
-//     }
-//   },
-//   onDrop(e) {
-//     console.log("Dropped files", e.dataTransfer.files);
-//   },
-// };
+import { deleteImg, uploadImg } from "../../../features/upload/uploadSlice";
 
 const columns = [
   {
@@ -79,24 +60,6 @@ const columns = [
   },
 ];
 
-const OptionSelect = [
-  {
-    title: "1",
-  },
-  {
-    title: "2",
-  },
-  {
-    title: "3",
-  },
-  {
-    title: "4",
-  },
-  {
-    title: "5",
-  },
-];
-
 const schemaForValidations = Yup.object().shape({
   title: Yup.string().required("Title is required"),
   description: Yup.string().required("Description is required"),
@@ -105,14 +68,18 @@ const schemaForValidations = Yup.object().shape({
   color: Yup.array().required("Email is required"),
   quantity: Yup.string().required("Email is required"),
   price: Yup.string().required("Email is required"),
+  images: Yup.string().required("Email is required"),
 });
 
+
 const Products = () => {
+
   //TODO: Statement
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [color, setColor] = useState([]);
+  // const [images, setImages] = useState([]);
   const dispatch = useDispatch();
-  console.log(color);
+
   //TODO: Configurations
   const formik = useFormik({
     initialValues: {
@@ -123,8 +90,10 @@ const Products = () => {
       color: [],
       quantity: "",
       price: "",
+      images: []
     },
     onSubmit: (values) => {
+      dispatch(createProducts(values));
       console.log(values);
       formik.resetForm();
       handleCancelModal();
@@ -133,7 +102,10 @@ const Products = () => {
   });
 
   //TODO: Selectors
+
+  //? Product Selector
   const productState = useSelector((state) => state.products.products.data);
+  console.log(productState);
   const productsData = [];
   for (let i = 0; i < productState?.length; i++) {
     productsData.push({
@@ -142,7 +114,7 @@ const Products = () => {
       description: productState[i]?.description,
       category: productState[i]?.category,
       brand: productState[i]?.category,
-      color: productState[i]?.color,
+      color: productState[i]?.color?.map((item, index) => {return [...item.color]}),
       quantity: productState[i]?.quantity,
       price: productState[i]?.price,
       actions: (
@@ -162,12 +134,13 @@ const Products = () => {
     });
   }
 
+  //? Brand Selector
   const brandState = useSelector((state) => state.brands.brands.data);
-
   const productCategoryState = useSelector(
     (state) => state.productCategories.productCategories.data
   );
 
+  //? Color Selector
   const colorState = useSelector((state) => state.colors.colors.data);
   const colors = [];
   colorState?.forEach((element) => {
@@ -177,16 +150,19 @@ const Products = () => {
       code: element?.code,
     });
   });
-  // const colorOptions = [];
-  // for (let i = 0; i < colorState?.length; i++) {
-  //   colorOptions.push({
-  //     id: colorState[i]?._id,
-  //     label: colorState[i]?.name,
-  //     value: `#${colorState[i]?.code}`,
-  //   });
-  // }
 
-  // console.log(colorOptions);
+  //? Images Selector
+  const imgState = useSelector((state) => state.images.img.data)
+  const imgArray = [];
+  if(imgState instanceof Array){
+    imgState?.forEach((element) => {
+      imgArray.push({
+        public_id: element?.public_id,
+        url: element?.url
+      });
+    })
+  }
+
   //TODO: Functions
   const handleOnChange = (e) => {
     console.log(e);
@@ -201,9 +177,12 @@ const Products = () => {
     dispatch(getBrands());
     dispatch(getProductCategories());
     dispatch(getColors());
-    formik.values.color = color;
-    console.log(formik.values.color);
   }, []);
+
+  useEffect(() => {
+    formik.values.images = imgArray;
+    formik.values.color = color
+  }, [color, imgArray])
 
   return (
     <section className="product-list">
@@ -228,7 +207,7 @@ const Products = () => {
       <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
         <h3 className="text-center mb-3">Add New Product</h3>
         <form
-          className="d-flex flex-column gap-2"
+          className="d-flex flex-column gap-3"
           onSubmit={formik.handleSubmit}
         >
           <div className="d-flex gap-3">
@@ -288,7 +267,7 @@ const Products = () => {
               <span>Select Colors</span>
               <Multiselect
                 style={{ width: "100%" }}
-                dataKey="id"
+                dataKey="_id"
                 textField="color"
                 defaultValue={[]}
                 data={colors}
@@ -322,11 +301,11 @@ const Products = () => {
           </div>
 
           <div className="dropzone_container">
-            <Dropzone  onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+            <Dropzone  onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}>
               {({ getRootProps, getInputProps }) => (
                 <section className='dropzone' {...getRootProps()}>
                   <div className="">
-                    <FontAwesomeIcon icon={faFileArrowUp} style={{height: '60px', padding: '20px'}}/>
+                    <FontAwesomeIcon icon={faFileArrowUp} style={{height: '40px', padding: '15px'}}/>
                     <input {...getInputProps()} />
                     <p>
                       Drag 'n' drop some files here, or click to select files
@@ -337,6 +316,17 @@ const Products = () => {
             </Dropzone>
           </div>
 
+          <div className="showImages d-flex flex-wrap gap-3">
+            {
+              imgArray.map((item, index) => (
+                <div className="position-relative" key={index}>
+                  <button type="button" onClick={() => dispatch(deleteImg(item?.public_id))} className="btn-close position-absolute" style={{top: "10px", right: '10px'}}></button>
+                  <img src={item?.url} alt="" width={100} height={100}/>
+                </div>
+              ))
+            }
+          </div>
+          
           <div
             style={{ marginTop: "3.2em" }}
             className="d-flex justify-content-end gap-2"
