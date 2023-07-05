@@ -53,7 +53,7 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
       state.isSuccess = false;
-      state.user = null;
+      state.message = action.payload;
     });
   },
 });
