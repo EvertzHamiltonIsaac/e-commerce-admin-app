@@ -8,12 +8,13 @@ import './styleTable.css'
  * @typedef {Object} ITable
  * @property {Array} data
  * @property {Array} columns
+ * @property {boolean} loading
  * 
  * @param {ITable} props
  */
 
 
-const TableComponent = ({ data=[], columns=[] }) => {
+const TableComponent = ({ data=[], columns=[], loading}) => {
 
   // const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   // const onSelectChange = (newSelectedRowKeys) => {
@@ -63,7 +64,7 @@ const TableComponent = ({ data=[], columns=[] }) => {
     <Table 
     className=''
     // rowSelection={rowSelection} 
-    loading={data.length === 0 ? true : false}
+    loading={loading}
     columns={columns} 
     dataSource={data} 
     />

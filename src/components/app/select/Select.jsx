@@ -20,10 +20,10 @@ import React from "react";
 const Select = ({options, className, placeholder, onChange, name ='', id='', value=''}) => {
   return (
     <select value={value} id={id} name={name} className={className} aria-label="Default select example" onChange={onChange && onChange}>
-      <option value="">{placeholder != '' ? placeholder : 'Choose an Option'}</option>
+      <option value="" disabled>{placeholder != '' ? placeholder : 'Choose an Option'}</option>
       {
         options?.map((option, index) => (
-          <option key={index} value={option?.title}>{option?.title}</option>
+          <option key={index} value={option.value ? option.value : option?.title}>{option?.title}</option>
         ))
       }
     </select>

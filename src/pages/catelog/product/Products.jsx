@@ -1,15 +1,19 @@
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import { faFileArrowUp, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faFileArrowUp,
+  faPlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
 import { useFormik } from "formik";
+import { toast } from 'react-toastify';
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
-import Multiselect from "react-widgets/Multiselect";
-import "react-widgets/styles.css";
+import { Select as SelectAntd } from "antd";
 import * as Yup from "yup";
 import Input from "../../../components/app/input/Input";
 import Select from "../../../components/app/select/Select";
@@ -18,8 +22,23 @@ import { getBrands } from "../../../features/brand/brandSlice";
 import { getColors } from "../../../features/color/colorSlice";
 import { getProducts, createProducts } from "../../../features/product/productSlice";
 import { getProductCategories } from "../../../features/productCategory/product.categorySlice";
-import "./productStyles.css";
 import { deleteImg, uploadImg } from "../../../features/upload/uploadSlice";
+import "./productStyles.css";
+
+const TagOptions = [
+  {
+    title: "Featured",
+    value: 'featured'
+  },
+  {
+    title: "Popular",
+    value: 'popular'
+  },
+  {
+    title: "Special",
+    value: 'special'
+  }
+]
 
 const columns = [
   {
@@ -65,19 +84,18 @@ const schemaForValidations = Yup.object().shape({
   description: Yup.string().required("Description is required"),
   category: Yup.string().required("Email is required"),
   brand: Yup.string().required("Email is required"),
-  color: Yup.array().required("Email is required"),
+  color: Yup.array()
+    .min(1, "Pick at least one color")
+    .required("Color is required"),
   quantity: Yup.string().required("Email is required"),
   price: Yup.string().required("Email is required"),
   images: Yup.string().required("Email is required"),
 });
 
-
 const Products = () => {
-
   //TODO: Statement
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [color, setColor] = useState([]);
-  // const [images, setImages] = useState([]);
   const dispatch = useDispatch();
 
   //TODO: Configurations
@@ -86,11 +104,12 @@ const Products = () => {
       title: "",
       description: "",
       category: "",
+      tags: "",
       brand: "",
       color: [],
       quantity: "",
       price: "",
-      images: []
+      images: [],
     },
     onSubmit: (values) => {
       dispatch(createProducts(values));
@@ -103,9 +122,20 @@ const Products = () => {
 
   //TODO: Selectors
 
+  //? States of Create Product Selector
+  const {isSuccess, isError, isLoading, productCreated} = useSelector((state) => state.products)
+
+  useEffect(() => {
+    if(isSuccess){
+      toast.success("Product Added Succesfully!");
+    }
+    if(isError){
+      toast.error("Something Went Wrong!");
+    }
+  }, [isSuccess, isError, isLoading])
+
   //? Product Selector
   const productState = useSelector((state) => state.products.products.data);
-  console.log(productState);
   const productsData = [];
   for (let i = 0; i < productState?.length; i++) {
     productsData.push({
@@ -114,7 +144,7 @@ const Products = () => {
       description: productState[i]?.description,
       category: productState[i]?.category,
       brand: productState[i]?.category,
-      color: productState[i]?.color?.map((item, index) => {return [...item.color]}),
+      color: productState[i]?.color,
       quantity: productState[i]?.quantity,
       price: productState[i]?.price,
       actions: (
@@ -145,22 +175,22 @@ const Products = () => {
   const colors = [];
   colorState?.forEach((element) => {
     colors.push({
-      _id: element?._id,
-      color: element?.name,
+      value: element?._id,
+      label: element?.name,
       code: element?.code,
     });
   });
 
   //? Images Selector
-  const imgState = useSelector((state) => state.images.img.data)
+  const imgState = useSelector((state) => state.images.img.data);
   const imgArray = [];
-  if(imgState instanceof Array){
+  if (imgState instanceof Array) {
     imgState?.forEach((element) => {
       imgArray.push({
         public_id: element?.public_id,
-        url: element?.url
+        url: element?.url,
       });
-    })
+    });
   }
 
   //TODO: Functions
@@ -169,6 +199,10 @@ const Products = () => {
   };
   const handleCancelModal = () => {
     setIsOpenModal(false);
+  };
+  const handleColors = (e) => {
+    setColor(e);
+    console.log(color);
   };
 
   //TODO: UseEffects
@@ -181,8 +215,8 @@ const Products = () => {
 
   useEffect(() => {
     formik.values.images = imgArray;
-    formik.values.color = color
-  }, [color, imgArray])
+    formik.values.color = color ? color : " ";
+  }, [color, imgArray]);
 
   return (
     <section className="product-list">
@@ -200,7 +234,7 @@ const Products = () => {
           </Button>
         </div>
         <div className="table-container">
-          <TableComponent data={productsData} columns={columns} />
+          <TableComponent data={productsData} columns={columns} loading={isLoading}/>
         </div>
       </article>
 
@@ -262,16 +296,28 @@ const Products = () => {
             </div>
           </div>
 
+          <span>Select a Tag</span>
+          <Select
+            value={formik.values.tags}
+            id="tags"
+            name="tags"
+            className="form-select"
+            options={TagOptions}
+            placeholder="Choose a Tag"
+            onChange={formik.handleChange("tags")}
+          />
+
           <div className="d-flex gap-2 align-items-center">
             <div style={{ width: "70%" }}>
               <span>Select Colors</span>
-              <Multiselect
-                style={{ width: "100%" }}
-                dataKey="_id"
-                textField="color"
-                defaultValue={[]}
-                data={colors}
-                onChange={(e) => setColor(e)}
+              <SelectAntd
+                mode="multiple"
+                allowClear
+                className="w-100"
+                placeholder="Select colors"
+                defaultValue={color}
+                onChange={(item) => handleColors(item)}
+                options={colors}
               />
             </div>
             <div style={{ width: "30%" }}>
@@ -290,7 +336,7 @@ const Products = () => {
           <div>
             <span>Description</span>
             <ReactQuill
-              style={{ height: "100px"}}
+              style={{ height: "100px" }}
               theme="snow"
               name="description"
               id="description"
@@ -301,11 +347,16 @@ const Products = () => {
           </div>
 
           <div className="dropzone_container">
-            <Dropzone  onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}>
+            <Dropzone
+              onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+            >
               {({ getRootProps, getInputProps }) => (
-                <section className='dropzone' {...getRootProps()}>
+                <section className="dropzone" {...getRootProps()}>
                   <div className="">
-                    <FontAwesomeIcon icon={faFileArrowUp} style={{height: '40px', padding: '15px'}}/>
+                    <FontAwesomeIcon
+                      icon={faFileArrowUp}
+                      style={{ height: "40px", padding: "15px" }}
+                    />
                     <input {...getInputProps()} />
                     <p>
                       Drag 'n' drop some files here, or click to select files
@@ -317,16 +368,19 @@ const Products = () => {
           </div>
 
           <div className="showImages d-flex flex-wrap gap-3">
-            {
-              imgArray.map((item, index) => (
-                <div className="position-relative" key={index}>
-                  <button type="button" onClick={() => dispatch(deleteImg(item?.public_id))} className="btn-close position-absolute" style={{top: "10px", right: '10px'}}></button>
-                  <img src={item?.url} alt="" width={100} height={100}/>
-                </div>
-              ))
-            }
+            {imgArray.map((item, index) => (
+              <div className="position-relative" key={index}>
+                <button
+                  type="button"
+                  onClick={() => dispatch(deleteImg(item?.public_id))}
+                  className="btn-close position-absolute"
+                  style={{ top: "10px", right: "10px" }}
+                ></button>
+                <img src={item?.url} alt="" width={100} height={100} />
+              </div>
+            ))}
           </div>
-          
+
           <div
             style={{ marginTop: "3.2em" }}
             className="d-flex justify-content-end gap-2"
