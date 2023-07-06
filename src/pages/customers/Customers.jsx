@@ -45,20 +45,21 @@ const Customers = () => {
     dispatch(getCustomers());
   }, []);
 
-  const customerState = useSelector((state) => state.customers.customers);
+  
+  const {customers, isLoading} = useSelector((state) => state.customers);
   // console.log(customerState);
 
   const customersData = [];
-  for (let i = 0; i < customerState?.length; i++) {
-    if(customerState[i]?.role != 'admin'){
+  for (let i = 0; i < customers?.length; i++) {
+    if(customers[i]?.role != 'admin'){
       customersData.push({
-        key: customerState[i]._id,
-        firstName: customerState[i].firstName,
-        lastName: customerState[i].lastName,
-        email: customerState[i].email,
-        phone: customerState[i].phone,
-        postalCode: customerState[i].postalCode,
-        address: customerState[i].address,
+        key: customers[i]._id,
+        firstName: customers[i].firstName,
+        lastName: customers[i].lastName,
+        email: customers[i].email,
+        phone: customers[i].phone,
+        postalCode: customers[i].postalCode,
+        address: customers[i].address,
       });
     }
   }
@@ -67,7 +68,7 @@ const Customers = () => {
     <section className="customers">
       <h3>Customers</h3>
       <article>
-        <TableComponent data={customersData} columns={columns} />
+        <TableComponent data={customersData} columns={columns} loading={isLoading}/>
       </article>
     </section>
   );
