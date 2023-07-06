@@ -58,6 +58,7 @@ const Login = () => {
   const { user, isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.auth
   );
+
   const handleOnLogin = () => {
     if (localStorage.getItem("sessionToken")) {
       navigate("/");
@@ -97,7 +98,7 @@ const Login = () => {
 
   return (
     <LoginContainer
-      title="Sign In"
+      title="Log In"
       backgroundColor="#EEEEEE"
       rightMessageTitle="Welcome to Ginger Admin"
       rightMessage={messageContainer}

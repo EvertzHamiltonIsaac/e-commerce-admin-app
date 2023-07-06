@@ -105,6 +105,7 @@ const Category = () => {
           if(result.isConfirmed){
             dispatch(resetBlogState())
             dispatch(resetProductState())
+            localStorage.clear();
             navigate('/auth/sign-in')
           }
         })
