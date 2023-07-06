@@ -57,12 +57,13 @@ const Color = () => {
   const dispatch = useDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const colorState = useSelector((state) => state.colors.colors.data);
-  for (let i = 0; i < colorState?.length; i++) {
+  const {colors, isLoading} = useSelector((state) => state.colors);
+
+  for (let i = 0; i < colors.data?.length; i++) {
     colorData.push({
       key: i + 1,
-      name: colorState[i]?.name,
-      code: colorState[i]?.code,
+      name: colors.data[i]?.name,
+      code: colors.data[i]?.code,
       actions: (
         <React.Fragment>
           <div
@@ -97,7 +98,7 @@ const Color = () => {
     <section className="color-list">
       <h3>Colors</h3>
       <article>
-        <TableComponent data={colorData} columns={columns} />
+        <TableComponent data={colorData} columns={columns} loading={isLoading}/>
       </article>
 
       <Modal open={isOpenModal} onCancel={handleCancelModal}>

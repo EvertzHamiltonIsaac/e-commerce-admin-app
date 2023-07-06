@@ -1,5 +1,7 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit";
 import productService from "./productService";
+
+export const resetProductState = createAction('resetProductState');
 
 export const getProducts = createAsyncThunk("product/", async (thunkAPI) => {
   try {
@@ -56,15 +58,16 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = action.payload;
+        state.productCreated = action.payload;
       })
       .addCase(createProducts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-      })
+      }).addCase(resetProductState, () => initialState)
   },
 });
 
+export const { actions } = productSlice
 export default productSlice.reducer;

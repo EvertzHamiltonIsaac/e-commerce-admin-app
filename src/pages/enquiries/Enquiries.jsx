@@ -40,18 +40,18 @@ const columns = [
 const Enquiries = () => {
   const dispatch = useDispatch();
 
-  const enquiryState = useSelector((state) => state.enquiries.enquiries.data);
+  const {isLoading, enquiries} = useSelector((state) => state.enquiries);
   
   const enquiryData = [];
-  for (let i = 0; i < enquiryState?.length; i++) {
+  for (let i = 0; i < enquiries.data?.length; i++) {
     enquiryData.push({
       key: i + 1,
-      name: enquiryState[i]?.name,
-      comment: enquiryState[i]?.comment,
-      phone: enquiryState[i]?.phone,
-      email: enquiryState[i]?.email,
+      name: enquiries.data[i]?.name,
+      comment: enquiries.data[i]?.comment,
+      phone: enquiries.data[i]?.phone,
+      email: enquiries.data[i]?.email,
       //! En Status tienes que poner en el componente select con las opciones.
-      status: enquiryState[i]?.status,
+      status: enquiries.data[i]?.status,
       actions: (<React.Fragment>
         <div
           className="fs-5 d-flex gap-2"
@@ -75,7 +75,7 @@ const Enquiries = () => {
     <section className="enquiries">
       <h3>Enquiries</h3>
       <article>
-        <TableComponent data={enquiryData} columns={columns} />
+        <TableComponent data={enquiryData} columns={columns} loading={isLoading}/>
       </article>
     </section>
   );

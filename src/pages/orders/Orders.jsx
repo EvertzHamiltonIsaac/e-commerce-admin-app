@@ -28,11 +28,11 @@ const columns = [
 const Orders = () => {
   const dispatch = useDispatch();
 
-  const orderState = useSelector((state) => state.orders.orders.data);
+  const {isLoading, orders} = useSelector((state) => state.orders);
   // console.log(orderState);
 
   const OrdersData = [];
-  for (let i = 0; i < orderState?.length; i++) {
+  for (let i = 0; i < orders.data?.length; i++) {
     OrdersData.push({
       key: i,
       name: `Poner las columnas que van ${i}`,
@@ -49,7 +49,7 @@ const Orders = () => {
     <section className="orders">
       <h3>Orders</h3>
       <article>
-        <TableComponent data={OrdersData} columns={columns} />
+        <TableComponent data={OrdersData} columns={columns} loading={isLoading}/>
       </article>
     </section>
   );

@@ -84,17 +84,18 @@ const Blog = () => {
   const dispatch = useDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const blogState = useSelector((state) => state.blogs.blogs.data);
+  const {isLoading, blogs} = useSelector((state) => state.blogs);
+
 
   const blogsData = [];
-  for (let i = 0; i < blogState?.length; i++) {
+  for (let i = 0; i < blogs.data?.length; i++) {
     blogsData.push({
       key: i + 1,
-      title: blogState[i]?.title,
-      description: blogState[i]?.description,
-      category: blogState[i]?.category,
-      dislikes: blogState[i]?.dislikes.length,
-      likes: blogState[i]?.likes.length,
+      title: blogs.data[i]?.title,
+      description: blogs.data[i]?.description,
+      category: blogs.data[i]?.category,
+      dislikes: blogs.data[i]?.dislikes.length,
+      likes: blogs.data[i]?.likes.length,
       actions: (
         <React.Fragment>
           <div className="fs-5 d-flex gap-2" style={{cursor: 'pointer', color: 'var(--color-blue-main)'}}>
@@ -129,7 +130,7 @@ const Blog = () => {
           Right
         </button>
         <div>
-          <TableComponent data={blogsData} columns={BlogsColumns} />
+          <TableComponent data={blogsData} columns={BlogsColumns} loading={isLoading}/>
         </div>
       </article>
       {/* Esto es el Modal */}

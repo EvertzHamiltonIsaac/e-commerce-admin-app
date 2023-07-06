@@ -34,13 +34,13 @@ const Brand = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {dispatch(getBrands())}, []);
-  const brandState = useSelector((state) => state.brands.brands.data);
+  const {brands, isLoading} = useSelector((state) => state.brands);
   // console.log(brandState);
   const brandsData = [];
-  for (let i = 0; i < brandState?.length; i++) {
+  for (let i = 0; i < brands.data?.length; i++) {
     brandsData.push({
       key: i + 1,
-      name: brandState[i].title,
+      name: brands.data[i].title,
       actions: (
         <React.Fragment>
           <div className="fs-5 d-flex gap-2" style={{cursor: 'pointer', color: 'var(--color-blue-main)'}}>
@@ -55,7 +55,7 @@ const Brand = () => {
     <section className="brand-list">
       <h3>Brands</h3>
       <article>
-        <TableComponent data={brandsData} columns={columns} />
+        <TableComponent data={brandsData} columns={columns} loading={isLoading}/>
       </article>
     </section>
   )

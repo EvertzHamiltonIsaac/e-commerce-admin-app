@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
 import { useFormik } from "formik";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
 import Dropzone from "react-dropzone";
 import ReactQuill from "react-quill";
@@ -20,7 +20,11 @@ import Select from "../../../components/app/select/Select";
 import TableComponent from "../../../components/app/table/Table";
 import { getBrands } from "../../../features/brand/brandSlice";
 import { getColors } from "../../../features/color/colorSlice";
-import { getProducts, createProducts } from "../../../features/product/productSlice";
+import {
+  getProducts,
+  createProducts,
+  resetProductState
+} from "../../../features/product/productSlice";
 import { getProductCategories } from "../../../features/productCategory/product.categorySlice";
 import { deleteImg, uploadImg } from "../../../features/upload/uploadSlice";
 import "./productStyles.css";
@@ -28,17 +32,17 @@ import "./productStyles.css";
 const TagOptions = [
   {
     title: "Featured",
-    value: 'featured'
+    value: "featured",
   },
   {
     title: "Popular",
-    value: 'popular'
+    value: "popular",
   },
   {
     title: "Special",
-    value: 'special'
-  }
-]
+    value: "special",
+  },
+];
 
 const columns = [
   {
@@ -113,7 +117,6 @@ const Products = () => {
     },
     onSubmit: (values) => {
       dispatch(createProducts(values));
-      console.log(values);
       formik.resetForm();
       handleCancelModal();
     },
@@ -123,16 +126,9 @@ const Products = () => {
   //TODO: Selectors
 
   //? States of Create Product Selector
-  const {isSuccess, isError, isLoading, productCreated} = useSelector((state) => state.products)
-
-  useEffect(() => {
-    if(isSuccess){
-      toast.success("Product Added Succesfully!");
-    }
-    if(isError){
-      toast.error("Something Went Wrong!");
-    }
-  }, [isSuccess, isError, isLoading])
+  const { isSuccess, isError, isLoading, productCreated } = useSelector(
+    (state) => state.products
+  );
 
   //? Product Selector
   const productState = useSelector((state) => state.products.products.data);
@@ -143,7 +139,7 @@ const Products = () => {
       title: productState[i]?.title,
       description: productState[i]?.description,
       category: productState[i]?.category,
-      brand: productState[i]?.category,
+      brand: productState[i]?.brand,
       color: productState[i]?.color,
       quantity: productState[i]?.quantity,
       price: productState[i]?.price,
@@ -207,16 +203,31 @@ const Products = () => {
 
   //TODO: UseEffects
   useEffect(() => {
-    dispatch(getProducts());
     dispatch(getBrands());
     dispatch(getProductCategories());
     dispatch(getColors());
-  }, []);
+  }, [isOpenModal]);
+
+  useEffect(() => {
+    dispatch(resetProductState());
+    dispatch(getProducts());
+  },[])
 
   useEffect(() => {
     formik.values.images = imgArray;
     formik.values.color = color ? color : " ";
   }, [color, imgArray]);
+
+  useEffect(() => {
+    if (productCreated && isSuccess) {
+      toast.success("Product Added Succesfully!");
+      dispatch(resetProductState());
+      dispatch(getProducts());
+    }
+    if (isError) {
+      toast.error("Something Went Wrong!");
+    }
+  }, [isSuccess, isError, isLoading]);
 
   return (
     <section className="product-list">
@@ -234,7 +245,11 @@ const Products = () => {
           </Button>
         </div>
         <div className="table-container">
-          <TableComponent data={productsData} columns={columns} loading={isLoading}/>
+          <TableComponent
+            data={productsData}
+            columns={columns}
+            loading={isLoading}
+          />
         </div>
       </article>
 

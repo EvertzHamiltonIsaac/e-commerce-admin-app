@@ -39,6 +39,7 @@ const Category = () => {
   const navigate = useNavigate();
 
   const PCategoryErrorHandler = useSelector((state) => state.productCategories)
+  const BCategoryErrorHandler = useSelector((state) => state.blogCategories)
 
   const productCategoryState = useSelector(
     (state) => state.productCategories.productCategories.data
@@ -123,11 +124,11 @@ const Category = () => {
     <section className="category-list">
       <h3>Product Categories</h3>
       <article>
-        <TableComponent data={ProductCategoryData} columns={CategoryColumns} />
+        <TableComponent data={ProductCategoryData} columns={CategoryColumns} loading={PCategoryErrorHandler.isLoading}/>
       </article>
       <h3>Blog Categories</h3>
       <article>
-        <TableComponent data={BlogCategoryData} columns={CategoryColumns} />
+        <TableComponent data={BlogCategoryData} columns={CategoryColumns} loading={BCategoryErrorHandler.isLoading}/>
       </article>
     </section>
   );
