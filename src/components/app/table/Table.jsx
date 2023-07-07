@@ -67,6 +67,9 @@ const TableComponent = ({ data=[], columns=[], loading}) => {
     loading={loading}
     columns={columns} 
     dataSource={data} 
+    scroll={{
+      x: 1300,
+    }}
     />
   )
 }

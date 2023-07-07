@@ -12,13 +12,19 @@ const columns = [
     title: "First Name",
     dataIndex: "firstName",
     defaultSortOrder: "descend",
-    sorter: (a, b) => a.firstName.length - b.firstName.length
+    sorter: (a, b) => a.firstName.length - b.firstName.length,
+    key: 'firstName',
+    fixed: 'left',
+    width: 100
   },
   {
     title: "Last Name",
     dataIndex: "lastName",
     defaultSortOrder: "descend",
-    sorter: (a, b) => a.lastName.length - b.lastName.length
+    sorter: (a, b) => a.lastName.length - b.lastName.length,
+    key: 'lastName',
+    // fixed: 'left',
+    width: 110,
   },
   {
     title: "Email",

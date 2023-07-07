@@ -57,6 +57,9 @@ const BlogsColumns = [
   {
     title: "Title",
     dataIndex: "title",
+    width: 150,
+    fixed: 'left'
+    
   },
   {
     title: "Description",
@@ -77,6 +80,8 @@ const BlogsColumns = [
   {
     title: "Actions",
     dataIndex: "actions",
+    width: 90,
+    fixed: 'right',
   },
 ];
 

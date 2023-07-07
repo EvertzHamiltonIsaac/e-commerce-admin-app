@@ -6,7 +6,10 @@ import DropDown from "../app/dropdown/DropDown";
 import "./layoutStyles.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRightFromBracket,
+  faBars,
+} from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 const { Header, Sider, Content } = Layout;
@@ -44,6 +47,7 @@ const DropDownItems = [
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [isBroken, setIsBroken] = useState(false)
   const [showDropDown, setshowDropDown] = useState(false);
   const {
     token: { colorBgContainer },
@@ -58,15 +62,24 @@ const MainLayout = () => {
     }
   };
 
+
   //! En la linea 33 debes hacer una logica para que coja la inicial del primer nombre y el primer apellido.
   //! Centrarlo un poco mas tambien.
   return (
     <Layout>
       <Sider
-        className="shadow-sm"
-        trigger={null}
-        collapsible
+        className={`shadow-sm ${collapsed && 'sider'}`}
+         trigger={null}
+        // collapsible
         collapsed={collapsed}
+        breakpoint="lg"
+        collapsedWidth="0"
+        onBreakpoint={(broken) => {
+          setIsBroken(broken);
+        }}
+        onCollapse={(collapsed, type) => {
+          setCollapsed(collapsed);
+        }}
         style={{ backgroundColor: "var(--color-blue-secundary)" }}
       >
         <div className="logo shadow-sm p-1">
@@ -90,6 +103,13 @@ const MainLayout = () => {
       </Sider>
       <Layout>
         <Header className="layout-header shadow-sm">
+          {
+            isBroken &&
+            <div onClick={() => setCollapsed(!collapsed)}
+            style={{width: '30px', margin:'10px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+              <FontAwesomeIcon icon={faBars} className="fs-1"/>
+            </div>
+          }
           <div className="layout-header-user-info-container dropdown user-select-none">
             {/* <div className="header-notification-icon-container position-relative">
               <IoIosNotifications className="fs-4" />
@@ -121,8 +141,8 @@ const MainLayout = () => {
 
         <Content
           style={{
-            margin: "24px 16px",
-            padding: 24,
+            margin: "24px",
+            // padding: 24,
             minHeight: 280,
             backgroundColor: "white",
           }}
