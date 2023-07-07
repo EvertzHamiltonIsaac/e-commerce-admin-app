@@ -185,8 +185,30 @@ h6 {
     display: block;
 } */
 
+.sider {
+    background-color: red;
+}
 
 /*! Media Querie */
+@media (max-width: 991px) {
+    .sider {
+        flex: 0 0 100px !important;
+        max-width: 0px !important;
+        min-width: 0px !important;
+        width: 0px !important;
+        position: absolute;
+        overflow: hidden;
+    }
+
+    .layout-header {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        padding: 0;
+        background-color: var(--color-blue-main);
+    }
+}
+
 /* .ant-layout-sider-collapsed{
     flex: 0 0 65px !important;
     max-width: 65px !important;

@@ -52,9 +52,10 @@ const schemaForValidations = Yup.object().shape({
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const message = "Sign in to take advantage of all the management tools and functions available for your e-commerce.";
+  const messageContainer =
+    "Sign in to take advantage of all the management tools and functions available for your e-commerce.";
 
-  const { user, isLoading, isSuccess, isError } = useSelector(
+  const { user, isLoading, isSuccess, isError, message } = useSelector(
     (state) => state.auth
   );
 
@@ -97,13 +98,24 @@ const Login = () => {
 
   return (
     <LoginContainer
-      title="Sign In"
+      title="Log In"
       backgroundColor="#EEEEEE"
       rightMessageTitle="Welcome to Ginger Admin"
-      rightMessage={message}
+      rightMessage={messageContainer}
       image="/Logo_CL.png"
       rightImage="/Logo_CL.png"
     >
+      <div className={`${isError ? 'alert alert-danger error_invalid' : 'none_error_invalid'}`} role="alert">
+        <h6>
+          {typeof message === "string" ? message : "Something went wrong!"}
+        </h6>
+        <p>
+          {typeof message === "string"
+            ? "Check Your Credentials"
+            : "Check your email or password"}
+        </p>
+      </div>
+
       <form onSubmit={formik.handleSubmit}>
         <p>Please login to your account</p>
         {InputsArray.map((item, index) => (
@@ -139,14 +151,22 @@ const Login = () => {
         <div className="login-forgot__container">
           <button
             type="submit"
-            className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-2 p-2 d-flex justify-content-center align-items-center gap-1"
+            disabled={isLoading}
+            className="user-select-none btn btn-primary btn-block fa-lg gradient-custom-2 mb-2 p-2 d-flex justify-content-center align-items-center gap-1"
           >
-            {
-              isLoading && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-            }
+            {isLoading && (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            )}
             <span>Login</span>
           </button>
-          <Link to={"/auth/forgot-password"} className="text-muted">
+          <Link
+            to={"/auth/forgot-password"}
+            className="text-muted user-select-none"
+          >
             Forgot password?
           </Link>
         </div>

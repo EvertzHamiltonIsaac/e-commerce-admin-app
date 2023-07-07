@@ -28,6 +28,30 @@
   /* text-align: center; */
 }
 
+.none_error_invalid {
+  height: 0px;
+  overflow: hidden;
+}
+
+.error_invalid {
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all ease 500ms;
+}
+
+.error_invalid p {
+  margin: 0;
+  padding: 0;
+}
+
+.error_invalid h6 {
+  margin: 0;
+  padding: 0;
+}
+
 .gradient-custom-2 {
   /* fallback for old browsers */
   background: #fccb90;

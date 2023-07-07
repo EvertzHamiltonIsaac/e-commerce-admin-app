@@ -1,21 +1,26 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, createAction } from "@reduxjs/toolkit";
 import BlogCategoryService from "./blog.categoryService";
 
-export const getBlogCategories = createAsyncThunk("blogCategory/getAllCategories/", async (thunkAPI) => {
-  try {
-    return await BlogCategoryService.getBlogCategories();
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
-  }
-}); 
-
 const initialState = {
-    blogCategories: [],
-    isError: false,
-    isLoading: false,
-    isSuccess: false,
-    message: ""
-}
+  blogCategories: [],
+  isError: false,
+  isLoading: false,
+  isSuccess: false,
+  message: "",
+};
+
+export const resetBlogState = createAction('resetBlogState');
+
+export const getBlogCategories = createAsyncThunk(
+  "blogCategory/getAllCategories/",
+  async (_, {rejectWithValue}) => {
+    try {
+      return await BlogCategoryService.getBlogCategories();
+    } catch (error) {
+      throw rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 export const blogCategorySlice = createSlice({
   name: "blogCategory",
@@ -23,22 +28,23 @@ export const blogCategorySlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(getBlogCategories.pending, (state) => {
+      .addCase(getBlogCategories.pending, (state) => {
         state.isLoading = true;
-    })
-    .addCase(getBlogCategories.fulfilled, (state, action) => {
+      })
+      .addCase(getBlogCategories.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
         state.blogCategories = action.payload;
-    })
-    .addCase(getBlogCategories.rejected, (state, action) => {
+      })
+      .addCase(getBlogCategories.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = action.error;
-    })
+        state.message = action.payload;
+      }).addCase(resetBlogState, () => initialState);
   },
 });
 
-export default blogCategorySlice.reducer 
+export const { actions } = blogCategorySlice
+export default blogCategorySlice.reducer;

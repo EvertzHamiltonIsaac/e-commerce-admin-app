@@ -10,8 +10,7 @@ const getProductCategories = async () => {
         });
         return res.data
     } catch (error) {
-        console.log(error.message);
-        return
+        throw error
     }
 };
 
