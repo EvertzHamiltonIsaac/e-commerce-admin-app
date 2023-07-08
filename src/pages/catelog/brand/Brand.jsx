@@ -29,6 +29,7 @@ const columns = [
     fixed: "right",
   },
 ];
+
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
 });
