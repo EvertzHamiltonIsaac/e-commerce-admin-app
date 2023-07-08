@@ -20,7 +20,10 @@ const columns = [
   },
   {
     title: 'Actions',
-    dataIndex: 'actions'
+    dataIndex: 'actions',
+    key: 'actions',
+    fixed: 'right',
+    width: 150
   }
 ];
 

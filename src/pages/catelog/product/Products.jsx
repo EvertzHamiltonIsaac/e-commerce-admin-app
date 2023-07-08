@@ -231,7 +231,7 @@ const Products = () => {
 
   return (
     <section className="product-list">
-      <h1>Products Page</h1>
+      <h1>Products</h1>
       <article>
         <div className="d-flex justify-content-end mb-2">
           <Button

@@ -13,11 +13,11 @@ export const getProducts = createAsyncThunk("product/", async (thunkAPI) => {
 
 export const createProducts = createAsyncThunk(
   "product/create",
-  async (data, thunkAPI) => {
+  async (data, {rejectWithValue}) => {
     try {
       return await productService.createProducts(data);
     } catch (error) {
-      return thunkAPI.rejectWithValue(error);
+      return rejectWithValue(error.response.data.message);
     }
   }
 );
@@ -64,7 +64,7 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = action.error;
+        state.message = action.payload;
       }).addCase(resetProductState, () => initialState)
   },
 });

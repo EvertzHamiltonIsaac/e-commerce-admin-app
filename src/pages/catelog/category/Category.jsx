@@ -29,6 +29,9 @@ const CategoryColumns = [
   {
     title: "Actions",
     dataIndex: "actions",
+    key: 'actions',
+    fixed: 'right',
+    width: 150
   },
 ];
 

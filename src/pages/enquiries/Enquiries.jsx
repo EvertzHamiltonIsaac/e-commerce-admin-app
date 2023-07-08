@@ -14,6 +14,9 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
+    key: 'name',
+    fixed: 'left',
+    width: 150
   },
   {
     title: "Comment",
@@ -34,6 +37,9 @@ const columns = [
   {
     title: "Actions",
     dataIndex: "actions",
+    key: 'actions',
+    fixed: 'right',
+    width: 150
   },
 ];
 

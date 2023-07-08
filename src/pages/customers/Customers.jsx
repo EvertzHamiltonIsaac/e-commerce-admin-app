@@ -29,18 +29,24 @@ const columns = [
   {
     title: "Email",
     dataIndex: "email",
+    width: 160
   },
   {
     title: "Phone",
     dataIndex: "phone",
+    width: 110
+
   },
   {
     title: "Postal Code",
     dataIndex: "postalCode",
+    width: 90
+
   },
   {
     title: "Address",
     dataIndex: "address",
+    width: 300
   },
 ];
 
