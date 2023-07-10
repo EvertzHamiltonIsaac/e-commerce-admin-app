@@ -56,9 +56,9 @@ const Category = () => {
     },
     onSubmit: (values) => {
       console.log(values);
-      dispatch(createBrands({ title: values.name }));
-      formik.resetForm();
-      handleCancelModal();
+      // dispatch(createBrands({ title: values.name }));
+      Pformik.resetForm();
+      handleCancelPModal();
     },
     // validationSchema: schemaForValidations,
   });
@@ -69,9 +69,9 @@ const Category = () => {
     },
     onSubmit: (values) => {
       console.log(values);
-      dispatch(createBrands({ title: values.name }));
-      formik.resetForm();
-      handleCancelModal();
+      // dispatch(createBrands({ title: values.name }));
+      Bformik.resetForm();
+      handleCancelBModal();
     },
     // validationSchema: schemaForValidations,
   });
