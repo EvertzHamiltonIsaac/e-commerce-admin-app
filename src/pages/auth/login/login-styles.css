@@ -1,0 +1,76 @@
+
+.login-forgot__container {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2em;
+}
+
+.login-forgot__container input{
+  width: 100%;
+  height: 2em;
+}
+
+.login-forgot__container a{
+  align-self: flex-end;
+}
+
+.erros_validations{
+  font-size: 15px;
+  /* height: 20px; */
+  overflow: hidden;
+  transition: height 500ms ease;
+}
+
+.erros_validations div {
+  color: red;
+  /* text-align: center; */
+}
+
+.none_error_invalid {
+  height: 0px;
+  overflow: hidden;
+}
+
+.error_invalid {
+  height: 70px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transition: all ease 500ms;
+}
+
+.error_invalid p {
+  margin: 0;
+  padding: 0;
+}
+
+.error_invalid h6 {
+  margin: 0;
+  padding: 0;
+}
+
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #fccb90;
+  
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, #021e43, #021e43);
+  
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #021e43, #021e43);
+  }
+  
+  @media (min-width: 768px) {
+  .gradient-form {
+  height: 100vh !important;
+  }
+  }
+  @media (min-width: 769px) {
+  .gradient-custom-2 {
+  border-top-right-radius: .3rem;
+  border-bottom-right-radius: .3rem;
+  }
+  }
