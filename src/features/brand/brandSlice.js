@@ -70,4 +70,5 @@ export const brandSlice = createSlice({
   },
 });
 
+export const { actions } = brandSlice
 export default brandSlice.reducer;

@@ -3,7 +3,7 @@ import TableComponent from "../../../components/app/table/Table";
 import {
   getProductCategories,
   resetProductState,
-  createProductCategories
+  createProductCategories,
 } from "../../../features/productCategory/product.categorySlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -22,7 +22,6 @@ import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../../components/app/input/Input";
 import { toast } from "react-toastify";
-
 
 const CategoryColumns = [
   {
@@ -143,10 +142,8 @@ const Category = () => {
   //! UseEffect Needing Refactoring.
   useEffect(() => {
     if (
-      (typeof PCategory.message === "string" &&
-      PCategory.isError) || 
-      (typeof BCategory.message === "string" &&
-      BCategory.isError) 
+      (typeof PCategory.message === "string" && PCategory.isError) ||
+      (typeof BCategory.message === "string" && BCategory.isError)
     ) {
       if (
         PCategory.message.includes("token") ||
@@ -193,7 +190,6 @@ const Category = () => {
     }
   }, [PCategory.isSuccess, PCategory.isError, PCategory.isLoading]);
 
-
   useEffect(() => {
     dispatch(getProductCategories());
   }, []);
@@ -205,45 +201,44 @@ const Category = () => {
   return (
     <section className="category-list">
       <h2 className="mt-4 mb-5">Categories</h2>
-      <h3>Product</h3>
-      <article>
-        <div className="d-flex justify-content-end mb-2">
-          <Button
-            type="primary"
-            size={"large"}
-            icon={<FontAwesomeIcon icon={faPlus} />}
-            className="add-btn"
-            onClick={() => setIsPOpenModal(true)}
-          >
-            Create New Product Category
-          </Button>
-        </div>
-        <TableComponent
-          data={ProductCategoryData}
-          columns={CategoryColumns}
-          loading={PCategory.isLoading}
-        />
-      </article>
-      <h3>Blog</h3>
-      <article>
-        <div className="d-flex justify-content-end mb-2">
-          <Button
-            type="primary"
-            size={"large"}
-            icon={<FontAwesomeIcon icon={faPlus} />}
-            className="add-btn"
-            onClick={() => setIsBOpenModal(true)}
-          >
-            Create New Blog Category
-          </Button>
-        </div>
-        <TableComponent
-          data={BlogCategoryData}
-          columns={CategoryColumns}
-          loading={BCategory.isLoading}
-        />
-      </article>
-
+        <h3>Product</h3>
+        <article>
+          <div className="d-flex justify-content-end mb-2">
+            <Button
+              type="primary"
+              size={"large"}
+              icon={<FontAwesomeIcon icon={faPlus} />}
+              className="add-btn"
+              onClick={() => setIsPOpenModal(true)}
+            >
+              Create New Product Category
+            </Button>
+          </div>
+          <TableComponent
+            data={ProductCategoryData}
+            columns={CategoryColumns}
+            loading={PCategory.isLoading}
+          />
+        </article>
+        <h3>Blog</h3>
+        <article>
+          <div className="d-flex justify-content-end mb-2">
+            <Button
+              type="primary"
+              size={"large"}
+              icon={<FontAwesomeIcon icon={faPlus} />}
+              className="add-btn"
+              onClick={() => setIsBOpenModal(true)}
+            >
+              Create New Blog Category
+            </Button>
+          </div>
+          <TableComponent
+            data={BlogCategoryData}
+            columns={CategoryColumns}
+            loading={BCategory.isLoading}
+          />
+        </article>
       <Modal open={isPOpenModal} onCancel={handleCancelPModal} footer={null}>
         <h3 className="text-center mb-3">Add New Product Category</h3>
 

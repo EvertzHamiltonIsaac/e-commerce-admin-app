@@ -1,67 +1,60 @@
-import React, {useEffect, useState} from "react";
-import TableComponent from '../../../components/app/table/Table'
+import React, { useEffect, useState } from "react";
+import TableComponent from "../../../components/app/table/Table";
 import Select from "../../../components/app/select/Select";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../../components/app/input/Input";
-import {getColors} from "../../../features/color/colorSlice"
+import { getColors } from "../../../features/color/colorSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { toast } from "react-toastify";
+import { Button } from "antd";
 
 const columns = [
   {
-    title: 'Name',
-    dataIndex: 'name',
+    title: "Name",
+    dataIndex: "name",
   },
   {
-    title: 'Code HEX',
-    dataIndex: 'code',
+    title: "Code HEX",
+    dataIndex: "code",
   },
   {
-    title: 'Actions',
-    dataIndex: 'actions',
-    key: 'actions',
-    fixed: 'right',
-    width: 150
-  }
-];
-
-// const dataTable = [];
-// for (let i = 0; i < 46; i++) {
-//   dataTable.push({
-//     key: i,
-//     name: `Edward King ${i}`,
-//     product: `product ${i}`,
-//     status: `London, Park Lane no. ${i}`,
-//   });
-// }
-
-const OptionSelect = [
-  {
-    title: "1",
-  },
-  {
-    title: "2",
-  },
-  {
-    title: "3",
-  },
-  {
-    title: "4",
-  },
-  {
-    title: "5",
+    title: "Actions",
+    dataIndex: "actions",
+    key: "actions",
+    fixed: "right",
+    width: 150,
   },
 ];
+
+const schemaForValidations = Yup.object().shape({
+  name: Yup.string().required("Title is required"),
+});
 
 const Color = () => {
-  const colorData = [];
-  const dispatch = useDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const dispatch = useDispatch();
 
-  const {colors, isLoading} = useSelector((state) => state.colors);
+  const { colors, message, ColorCreated, isLoading, isError, isSuccess } =
+    useSelector((state) => state.colors);
 
+  const formik = useFormik({
+    initialValues: {
+      name: "",
+    },
+    onSubmit: (values) => {
+      // dispatch(createBrands({title: values.name}));
+      formik.resetForm();
+      handleCancelModal();
+    },
+    // validationSchema: schemaForValidations,
+  });
+
+  const colorData = [];
   for (let i = 0; i < colors.data?.length; i++) {
     colorData.push({
       key: i + 1,
@@ -84,60 +77,56 @@ const Color = () => {
     });
   }
 
-
-  const handleOnChange = (e) => {
-    console.log(e.target.value);
+  const handleCancelModal = () => {
+    setIsOpenModal(false);
   };
 
-  const handleCancelModal = () => {
-    setIsOpenModal(false)
-  }
+  useEffect(() => {
+    dispatch(getColors());
+  }, []);
 
   useEffect(() => {
-    dispatch(getColors())
-  }, [])
-
+    if (ColorCreated && isSuccess) {
+      toast.success("Brand Added Succesfully!");
+      dispatch(resetBrandState());
+      dispatch(getBrands());
+    }
+    if (isError) {
+      toast.error("Something Went Wrong!");
+      dispatch(resetBrandState());
+    }
+  }, [isSuccess, isError, isLoading]);
+  
   return (
     <section className="color-list">
       <h3>Colors</h3>
       <article>
-        <TableComponent data={colorData} columns={columns} loading={isLoading}/>
+        <div className="d-flex justify-content-end mb-2">
+          <Button
+            type="primary"
+            size={"large"}
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            className="add-btn"
+            onClick={() => setIsOpenModal(true)}
+          >
+            Create New Brand
+          </Button>
+        </div>
+        <TableComponent
+          data={colorData}
+          columns={columns}
+          loading={isLoading}
+        />
       </article>
 
       <Modal open={isOpenModal} onCancel={handleCancelModal}>
-        <article>
-          <h3>Add Blog</h3>
-          <div>
-            <form>
-              <Input type="color" />
-
-              <Select
-                className="form-select"
-                options={OptionSelect}
-                placeholder=""
-                onChange={handleOnChange}
-              />
-
-              {/* <ReactQuill theme="snow" /> */}
-
-              {/* <Dragger {...props}>
-                <p className="ant-upload-drag-icon">
-                  <InboxOutlined />
-                </p>
-                <p className="ant-upload-text">
-                  Click or drag file to this area to upload
-                </p>
-                <p className="ant-upload-hint">
-                  Support for a single or bulk upload. Strictly prohibited from
-                  uploading company data or other banned files.
-                </p>
-              </Dragger> */}
-            </form>
-          </div>
-        </article>
+        <h3>Create a New Color</h3>
+        <form>
+          <Input type="color" />
+        </form>
       </Modal>
     </section>
-  )
-}
+  );
+};
 
-export default Color
+export default Color;

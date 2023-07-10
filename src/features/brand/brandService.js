@@ -12,7 +12,7 @@ const getBrands = async () => {
 
 const createBrands = async (data) => {
   try {
-    
+  
     const res = await axios.post(`${URL}brand/create`, data, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
