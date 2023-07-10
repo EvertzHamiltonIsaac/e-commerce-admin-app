@@ -3,6 +3,7 @@ import TableComponent from "../../../components/app/table/Table";
 import {
   getProductCategories,
   resetProductState,
+  createProductCategories
 } from "../../../features/productCategory/product.categorySlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -10,6 +11,7 @@ import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getBlogCategories,
+  createBlogCategories,
   resetBlogState,
 } from "../../../features/blogCategory/blog.categorySlice";
 import Swal from "sweetalert2";
@@ -19,6 +21,8 @@ import { useFormik } from "formik";
 import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../../components/app/input/Input";
+import { toast } from "react-toastify";
+
 
 const CategoryColumns = [
   {
@@ -55,8 +59,8 @@ const Category = () => {
       name: "",
     },
     onSubmit: (values) => {
-      console.log(values);
-      // dispatch(createBrands({ title: values.name }));
+      // console.log(values);
+      dispatch(createProductCategories({ title: values.name }));
       Pformik.resetForm();
       handleCancelPModal();
     },
@@ -68,16 +72,16 @@ const Category = () => {
       name: "",
     },
     onSubmit: (values) => {
-      console.log(values);
-      // dispatch(createBrands({ title: values.name }));
+      // console.log(values);
+      dispatch(createBlogCategories({ title: values.name }));
       Bformik.resetForm();
       handleCancelBModal();
     },
     // validationSchema: schemaForValidations,
   });
 
-  const PCategoryErrorHandler = useSelector((state) => state.productCategories);
-  const BCategoryErrorHandler = useSelector((state) => state.blogCategories);
+  const PCategory = useSelector((state) => state.productCategories);
+  const BCategory = useSelector((state) => state.blogCategories);
 
   const productCategoryState = useSelector(
     (state) => state.productCategories.productCategories.data
@@ -136,20 +140,23 @@ const Category = () => {
     setIsBOpenModal(false);
   };
 
+  //! UseEffect Needing Refactoring.
   useEffect(() => {
     if (
-      typeof PCategoryErrorHandler.message === "string" &&
-      PCategoryErrorHandler.isError
+      (typeof PCategory.message === "string" &&
+      PCategory.isError) || 
+      (typeof BCategory.message === "string" &&
+      BCategory.isError) 
     ) {
       if (
-        PCategoryErrorHandler.message.includes("token") ||
-        PCategoryErrorHandler.message.includes("expired") ||
-        PCategoryErrorHandler.message.includes("log again")
+        PCategory.message.includes("token") ||
+        PCategory.message.includes("expired") ||
+        PCategory.message.includes("log again")
       ) {
         Swal.fire({
           icon: "error",
           title: "Oops...",
-          text: `${PCategoryErrorHandler.message}`,
+          text: `${PCategory.message}`,
         }).then((result) => {
           if (result.isConfirmed) {
             dispatch(resetBlogState());
@@ -161,6 +168,31 @@ const Category = () => {
       }
     }
   });
+
+  useEffect(() => {
+    if (BCategory.BlogCategoryCreated && BCategory.isSuccess) {
+      toast.success("Blog Category Succesfully!");
+      dispatch(resetBlogState());
+      dispatch(getBlogCategories());
+    }
+    if (BCategory.isError) {
+      toast.error("Something Went Wrong!");
+      dispatch(resetBlogState());
+    }
+  }, [BCategory.isSuccess, BCategory.isError, BCategory.isLoading]);
+
+  useEffect(() => {
+    if (PCategory.ProductCategoryCreated && PCategory.isSuccess) {
+      toast.success("Product Category Succesfully!");
+      dispatch(resetProductState());
+      dispatch(getProductCategories());
+    }
+    if (PCategory.isError) {
+      toast.error("Something Went Wrong!");
+      dispatch(resetProductState());
+    }
+  }, [PCategory.isSuccess, PCategory.isError, PCategory.isLoading]);
+
 
   useEffect(() => {
     dispatch(getProductCategories());
@@ -189,7 +221,7 @@ const Category = () => {
         <TableComponent
           data={ProductCategoryData}
           columns={CategoryColumns}
-          loading={PCategoryErrorHandler.isLoading}
+          loading={PCategory.isLoading}
         />
       </article>
       <h3>Blog</h3>
@@ -208,7 +240,7 @@ const Category = () => {
         <TableComponent
           data={BlogCategoryData}
           columns={CategoryColumns}
-          loading={BCategoryErrorHandler.isLoading}
+          loading={BCategory.isLoading}
         />
       </article>
 

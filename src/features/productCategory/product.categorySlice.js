@@ -14,6 +14,17 @@ export const getProductCategories = createAsyncThunk(
   }
 );
 
+export const createProductCategories = createAsyncThunk(
+  "prodCategory/createCategory",
+  async (data, { rejectWithValue }) => {
+    try {
+      return await productCategoryService.createProductCategories(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   productCategories: [],
   isError: false,
@@ -42,7 +53,23 @@ export const productCategorySlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
-      }) .addCase(resetProductState, () => initialState)
+      }) 
+      .addCase(createProductCategories.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createProductCategories.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.ProductCategoryCreated = action.payload;
+      })
+      .addCase(createProductCategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(resetProductState, () => initialState)
   },
 });
 

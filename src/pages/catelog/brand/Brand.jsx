@@ -44,7 +44,6 @@ const Brand = () => {
       name: "",
     },
     onSubmit: (values) => {
-      console.log(values);
       dispatch(createBrands({title: values.name}));
       formik.resetForm();
       handleCancelModal();
