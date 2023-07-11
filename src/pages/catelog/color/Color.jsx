@@ -3,7 +3,7 @@ import TableComponent from "../../../components/app/table/Table";
 import Select from "../../../components/app/select/Select";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../../components/app/input/Input";
-import { getColors } from "../../../features/color/colorSlice";
+import { getColors, resetColorState, createColors } from "../../../features/color/colorSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
@@ -45,9 +45,12 @@ const Color = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
+      color: "#000000",
     },
     onSubmit: (values) => {
       // dispatch(createBrands({title: values.name}));
+      dispatch(createColors({name: values.name, code: values.color}))
+      console.log(values);
       formik.resetForm();
       handleCancelModal();
     },
@@ -59,7 +62,7 @@ const Color = () => {
     colorData.push({
       key: i + 1,
       name: colors.data[i]?.name,
-      code: colors.data[i]?.code,
+      code: colors.data[i]?.code.toUpperCase(),
       actions: (
         <React.Fragment>
           <div
@@ -88,15 +91,16 @@ const Color = () => {
   useEffect(() => {
     if (ColorCreated && isSuccess) {
       toast.success("Brand Added Succesfully!");
-      dispatch(resetBrandState());
-      dispatch(getBrands());
+      dispatch(resetColorState());
+      dispatch(getColors());
     }
     if (isError) {
       toast.error("Something Went Wrong!");
-      dispatch(resetBrandState());
+      dispatch(resetColorState());
+      dispatch(getColors());
     }
   }, [isSuccess, isError, isLoading]);
-  
+
   return (
     <section className="color-list">
       <h3>Colors</h3>
@@ -109,7 +113,7 @@ const Color = () => {
             className="add-btn"
             onClick={() => setIsOpenModal(true)}
           >
-            Create New Brand
+            Create New Color
           </Button>
         </div>
         <TableComponent
@@ -119,10 +123,54 @@ const Color = () => {
         />
       </article>
 
-      <Modal open={isOpenModal} onCancel={handleCancelModal}>
+      <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
         <h3>Create a New Color</h3>
-        <form>
-          <Input type="color" />
+        <form onSubmit={formik.handleSubmit}>
+          <section className="d-flex gap-2">
+            <div style={{ width: "85%" }}>
+              <span>Name</span>
+              <Input
+                Id="name"
+                labelValue="Enter Product Category Name"
+                name="name"
+                onChange={formik.handleChange("name")}
+                value={formik.values.name}
+                onBlur={formik.handleBlur("name")}
+              />
+            </div>
+            <div style={{ width: "15%" }}>
+              <span>Color</span>
+              <Input
+                Id="color"
+                // labelValue="Enter Color"
+                type="color"
+                name="color"
+                onChange={formik.handleChange("color")}
+                value={formik.values.color}
+                onBlur={formik.handleBlur("color")}
+              />
+            </div>
+          </section>
+          <div
+            style={{ marginTop: "1em" }}
+            className="d-flex justify-content-end gap-2"
+          >
+            <button
+              onClick={handleCancelModal}
+              type="button"
+              className="btn btn-secondary"
+              style={{ backgroundColor: "var(--color-gray-main)" }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ backgroundColor: "var(--color-blue-main)" }}
+            >
+              Submit
+            </button>
+          </div>
         </form>
       </Modal>
     </section>
