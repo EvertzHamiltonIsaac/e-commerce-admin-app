@@ -11,8 +11,18 @@ const getBlogs = async () => {
     }
 };
 
+const createBlogs = async (data) => {
+    const res = await axios.post(`${URL}blog/create`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+        },
+      });
+    return res.data
+};
+
 const blogsService = {
     getBlogs,
+    createBlogs
 };
 
 export default blogsService

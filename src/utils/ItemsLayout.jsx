@@ -4,6 +4,8 @@ import { FaClipboardList, FaStore, FaTruckLoading, FaUsers, FaTruckMoving,FaBlog
 import { MdShelves } from 'react-icons/md';
 import {BiCategoryAlt} from 'react-icons/bi'
 import {IoMdColorPalette} from 'react-icons/io'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTicketSimple } from "@fortawesome/free-solid-svg-icons";
 
 export const ItemsLayout = [
   {
@@ -26,42 +28,27 @@ export const ItemsLayout = [
         icon: <FaTruckLoading />,
         label: "Products",
       },
-      // {
-      //   key: "list-product",
-      //   icon: <FaClipboardList />,
-      //   label: "Product List",
-      // },
       {
         key: "brand", //! Ojo a esta.
         icon: <FaStore />,
         label: "Brand",
       },
-      // {
-      //   key: "list-brand",
-      //   icon: <FaClipboardList />,
-      //   label: "Brand List",
-      // },
       {
         key: "category",
         icon: <BiCategoryAlt />,
         label: "Category",
       },
-      // {
-      //   key: "list-category",
-      //   icon: <FaClipboardList />,
-      //   label: "Category List",
-      // },
       {
         key: "color",
         icon: <IoMdColorPalette />,
         label: "Color",
       },
-      // {
-      //   key: "list-color",
-      //   icon: <FaClipboardList />,
-      //   label: "Color List",
-      // },
     ]
+  },
+  {
+    key: "coupons",
+    icon: <FontAwesomeIcon icon={faTicketSimple}/> ,
+    label: "Coupons",
   },
   {
     key: "orders",
@@ -72,28 +59,6 @@ export const ItemsLayout = [
     key: "blogs",
     icon: <FaBlogger />,
     label: "Blogs",
-    // children: [
-    //   // {
-    //   //   key: "blog",
-    //   //   icon: <FaBlogger />,
-    //   //   label: "Blogs",
-    //   // },
-    //   // {
-    //   //   key: "list-blog",
-    //   //   icon: <FaClipboardList />,
-    //   //   label: "Blog List",
-    //   // },
-    //   // {
-    //   //   key: "blog-category",
-    //   //   icon: <BiCategoryAlt />,
-    //   //   label: "Blog Categories",
-    //   // },
-    //   // {
-    //   //   key: "blog-category-list",
-    //   //   icon: <FaClipboardList />,
-    //   //   label: "Blog Category List",
-    //   // },
-    // ]
   },
   {
     key: "enquiries",

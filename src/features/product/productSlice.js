@@ -3,11 +3,11 @@ import productService from "./productService";
 
 export const resetProductState = createAction('resetProductState');
 
-export const getProducts = createAsyncThunk("product/", async (thunkAPI) => {
+export const getProducts = createAsyncThunk("product/", async (_, {rejectWithValue}) => {
   try {
     return await productService.getProducts();
   } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+    return rejectWithValue(error);
   }
 });
 
@@ -49,7 +49,7 @@ export const productSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
-        state.message = action.error;
+        state.message = action.payload;
       })
       .addCase(createProducts.pending, (state) => {
         state.isLoading = true;

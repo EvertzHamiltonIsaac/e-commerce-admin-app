@@ -162,6 +162,7 @@ const Products = () => {
 
   //? Brand Selector
   const brandState = useSelector((state) => state.brands.brands.data);
+  
   const productCategoryState = useSelector(
     (state) => state.productCategories.productCategories.data
   );
@@ -190,12 +191,10 @@ const Products = () => {
   }
 
   //TODO: Functions
-  const handleOnChange = (e) => {
-    console.log(e);
-  };
   const handleCancelModal = () => {
     setIsOpenModal(false);
   };
+  
   const handleColors = (e) => {
     setColor(e);
     console.log(color);
