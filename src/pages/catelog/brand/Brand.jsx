@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 import TableComponent from "../../../components/app/table/Table";
 import { useDispatch, useSelector } from "react-redux";
-import { getBrands, createBrands, resetBrandState, updateBrands } from "../../../features/brand/brandSlice";
+import {
+  getBrands,
+  createBrands,
+  resetBrandState,
+  updateBrands,
+  deleteBrands
+} from "../../../features/brand/brandSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
@@ -10,9 +16,10 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
+const { confirm } = Modal;
 import Input from "../../../components/app/input/Input";
 import { toast } from "react-toastify";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const columns = [
@@ -37,7 +44,9 @@ const schemaForValidations = Yup.object().shape({
 const Brand = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
-  const [brandId, setBrandId] = useState('');
+  const [isDeleteOpenModal, setIsDeleteOpenModal] = useState(false);
+
+  const [brandId, setBrandId] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -47,23 +56,48 @@ const Brand = () => {
       name: "",
     },
     onSubmit: (values) => {
-      if(isOpenModal){
-        dispatch(createBrands({title: values.name}));
-      } 
-      if(isUpdateOpenModal){
-        dispatch(updateBrands({data: {title: values.name}, id: brandId}));
+      if (isOpenModal) {
+        dispatch(createBrands({ title: values.name }));
+        formik.resetForm();
+        handleCancelModal();
       }
-      
-      formik.resetForm();
-      handleCancelModal();
+      if (isUpdateOpenModal) {
+        dispatch(updateBrands({ data: { title: values.name }, id: brandId }));
+        formik.resetForm();
+        handleCancelUpdateModal();
+      }
     },
     // validationSchema: schemaForValidations,
   });
 
-  const { isSuccess, isError, brandCreated, message, isLoading, brands } = useSelector(
-    (state) => state.brands
-  );
-  
+  const showDeleteConfirm = (item) => {
+    confirm({
+      title: "Are you sure delete this brand?",
+      // icon: <ExclamationCircleFilled />,
+      content: "Some descriptions",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        dispatch(deleteBrands(item._id));
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
+
+  const {
+    isSuccess,
+    isError,
+    brandCreated,
+    brandUpdated,
+    brandDeleted,
+    message,
+    isLoading,
+    brands,
+  } = useSelector((state) => state.brands);
+
   //? Get All Brands Selector
   const brandsData = [];
   for (let i = 0; i < brands.data?.length; i++) {
@@ -71,7 +105,7 @@ const Brand = () => {
       key: i + 1,
       name: brands.data[i].title,
       actions: (
-        <div onClick={() => handleOnEditButtonClick(brands.data[i])}>
+        <div>
           <div
             className="fs-5 d-flex gap-2"
             style={{ cursor: "pointer", color: "var(--color-blue-main)" }}
@@ -79,8 +113,13 @@ const Brand = () => {
             <FontAwesomeIcon
               icon={faPenToSquare}
               className="icons-hover-update"
+              onClick={() => handleOnEditButtonClick(brands.data[i])}
             />
-            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" />
+            <FontAwesomeIcon
+              icon={faTrash}
+              className="icons-hover-delete"
+              onClick={() => showDeleteConfirm(brands.data[i])}
+            />
           </div>
         </div>
       ),
@@ -90,21 +129,36 @@ const Brand = () => {
   //? Functions
   const handleCancelModal = () => {
     setIsOpenModal(false);
-    formik.values.name = ''
-  }
+    setBrandId("");
+    formik.values.name = "";
+  };
 
   const handleCancelUpdateModal = () => {
     setIsUpdateOpenModal(false);
-    formik.values.name = ''
-  }
+    setBrandId("");
+    formik.values.name = "";
+  };
+
+  const handleCancelDeleteModal = () => {
+    setIsDeleteOpenModal(false);
+    setBrandId("");
+    formik.values.name = "";
+  };
 
   //!This can be Refactored.
   const handleOnEditButtonClick = (item) => {
     setIsUpdateOpenModal(true);
-    
+
     setBrandId(item._id);
-    formik.values.name = item.title
-  }
+    formik.values.name = item.title;
+  };
+
+  const handleOnDeleteButtonClick = (item) => {
+    setIsDeleteOpenModal(true);
+    setBrandId(item._id);
+    console.log(brandId);
+  };
+
   //? useEffects
   useEffect(() => {
     dispatch(getBrands());
@@ -116,6 +170,18 @@ const Brand = () => {
       dispatch(resetBrandState());
       dispatch(getBrands());
     }
+    if (brandUpdated && isSuccess) {
+      toast.success("Brand Updated Succesfully!");
+      dispatch(resetBrandState());
+      dispatch(getBrands());
+    }
+
+    if (brandDeleted && isSuccess) {
+      toast.success("Brand Deleted Succesfully!");
+      dispatch(resetBrandState());
+      dispatch(getBrands());
+    }
+
     if (isError) {
       toast.error("Something Went Wrong!");
       dispatch(resetBrandState());
@@ -130,16 +196,16 @@ const Brand = () => {
         message.includes("log again")
       ) {
         Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
+          icon: "error",
+          title: "Oops...",
           text: `${message}`,
         }).then((result) => {
-          if(result.isConfirmed){
-            dispatch(resetBrandState())
+          if (result.isConfirmed) {
+            dispatch(resetBrandState());
             localStorage.clear();
-            navigate('/auth/sign-in')
+            navigate("/auth/sign-in");
           }
-        })
+        });
       }
     }
   });
@@ -206,8 +272,12 @@ const Brand = () => {
           </div>
         </form>
       </Modal>
-      
-      <Modal open={isUpdateOpenModal} onCancel={handleCancelUpdateModal} footer={null}>
+
+      <Modal
+        open={isUpdateOpenModal}
+        onCancel={handleCancelUpdateModal}
+        footer={null}
+      >
         <h3 className="text-center mb-3">Update Brand</h3>
         <form
           className="d-flex flex-column gap-3"
@@ -247,7 +317,33 @@ const Brand = () => {
         </form>
       </Modal>
 
+      <Modal
+        open={isDeleteOpenModal}
+        onCancel={() => setIsDeleteOpenModal(false)}
+        footer={null}
+      >
+        <h3 className="text-center mb-3">Do you want delete this brand?</h3>
 
+        <div
+          style={{ marginTop: "1em" }}
+          className="d-flex justify-content-center gap-2"
+        >
+          <button
+            onClick={handleCancelDeleteModal}
+            type="button"
+            className="btn btn-secondary"
+            style={{ backgroundColor: "var(--color-gray-main)" }}
+          >
+            Cancel
+          </button>
+          <button
+            className="btn btn-primary"
+            style={{ backgroundColor: "var(--color-red-main)" }}
+          >
+            Delete
+          </button>
+        </div>
+      </Modal>
     </section>
   );
 };

@@ -44,10 +44,28 @@ const updateBrand = async ({data, id}) => {
   }
 };
 
+const deleteBrand = async (id) => {
+  console.log(id);
+  try {
+    const res = await axios.delete(`${URL}brand/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+      },
+    });
+
+    return res.data;
+
+  } catch (error) {
+
+    throw error;
+  }
+};
+
 const brandService = {
   getBrands,
   createBrands,
-  updateBrand
+  updateBrand,
+  deleteBrand
 };
 
 export default brandService;

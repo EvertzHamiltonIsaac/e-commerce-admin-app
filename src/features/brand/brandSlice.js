@@ -25,9 +25,19 @@ export const createBrands = createAsyncThunk(
 export const updateBrands = createAsyncThunk(
   `/brand/update/:id`,
   async ({data, id}, { rejectWithValue }) => {
-    console.log(data, id);
     try {
       return await brandService.updateBrand({data, id});
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const deleteBrands = createAsyncThunk(
+  `/brand/delete/:id`,
+  async (id, { rejectWithValue }) => {
+    try {
+      return await brandService.deleteBrand(id);
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
@@ -88,6 +98,21 @@ export const brandSlice = createSlice({
         state.brandUpdated = action.payload;
       })
       .addCase(updateBrands.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(deleteBrands.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteBrands.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.brandDeleted = action.payload;
+      })
+      .addCase(deleteBrands.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
