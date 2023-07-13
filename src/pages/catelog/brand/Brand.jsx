@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import TableComponent from "../../../components/app/table/Table";
 import { useDispatch, useSelector } from "react-redux";
-import { getBrands, createBrands, resetBrandState } from "../../../features/brand/brandSlice";
+import { getBrands, createBrands, resetBrandState, updateBrands } from "../../../features/brand/brandSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
@@ -36,6 +36,9 @@ const schemaForValidations = Yup.object().shape({
 
 const Brand = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
+  const [brandId, setBrandId] = useState('');
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -44,7 +47,13 @@ const Brand = () => {
       name: "",
     },
     onSubmit: (values) => {
-      dispatch(createBrands({title: values.name}));
+      if(isOpenModal){
+        dispatch(createBrands({title: values.name}));
+      } 
+      if(isUpdateOpenModal){
+        dispatch(updateBrands({data: {title: values.name}, id: brandId}));
+      }
+      
       formik.resetForm();
       handleCancelModal();
     },
@@ -54,7 +63,7 @@ const Brand = () => {
   const { isSuccess, isError, brandCreated, message, isLoading, brands } = useSelector(
     (state) => state.brands
   );
-
+  
   //? Get All Brands Selector
   const brandsData = [];
   for (let i = 0; i < brands.data?.length; i++) {
@@ -62,7 +71,7 @@ const Brand = () => {
       key: i + 1,
       name: brands.data[i].title,
       actions: (
-        <React.Fragment>
+        <div onClick={() => handleOnEditButtonClick(brands.data[i])}>
           <div
             className="fs-5 d-flex gap-2"
             style={{ cursor: "pointer", color: "var(--color-blue-main)" }}
@@ -73,7 +82,7 @@ const Brand = () => {
             />
             <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" />
           </div>
-        </React.Fragment>
+        </div>
       ),
     });
   }
@@ -81,7 +90,21 @@ const Brand = () => {
   //? Functions
   const handleCancelModal = () => {
     setIsOpenModal(false);
-  };
+    formik.values.name = ''
+  }
+
+  const handleCancelUpdateModal = () => {
+    setIsUpdateOpenModal(false);
+    formik.values.name = ''
+  }
+
+  //!This can be Refactored.
+  const handleOnEditButtonClick = (item) => {
+    setIsUpdateOpenModal(true);
+    
+    setBrandId(item._id);
+    formik.values.name = item.title
+  }
   //? useEffects
   useEffect(() => {
     dispatch(getBrands());
@@ -183,6 +206,48 @@ const Brand = () => {
           </div>
         </form>
       </Modal>
+      
+      <Modal open={isUpdateOpenModal} onCancel={handleCancelUpdateModal} footer={null}>
+        <h3 className="text-center mb-3">Update Brand</h3>
+        <form
+          className="d-flex flex-column gap-3"
+          onSubmit={formik.handleSubmit}
+        >
+          <div>
+            <span>Name</span>
+            <Input
+              Id="name"
+              labelValue="Enter Brand Name"
+              name="name"
+              onChange={formik.handleChange("name")}
+              value={formik.values.name}
+              onBlur={formik.handleBlur("name")}
+            />
+          </div>
+          <div
+            style={{ marginTop: "1em" }}
+            className="d-flex justify-content-end gap-2"
+          >
+            <button
+              onClick={handleCancelUpdateModal}
+              type="button"
+              className="btn btn-secondary"
+              style={{ backgroundColor: "var(--color-gray-main)" }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ backgroundColor: "var(--color-blue-main)" }}
+            >
+              Update
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+
     </section>
   );
 };
