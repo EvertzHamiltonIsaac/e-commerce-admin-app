@@ -5,7 +5,7 @@ import {
   resetProductState,
   createProductCategories,
   updateProductCategory,
-  deleteProductCategory
+  deleteProductCategory,
 } from "../../../features/productCategory/product.categorySlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -16,7 +16,7 @@ import {
   createBlogCategories,
   resetBlogState,
   updateBlogCategory,
-  deleteBlogCategory
+  deleteBlogCategory,
 } from "../../../features/blogCategory/blog.categorySlice";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -44,17 +44,16 @@ const CategoryColumns = [
 const schemaForProductValidations = Yup.object().shape({
   name: Yup.string().required("name is required"),
 });
-1
+1;
 const schemaForBlogValidations = Yup.object().shape({
   name: Yup.string().required("name is required"),
 });
 
 const Category = () => {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //* Blog 
+  //* Blog
   const [isBOpenModal, setIsBOpenModal] = useState(false);
   const [isBUpdateOpenModal, setIsBUpdateOpenModal] = useState(false);
   const [isBDeleteOpenModal, setIsBDeleteOpenModal] = useState(false);
@@ -74,7 +73,7 @@ const Category = () => {
       okType: "danger",
       cancelText: "No",
       onOk() {
-          dispatch(deleteProductCategory(item._id))
+        dispatch(deleteProductCategory(item._id));
       },
       onCancel() {
         console.log("Cancel");
@@ -91,7 +90,7 @@ const Category = () => {
       okType: "danger",
       cancelText: "No",
       onOk() {
-          dispatch(deleteBlogCategory(item._id))
+        dispatch(deleteBlogCategory(item._id));
       },
       onCancel() {
         console.log("Cancel");
@@ -106,9 +105,18 @@ const Category = () => {
       name: "",
     },
     onSubmit: (values) => {
-      dispatch(createBlogCategories({ title: values.name }));
-      Bformik.resetForm();
-      handleCancelBModal();
+      if (isBOpenModal) {
+        dispatch(createBlogCategories({ title: values.name }));
+        Bformik.resetForm();
+        handleCancelBModal();
+        setItemId("");
+      }
+      if (isBUpdateOpenModal) {
+        dispatch(updateBlogCategory({ data: { title: values.name }, id: itemId }));
+        Bformik.resetForm();
+        handleCancelBModal();
+        setItemId("");
+      }
     },
     // validationSchema: schemaForValidations,
   });
@@ -132,9 +140,13 @@ const Category = () => {
             <FontAwesomeIcon
               icon={faPenToSquare}
               className="icons-hover-update"
-              onClick={() => setIsBUpdateOpenModal(true)}
+              onClick={() => handleOnClickButtonEdit(blogCategoryState[i])}
             />
-            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" onClick={() => showDeleteBlogConfirm(blogCategoryState[i])}/>
+            <FontAwesomeIcon
+              icon={faTrash}
+              className="icons-hover-delete"
+              onClick={() => showDeleteBlogConfirm(blogCategoryState[i])}
+            />
           </div>
         </React.Fragment>
       ),
@@ -151,6 +163,7 @@ const Category = () => {
       dispatch(createProductCategories({ title: values.name }));
       Pformik.resetForm();
       handleCancelPModal();
+      setItemId("");
     },
     // validationSchema: schemaForValidations,
   });
@@ -160,7 +173,7 @@ const Category = () => {
   const productCategoryState = useSelector(
     (state) => state.productCategories.productCategories.data
   );
-  
+
   for (let i = 0; i < productCategoryState?.length; i++) {
     ProductCategoryData.push({
       key: i + 1,
@@ -174,9 +187,15 @@ const Category = () => {
             <FontAwesomeIcon
               icon={faPenToSquare}
               className="icons-hover-update"
-              onClick={() => setIsPUpdateOpenModal(true)}
+              onClick={() =>
+                handleOnClickButtonEditProduct(productCategoryState[i])
+              }
             />
-            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" onClick={() => showDeleteProductConfirm(productCategoryState[i])} />
+            <FontAwesomeIcon
+              icon={faTrash}
+              className="icons-hover-delete"
+              onClick={() => showDeleteProductConfirm(productCategoryState[i])}
+            />
           </div>
         </React.Fragment>
       ),
@@ -185,16 +204,29 @@ const Category = () => {
 
   //? Functions
 
+  const handleOnClickButtonEditProduct = (item) => {
+    setIsPUpdateOpenModal(true);
+    setItemId(item._id);
+    Pformik.values.name = item.title;
+  };
+
+  const handleOnClickButtonEdit = (item) => {
+    setIsBUpdateOpenModal(true);
+    setItemId(item._id);
+    Bformik.values.name = item.title;
+  };
 
   const handleCancelPModal = () => {
     setIsPOpenModal(false);
     setIsPUpdateOpenModal(false);
+    Pformik.values.name = "";
   };
+
   const handleCancelBModal = () => {
     setIsBOpenModal(false);
     setIsBUpdateOpenModal(false);
+    Bformik.values.name = "";
   };
-
 
   //! UseEffect Needing Refactoring.
   useEffect(() => {
@@ -245,8 +277,8 @@ const Category = () => {
     if (BCategory.isError) {
       toast.error("Something Went Wrong!");
       dispatch(resetBlogState());
+      dispatch(getBlogCategories());
     }
-
   }, [BCategory.isSuccess, BCategory.isError, BCategory.isLoading]);
 
   useEffect(() => {
@@ -255,6 +287,19 @@ const Category = () => {
       dispatch(resetProductState());
       dispatch(getProductCategories());
     }
+
+    if (PCategory.ProductCategoryUpdated && PCategory.isSuccess) {
+      toast.success("Product Category Updated Succesfully!");
+      dispatch(resetProductState());
+      dispatch(getProductCategories());
+    }
+
+    if (PCategory.ProductCategoryDeleted && PCategory.isSuccess) {
+      toast.success("Product Category Deleted Succesfully!");
+      dispatch(resetProductState());
+      dispatch(getProductCategories());
+    }
+
     if (PCategory.isError) {
       toast.error("Something Went Wrong!");
       dispatch(resetProductState());
@@ -272,44 +317,44 @@ const Category = () => {
   return (
     <section className="category-list">
       <h2 className="mt-4 mb-5">Categories</h2>
-        <h3>Product</h3>
-        <article>
-          <div className="d-flex justify-content-end mb-2">
-            <Button
-              type="primary"
-              size={"large"}
-              icon={<FontAwesomeIcon icon={faPlus} />}
-              className="add-btn"
-              onClick={() => setIsPOpenModal(true)}
-            >
-              Create New Product Category
-            </Button>
-          </div>
-          <TableComponent
-            data={ProductCategoryData}
-            columns={CategoryColumns}
-            loading={PCategory.isLoading}
-          />
-        </article>
-        <h3>Blog</h3>
-        <article>
-          <div className="d-flex justify-content-end mb-2">
-            <Button
-              type="primary"
-              size={"large"}
-              icon={<FontAwesomeIcon icon={faPlus} />}
-              className="add-btn"
-              onClick={() => setIsBOpenModal(true)}
-            >
-              Create New Blog Category
-            </Button>
-          </div>
-          <TableComponent
-            data={BlogCategoryData}
-            columns={CategoryColumns}
-            loading={BCategory.isLoading}
-          />
-        </article>
+      <h3>Product</h3>
+      <article>
+        <div className="d-flex justify-content-end mb-2">
+          <Button
+            type="primary"
+            size={"large"}
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            className="add-btn"
+            onClick={() => setIsPOpenModal(true)}
+          >
+            Create New Product Category
+          </Button>
+        </div>
+        <TableComponent
+          data={ProductCategoryData}
+          columns={CategoryColumns}
+          loading={PCategory.isLoading}
+        />
+      </article>
+      <h3>Blog</h3>
+      <article>
+        <div className="d-flex justify-content-end mb-2">
+          <Button
+            type="primary"
+            size={"large"}
+            icon={<FontAwesomeIcon icon={faPlus} />}
+            className="add-btn"
+            onClick={() => setIsBOpenModal(true)}
+          >
+            Create New Blog Category
+          </Button>
+        </div>
+        <TableComponent
+          data={BlogCategoryData}
+          columns={CategoryColumns}
+          loading={BCategory.isLoading}
+        />
+      </article>
 
       <Modal open={isPOpenModal} onCancel={handleCancelPModal} footer={null}>
         <h3 className="text-center mb-3">Add New Product Category</h3>
@@ -352,8 +397,12 @@ const Category = () => {
         </form>
       </Modal>
 
-      <Modal open={isPUpdateOpenModal} onCancel={handleCancelPModal} footer={null}>
-        {/* <h3 className="text-center mb-3">Add New Product Category</h3>
+      <Modal
+        open={isPUpdateOpenModal}
+        onCancel={handleCancelPModal}
+        footer={null}
+      >
+        <h3 className="text-center mb-3">Update Product Category</h3>
 
         <form
           className="d-flex flex-column gap-3"
@@ -390,7 +439,7 @@ const Category = () => {
               Submit
             </button>
           </div>
-        </form> */}
+        </form>
       </Modal>
 
       <Modal open={isBOpenModal} onCancel={handleCancelBModal} footer={null}>
@@ -433,22 +482,26 @@ const Category = () => {
         </form>
       </Modal>
 
-      <Modal open={isBUpdateOpenModal} onCancel={handleCancelBModal} footer={null}>
-        {/* <h3 className="text-center mb-3">Add New Product Category</h3>
+      <Modal
+        open={isBUpdateOpenModal}
+        onCancel={handleCancelBModal}
+        footer={null}
+      >
+        <h3 className="text-center mb-3">Update Product Category</h3>
 
         <form
           className="d-flex flex-column gap-3"
-          onSubmit={Pformik.handleSubmit}
+          onSubmit={Bformik.handleSubmit}
         >
           <div>
             <span>Name</span>
             <Input
               Id="name"
-              labelValue="Enter Product Category Name"
+              labelValue="Enter Blog Category Name"
               name="name"
-              onChange={Pformik.handleChange("name")}
-              value={Pformik.values.name}
-              onBlur={Pformik.handleBlur("name")}
+              onChange={Bformik.handleChange("name")}
+              value={Bformik.values.name}
+              onBlur={Bformik.handleBlur("name")}
             />
           </div>
           <div
@@ -456,7 +509,7 @@ const Category = () => {
             className="d-flex justify-content-end gap-2"
           >
             <button
-              onClick={handleCancelPModal}
+              onClick={handleCancelBModal}
               type="button"
               className="btn btn-secondary"
               style={{ backgroundColor: "var(--color-gray-main)" }}
@@ -471,9 +524,8 @@ const Category = () => {
               Submit
             </button>
           </div>
-        </form> */}
+        </form>
       </Modal>
-
     </section>
   );
 };

@@ -38,9 +38,7 @@ const updateBlogCategory = async ({data, id}) => {
         Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
       },
     });
-
     return res.data;
-
   } catch (error) {
 
     throw error;
