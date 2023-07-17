@@ -44,7 +44,6 @@ const schemaForValidations = Yup.object().shape({
 const Brand = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
-  const [isDeleteOpenModal, setIsDeleteOpenModal] = useState(false);
 
   const [brandId, setBrandId] = useState("");
 
@@ -135,12 +134,6 @@ const Brand = () => {
 
   const handleCancelUpdateModal = () => {
     setIsUpdateOpenModal(false);
-    setBrandId("");
-    formik.values.name = "";
-  };
-
-  const handleCancelDeleteModal = () => {
-    setIsDeleteOpenModal(false);
     setBrandId("");
     formik.values.name = "";
   };
@@ -310,33 +303,6 @@ const Brand = () => {
         </form>
       </Modal>
 
-      <Modal
-        open={isDeleteOpenModal}
-        onCancel={() => setIsDeleteOpenModal(false)}
-        footer={null}
-      >
-        <h3 className="text-center mb-3">Do you want delete this brand?</h3>
-
-        <div
-          style={{ marginTop: "1em" }}
-          className="d-flex justify-content-center gap-2"
-        >
-          <button
-            onClick={handleCancelDeleteModal}
-            type="button"
-            className="btn btn-secondary"
-            style={{ backgroundColor: "var(--color-gray-main)" }}
-          >
-            Cancel
-          </button>
-          <button
-            className="btn btn-primary"
-            style={{ backgroundColor: "var(--color-red-main)" }}
-          >
-            Delete
-          </button>
-        </div>
-      </Modal>
     </section>
   );
 };

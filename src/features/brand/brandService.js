@@ -45,7 +45,6 @@ const updateBrand = async ({data, id}) => {
 };
 
 const deleteBrand = async (id) => {
-  console.log(id);
   try {
     const res = await axios.delete(`${URL}brand/delete/${id}`, {
       headers: {

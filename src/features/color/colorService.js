@@ -27,9 +27,44 @@ const createColors = async (data) => {
     }
   };
 
+  const updateColor = async ({data, id}) => {
+    try {
+      const res = await axios.put(`${URL}color/update/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+        },
+      });
+  
+      return res.data;
+  
+    } catch (error) {
+  
+      throw error;
+      
+    }
+  };
+  
+  const deleteColor = async (id) => {
+    try {
+      const res = await axios.delete(`${URL}color/delete/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+        },
+      });
+  
+      return res.data;
+  
+    } catch (error) {
+  
+      throw error;
+    }
+  };
+
 const colorService = {
     getColors,
-    createColors
+    createColors,
+    updateColor,
+    deleteColor
 };
 
 export default colorService

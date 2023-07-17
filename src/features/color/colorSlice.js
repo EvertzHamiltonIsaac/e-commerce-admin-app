@@ -22,6 +22,28 @@ export const createColors = createAsyncThunk(
   }
 );
 
+export const updateColors = createAsyncThunk(
+  `color/update/:id`,
+  async ({data, id}, { rejectWithValue }) => {
+    try {
+      return await colorService.updateColor({data, id});
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const deleteColors = createAsyncThunk(
+  `color/delete/:id`,
+  async (id, { rejectWithValue }) => {
+    try {
+      return await colorService.deleteColor(id);
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
     colors: [],
     isError: false,
@@ -61,6 +83,36 @@ export const colorSlice = createSlice({
       state.ColorCreated = action.payload;
     })
     .addCase(createColors.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.message = action.payload;
+    })
+    .addCase(updateColors.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(updateColors.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = true;
+      state.ColorUpdated = action.payload;
+    })
+    .addCase(updateColors.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.message = action.payload;
+    })
+    .addCase(deleteColors.pending, (state) => {
+      state.isLoading = true;
+    })
+    .addCase(deleteColors.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = true;
+      state.ColorDeleted = action.payload;
+    })
+    .addCase(deleteColors.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.isSuccess = false;
