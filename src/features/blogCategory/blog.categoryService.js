@@ -29,11 +29,49 @@ const createBlogCategories = async (data) => {
   
       throw error;
     }
+}
+
+const updateBlogCategory = async ({data, id}) => {
+  try {
+    const res = await axios.put(`${URL}blogCategory/updateCategory/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+      },
+    });
+
+    return res.data;
+
+  } catch (error) {
+
+    throw error;
+    
   }
+};
+
+const deleteBlogCategory = async (id) => {
+  console.log(id);
+  try {
+    const res = await axios.delete(`${URL}blogCategory/deleteCategory/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+      },
+    });
+
+    return res.data;
+
+  } catch (error) {
+
+    throw error;
+  }
+};
+
+
 
 const BlogCategoryService = {
     getBlogCategories,
-    createBlogCategories
+    createBlogCategories,
+    updateBlogCategory,
+    deleteBlogCategory
 };
 
 export default BlogCategoryService

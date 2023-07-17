@@ -148,15 +148,8 @@ const Brand = () => {
   //!This can be Refactored.
   const handleOnEditButtonClick = (item) => {
     setIsUpdateOpenModal(true);
-
     setBrandId(item._id);
     formik.values.name = item.title;
-  };
-
-  const handleOnDeleteButtonClick = (item) => {
-    setIsDeleteOpenModal(true);
-    setBrandId(item._id);
-    console.log(brandId);
   };
 
   //? useEffects

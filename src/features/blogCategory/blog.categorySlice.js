@@ -32,6 +32,28 @@ export const createBlogCategories = createAsyncThunk(
     }
   }
 );
+  
+export const updateBlogCategory = createAsyncThunk(
+  `blogCategory/updateCategory/:id`,
+  async ({data, id}, { rejectWithValue }) => {
+    try {
+      return await BlogCategoryService.updateBlogCategory({data, id});
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const deleteBlogCategory = createAsyncThunk(
+  `blogCategory/deleteCategory/:id`,
+  async (id, { rejectWithValue }) => {
+    try {
+      return await BlogCategoryService.deleteBlogCategory(id);
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 
 export const blogCategorySlice = createSlice({
   name: "blogCategory",
@@ -64,6 +86,36 @@ export const blogCategorySlice = createSlice({
         state.BlogCategoryCreated = action.payload;
       })
       .addCase(createBlogCategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(updateBlogCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateBlogCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.BlogCategoryUpdated = action.payload;
+      })
+      .addCase(updateBlogCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(deleteBlogCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteBlogCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.BlogCategoryDeleted = action.payload;
+      })
+      .addCase(deleteBlogCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

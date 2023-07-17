@@ -31,9 +31,45 @@ const createProductCategories = async (data) => {
     }
   };
 
+  const updateProductCategory = async ({data, id}) => {
+    try {
+      const res = await axios.put(`${URL}prodCategory/updateCategory/${id}`, data, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+        },
+      });
+  
+      return res.data;
+  
+    } catch (error) {
+  
+      throw error;
+      
+    }
+  };
+  
+  const deleteProductCategory = async (id) => {
+    console.log(id);
+    try {
+      const res = await axios.delete(`${URL}prodCategory/deleteCategory/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+        },
+      });
+  
+      return res.data;
+  
+    } catch (error) {
+  
+      throw error;
+    }
+  };
+
 const productCategoryService = {
     getProductCategories,
-    createProductCategories
+    createProductCategories,
+    updateProductCategory,
+    deleteProductCategory
 };
 
 export default productCategoryService

@@ -25,6 +25,28 @@ export const createProductCategories = createAsyncThunk(
   }
 );
 
+export const updateProductCategory = createAsyncThunk(
+  `prodCategory/updateCategory/:id`,
+  async ({data, id}, { rejectWithValue }) => {
+    try {
+      return await productCategoryService.updateProductCategory({data, id});
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const deleteProductCategory = createAsyncThunk(
+  `prodCategory/deleteCategory/:id`,
+  async (id, { rejectWithValue }) => {
+    try {
+      return await productCategoryService.deleteProductCategory(id);
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   productCategories: [],
   isError: false,
@@ -64,6 +86,36 @@ export const productCategorySlice = createSlice({
         state.ProductCategoryCreated = action.payload;
       })
       .addCase(createProductCategories.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(updateProductCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProductCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.ProductCategoryUpdated = action.payload;
+      })
+      .addCase(updateProductCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(deleteProductCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProductCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.ProductCategoryDeleted = action.payload;
+      })
+      .addCase(deleteProductCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

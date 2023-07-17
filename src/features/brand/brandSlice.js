@@ -23,7 +23,7 @@ export const createBrands = createAsyncThunk(
 );
 
 export const updateBrands = createAsyncThunk(
-  `/brand/update/:id`,
+  `brand/update/:id`,
   async ({data, id}, { rejectWithValue }) => {
     try {
       return await brandService.updateBrand({data, id});
@@ -34,7 +34,7 @@ export const updateBrands = createAsyncThunk(
 );
 
 export const deleteBrands = createAsyncThunk(
-  `/brand/delete/:id`,
+  `brand/delete/:id`,
   async (id, { rejectWithValue }) => {
     try {
       return await brandService.deleteBrand(id);
