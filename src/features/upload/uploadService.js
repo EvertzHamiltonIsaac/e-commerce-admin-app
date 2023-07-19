@@ -1,13 +1,12 @@
 import axios from "axios";
 import { URL } from "../../utils/BaseURL";
-import { config } from "../../utils/axiosconfig";
 
 const uploadImg = async (data) => {
   const res = await axios.post(`${URL}image/upload`, data, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
     },
-  });
+    });
   return res.data;
 };
 

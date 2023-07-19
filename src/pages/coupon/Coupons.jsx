@@ -4,6 +4,8 @@ import {
   getCoupons,
   createCoupons,
   resetCouponState,
+  deleteCoupons,
+  updateCoupons,
 } from "../../features/coupons/couponSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -19,6 +21,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/app/table/Table";
 import moment from "moment/moment";
+const { confirm } = Modal;
 
 const columns = [
   {
@@ -51,18 +54,52 @@ const schemaForValidations = Yup.object().shape({
 
 const Coupons = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
+  const [couponId, setCouponId] = useState("");
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   //? Functions
   const handleCancelModal = () => {
     setIsOpenModal(false);
+    setIsUpdateOpenModal(false)
+    formik.values.name = "";
+    formik.values.expiry = "";
+    formik.values.discount = "";
   };
 
-  const handleFormatDateTime = (dateTimeIsoFormat) => {
+  const handleOnClickEditCoupon = (item) => {
+    setIsUpdateOpenModal(true);
+    setCouponId(item._id);
+    formik.values.name = item.name;
+    formik.values.expiry = handleFormatDateTime(item.expiry, 'YYYY-MM-DD');
+    console.log(formik.values.expiry);
+    formik.values.discount = item.discount
+  }
+
+  const handleFormatDateTime = (dateTimeIsoFormat, format) => {
     const momentObj = moment(dateTimeIsoFormat);
-    const formattedTimestamp = momentObj.format("DD-MM-YYYY");
+    momentObj.utcOffset(0);
+    const formattedTimestamp = momentObj.format(format);
     return formattedTimestamp;
+  };
+
+  const showDeleteConfirm = (item) => {
+    confirm({
+      title: "Are you sure delete this brand?",
+      // icon: <ExclamationCircleFilled />,
+      content: "Some descriptions",
+      okText: "Yes",
+      okType: "danger",
+      cancelText: "No",
+      onOk() {
+        dispatch(deleteCoupons(item._id));
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
   };
 
   const formik = useFormik({
@@ -72,15 +109,21 @@ const Coupons = () => {
       discount: 0,
     },
     onSubmit: (values) => {
-      dispatch(createCoupons(values));
-      console.log(values);
-      formik.resetForm();
-      handleCancelModal();
+      if (isOpenModal) {
+        dispatch(createCoupons(values));
+        formik.resetForm();
+        handleCancelModal();
+      }
+      if (isUpdateOpenModal) {
+        dispatch(updateCoupons({ data: values, id: couponId }));
+        formik.resetForm();
+        handleCancelModal();
+      }
     },
     // validationSchema: schemaForValidations,
   });
 
-  const { isSuccess, isError, CouponCreated, message, isLoading, coupons } =
+  const { isSuccess, isError, CouponCreated, CouponDeleted, CouponUpdated, message, isLoading, coupons } =
     useSelector((state) => state.coupons);
 
   //? Get All Brands Selector
@@ -89,7 +132,7 @@ const Coupons = () => {
     couponsData.push({
       key: i + 1,
       name: coupons.data[i].name,
-      expiry: handleFormatDateTime(coupons?.data[i].expiry),
+      expiry: handleFormatDateTime(coupons?.data[i].expiry, 'MMMM Do YYYY'),
       discount: coupons?.data[i].discount,
       actions: (
         <React.Fragment>
@@ -100,8 +143,9 @@ const Coupons = () => {
             <FontAwesomeIcon
               icon={faPenToSquare}
               className="icons-hover-update"
+              onClick={() => handleOnClickEditCoupon(coupons.data[i])}
             />
-            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" />
+            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" onClick={() => showDeleteConfirm(coupons.data[i])}/>
           </div>
         </React.Fragment>
       ),
@@ -115,10 +159,23 @@ const Coupons = () => {
 
   useEffect(() => {
     if (CouponCreated && isSuccess) {
-      toast.success("Brand Added Succesfully!");
+      toast.success("Coupon Added Succesfully!");
       dispatch(resetCouponState());
       dispatch(getCoupons());
     }
+
+    if (CouponUpdated && isSuccess) {
+      toast.success("Coupon Updated Succesfully!");
+      dispatch(resetCouponState());
+      dispatch(getCoupons());
+    }
+
+    if (CouponDeleted && isSuccess) {
+      toast.success("Coupon Deleted Succesfully!");
+      dispatch(resetCouponState());
+      dispatch(getCoupons());
+    }
+
     if (isError) {
       toast.error("Something Went Wrong!");
       dispatch(resetCouponState());
@@ -149,7 +206,7 @@ const Coupons = () => {
 
   return (
     <section className="brand-list">
-      <h3>Brands</h3>
+      <h3>Coupons</h3>
       <article>
         <div className="d-flex justify-content-end mb-2">
           <Button
@@ -171,6 +228,82 @@ const Coupons = () => {
 
       <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
         <h3 className="text-center mb-3">Add New Brand</h3>
+
+        <form
+          className="d-flex flex-column gap-3"
+          onSubmit={formik.handleSubmit}
+        >
+          <div>
+            <span>Name</span>
+            <Input
+              Id="name"
+              labelValue="Enter Brand Name"
+              name="name"
+              onChange={formik.handleChange("name")}
+              value={formik.values.name}
+              onBlur={formik.handleBlur("name")}
+            />
+          </div>
+
+          <div>
+            {/* <DatePicker
+              Id="expiry"
+              name="expiry"
+              onChange={formik.handleChange("expiry")}
+              value={formik.values.expiry}
+              allowClear
+            //   onBlur={formik.handleBlur("expiry")}
+            /> */}
+            <span>Name</span>
+            <Input
+              Id="expiry"
+              labelValue="Enter Brand Name"
+              type="date"
+              name="expiry"
+              onChange={formik.handleChange("expiry")}
+              value={formik.values.expiry}
+            //   onBlur={formik.handleBlur("expiry")}
+            />
+          </div>
+
+          <div>
+            <span>Name</span>
+            <Input
+              Id="discount"
+              labelValue="Enter Brand Name"
+              name="discount"
+              type="number"
+              onChange={formik.handleChange("discount")}
+              value={formik.values.discount}
+              onBlur={formik.handleBlur("discount")}
+            />
+          </div>
+
+          <div
+            style={{ marginTop: "1em" }}
+            className="d-flex justify-content-end gap-2"
+          >
+            <button
+              onClick={handleCancelModal}
+              type="button"
+              className="btn btn-secondary"
+              style={{ backgroundColor: "var(--color-gray-main)" }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ backgroundColor: "var(--color-blue-main)" }}
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </Modal>
+
+      <Modal open={isUpdateOpenModal} onCancel={handleCancelModal} footer={null}>
+        <h3 className="text-center mb-3">Update Coupon</h3>
 
         <form
           className="d-flex flex-column gap-3"

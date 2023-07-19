@@ -41,6 +41,7 @@ const CategoryColumns = [
     width: 150,
   },
 ];
+
 const schemaForProductValidations = Yup.object().shape({
   name: Yup.string().required("name is required"),
 });
@@ -56,13 +57,11 @@ const Category = () => {
   //* Blog
   const [isBOpenModal, setIsBOpenModal] = useState(false);
   const [isBUpdateOpenModal, setIsBUpdateOpenModal] = useState(false);
-  const [isBDeleteOpenModal, setIsBDeleteOpenModal] = useState(false);
   const [itemId, setItemId] = useState("");
 
   //* Product
   const [isPOpenModal, setIsPOpenModal] = useState(false);
   const [isPUpdateOpenModal, setIsPUpdateOpenModal] = useState(false);
-  const [isPDeleteOpenModal, setIsPDeleteOpenModal] = useState(false);
 
   const showDeleteProductConfirm = (item) => {
     confirm({
@@ -160,10 +159,18 @@ const Category = () => {
       name: "",
     },
     onSubmit: (values) => {
-      dispatch(createProductCategories({ title: values.name }));
-      Pformik.resetForm();
-      handleCancelPModal();
-      setItemId("");
+      if (isPOpenModal) {
+        dispatch(createProductCategories({ title: values.name }));
+        Bformik.resetForm();
+        handleCancelPModal();
+        setItemId("");
+      }
+      if (isPUpdateOpenModal) {
+        dispatch(updateProductCategory({ data: { title: values.name }, id: itemId }));
+        Bformik.resetForm();
+        handleCancelPModal();
+        setItemId("");
+      }
     },
     // validationSchema: schemaForValidations,
   });

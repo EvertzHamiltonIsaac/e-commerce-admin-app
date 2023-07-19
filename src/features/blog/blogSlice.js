@@ -22,6 +22,28 @@ export const createBlogs = createAsyncThunk(
   }
 );
 
+export const updateBlogs = createAsyncThunk(
+  `blog/update/:id`,
+  async ({data, id}, { rejectWithValue }) => {
+    try {
+      return await blogService.updateBlog({data, id});
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const deleteBlogs = createAsyncThunk(
+  `blog/delete/:id`,
+  async (id, { rejectWithValue }) => {
+    try {
+      return await blogService.deleteBlog(id);
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   blogs: [],
   isError: false,
@@ -65,7 +87,38 @@ export const blogSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
-      }).addCase(resetBlogState, () => initialState)
+      })
+      .addCase(updateBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateBlogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.BlogUpdated = action.payload;
+      })
+      .addCase(updateBlogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(deleteBlogs.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteBlogs.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.BlogDeleted = action.payload;
+      })
+      .addCase(deleteBlogs.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(resetBlogState, () => initialState)
   },
 });
 

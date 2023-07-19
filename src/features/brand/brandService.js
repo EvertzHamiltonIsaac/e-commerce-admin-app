@@ -19,15 +19,12 @@ const createBrands = async (data) => {
     });
 
     return res.data;
-
   } catch (error) {
-
     throw error;
-    
   }
 };
 
-const updateBrand = async ({data, id}) => {
+const updateBrand = async ({ data, id }) => {
   try {
     const res = await axios.put(`${URL}brand/update/${id}`, data, {
       headers: {
@@ -36,11 +33,8 @@ const updateBrand = async ({data, id}) => {
     });
 
     return res.data;
-
   } catch (error) {
-
     throw error;
-    
   }
 };
 
@@ -53,9 +47,7 @@ const deleteBrand = async (id) => {
     });
 
     return res.data;
-
   } catch (error) {
-
     throw error;
   }
 };
@@ -64,7 +56,7 @@ const brandService = {
   getBrands,
   createBrands,
   updateBrand,
-  deleteBrand
+  deleteBrand,
 };
 
 export default brandService;

@@ -28,9 +28,39 @@ const createCoupons = async (data) => {
   }
 };
 
+const updateCoupons = async ({ data, id }) => {
+  try {
+    const res = await axios.put(`${URL}coupon/update/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteCoupons = async (id) => {
+  try {
+    const res = await axios.delete(`${URL}coupon/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const couponService = {
   getCoupons,
   createCoupons,
+  updateCoupons,
+  deleteCoupons,
 };
 
 export default couponService;
