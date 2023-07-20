@@ -5,7 +5,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Upload } from "antd";
+import { Button, Upload, Image } from "antd";
 import Modal from "antd/es/modal/Modal";
 import DOMPurify from "dompurify";
 import { useFormik } from "formik";
@@ -42,16 +42,9 @@ const getBase64 = (file) =>
   });
 
 const schemaForValidations = Yup.object().shape({
-  title: Yup.string().required("Title is required"),
+  title: Yup.string().required("Title of Blog is required."),
   description: Yup.string().required("Description is required"),
-  category: Yup.string().required("Email is required"),
-  brand: Yup.string().required("Email is required"),
-  color: Yup.array()
-    .min(1, "Pick at least one color")
-    .required("Color is required"),
-  quantity: Yup.string().required("Email is required"),
-  price: Yup.string().required("Email is required"),
-  images: Yup.string().required("Email is required"),
+  category: Yup.string().required("Category is required"),
 });
 
 const Blog = () => {
@@ -191,7 +184,7 @@ const Blog = () => {
   };
 
   const handleOnEditButtonClick = (item) => {
-    console.log(item.images);
+    // console.log(item.images);
     setIsUpdateOpenModal(true);
     setBlogId(item._id);
     formik.values.title = item.title;
@@ -362,25 +355,7 @@ const Blog = () => {
                 />
               </div>
               <div className="dropzone_container">
-                {/* <Dropzone
-                  onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <section className="dropzone" {...getRootProps()}>
-                      <div className="">
-                        <FontAwesomeIcon
-                          icon={faFileArrowUp}
-                          style={{ height: "40px", padding: "15px" }}
-                        />
-                        <input {...getInputProps()} />
-                        <p>
-                          Drag 'n' drop some files here, or click to select
-                          files
-                        </p>
-                      </div>
-                    </section>
-                  )}
-                </Dropzone> */}
+                <span className="mb-5">Upload Images</span>
                 <Upload
                   action="https://ginger-final-project.onrender.com/api/v1/image/upload"
                   headers={{
@@ -388,7 +363,9 @@ const Blog = () => {
                       "sessionToken"
                     )}`,
                   }}
-                  onRemove={(file) => dispatch(deleteImg(file?.response?.data[0]?.public_id))}
+                  onRemove={(file) =>
+                    dispatch(deleteImg(file?.response?.data[0]?.public_id))
+                  }
                   // onDrop={(acceptedFiles) => console.log(acceptedFiles)}
                   listType="picture-card"
                   fileList={fileList}
@@ -398,19 +375,6 @@ const Blog = () => {
                   {fileList.length >= 8 ? null : uploadButton}
                 </Upload>
               </div>
-              {/* <div className="showImages d-flex flex-wrap gap-3">
-                {imgArray.map((item, index) => (
-                  <div className="position-relative" key={index}>
-                    <button
-                      type="button"
-                      onClick={() => dispatch(deleteImg(item?.public_id))}
-                      className="btn-close position-absolute"
-                      style={{ top: "10px", right: "10px" }}
-                    ></button>
-                    <img src={item?.url} alt="" width={100} height={100} />
-                  </div>
-                ))}
-              </div> */}
 
               <div
                 style={{ marginTop: "3.2em" }}
@@ -451,31 +415,32 @@ const Blog = () => {
           src={previewImage}
         />
       </Modal>
-      {/* <Modal
+
+      <Modal
         open={isUpdateOpenModal}
         onCancel={handleCancelModal}
         footer={null}
       >
         <article>
-          <h3>Add Blog</h3>
+          <h3 className="d-flex justify-content-center mb-3">Update Blog</h3>
           <div>
             <form
               className="d-flex flex-column gap-3"
               onSubmit={formik.handleSubmit}
             >
-              <div style={{ width: "70%" }}>
+              <div style={{ width: "100%" }}>
                 <span>Title</span>
                 <Input
                   Id="title"
-                  labelValue="Enter Product Title"
+                  labelValue="Enter the blog title"
                   name="title"
                   onChange={formik.handleChange("title")}
                   value={formik.values.title}
                   onBlur={formik.handleBlur("title")}
                 />
               </div>
-              <div style={{ width: "50%" }}>
-                <span>Select a Category</span>
+              <div style={{ width: "100%" }}>
+                <span>Select a Blog Category</span>
                 <Select
                   value={formik.values.category}
                   id="category"
@@ -498,40 +463,48 @@ const Blog = () => {
                   value={formik?.values?.description}
                 />
               </div>
-              <div className="dropzone_container">
-                <Dropzone
-                  onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
-                >
-                  {({ getRootProps, getInputProps }) => (
-                    <section className="dropzone" {...getRootProps()}>
-                      <div className="">
-                        <FontAwesomeIcon
-                          icon={faFileArrowUp}
-                          style={{ height: "40px", padding: "15px" }}
-                        />
-                        <input {...getInputProps()} />
-                        <p>
-                          Drag 'n' drop some files here, or click to select
-                          files
-                        </p>
+
+              
+              <div className="images_blog_container">
+              <span>Images of Blog</span>
+                <div className="images_blog">
+                  <Image.PreviewGroup
+                    preview={{
+                      onChange: (current, prev) =>
+                        console.log(
+                          `current index: ${current}, prev index: ${prev}`
+                        ),
+                    }}
+                  >
+                    {formik.values.images?.map((images) => (
+                      <div className="rounded" style={{width: '80px', height: '80px', overflow: 'hidden'}}>
+                        <Image style={{width: '100%', height: '100%', objectFit: 'cover'}} src={images?.url} />
                       </div>
-                    </section>
-                  )}
-                </Dropzone>
+                    ))}
+                  </Image.PreviewGroup>
+                </div>
               </div>
 
-              <div className="showImages d-flex flex-wrap gap-3">
-                {imgArray.map((item, index) => (
-                  <div className="position-relative" key={index}>
-                    <button
-                      type="button"
-                      onClick={() => dispatch(deleteImg(item?.public_id))}
-                      className="btn-close position-absolute"
-                      style={{ top: "10px", right: "10px" }}
-                    ></button>
-                    <img src={item?.url} alt="" width={100} height={100} />
-                  </div>
-                ))}
+              <div className="dropzone_container">
+                <span className="mb-5">Upload More Images</span>
+                <Upload
+                  action="https://ginger-final-project.onrender.com/api/v1/image/upload"
+                  headers={{
+                    Authorization: `Bearer ${localStorage.getItem(
+                      "sessionToken"
+                    )}`,
+                  }}
+                  onRemove={(file) =>
+                    dispatch(deleteImg(file?.response?.data[0]?.public_id))
+                  }
+                  // onDrop={(acceptedFiles) => console.log(acceptedFiles)}
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                >
+                  {fileList.length >= 8 ? null : uploadButton}
+                </Upload>
               </div>
 
               <div
@@ -557,7 +530,7 @@ const Blog = () => {
             </form>
           </div>
         </article>
-      </Modal> */}
+      </Modal>
     </section>
   );
 };

@@ -1,10 +1,11 @@
 .dropzone_container{
     /* background-color: red; */
-    cursor: pointer;
-    border: 1px dashed var(--color-blue-main);
+    /* cursor: pointer; */
     height: auto;
-    border-radius: 4px;
     margin-top: 3.2em   ;
+    /* border: 1px dashed var(--color-blue-main); */
+    /* border-radius: 4px; */
+   
 }
 
 .dropzone{
