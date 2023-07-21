@@ -29,8 +29,7 @@ const Orders = () => {
   const dispatch = useDispatch();
 
   const {isLoading, orders} = useSelector((state) => state.orders);
-  // console.log(orderState);
-
+  
   const OrdersData = [];
   for (let i = 0; i < orders.data?.length; i++) {
     OrdersData.push({
@@ -47,7 +46,10 @@ const Orders = () => {
 
   return (
     <section className="orders">
-      <h3>Orders</h3>
+      <div className="mb-4">
+          <h1>Orders</h1>
+          <h6 className="text-muted">{`On this page are all the orders made in the project. In General there are ${orders.data?.length} amount of orders.`}</h6>
+        </div>
       <article>
         <TableComponent data={OrdersData} columns={columns} loading={isLoading}/>
       </article>

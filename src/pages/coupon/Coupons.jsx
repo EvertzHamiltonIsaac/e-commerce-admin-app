@@ -21,32 +21,9 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/app/table/Table";
 import moment from "moment/moment";
+import { CouponsTableColumns } from "../../utils/TableColums";
 const { confirm } = Modal;
 
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-  {
-    title: "Expiry",
-    dataIndex: "expiry",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-  {
-    title: "Discount",
-    dataIndex: "discount",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    width: 150,
-    key: "actions",
-    fixed: "right",
-  },
-];
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -87,9 +64,8 @@ const Coupons = () => {
 
   const showDeleteConfirm = (item) => {
     confirm({
-      title: "Are you sure delete this brand?",
-      // icon: <ExclamationCircleFilled />,
-      content: "Some descriptions",
+      title: "Are you sure delete this coupon?",
+      content: "Once it's deleted it can't be restored",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -206,7 +182,10 @@ const Coupons = () => {
 
   return (
     <section className="brand-list">
-      <h3>Coupons</h3>
+      <div className="mb-4">
+        <h1>Coupons</h1>
+        <h6 className="text-muted">{`These are all the coupons that can be used in the project. There is a number of ${coupons.data?.length} coupons created.`}</h6>
+      </div>
       <article>
         <div className="d-flex justify-content-end mb-2">
           <Button
@@ -216,18 +195,18 @@ const Coupons = () => {
             className="add-btn"
             onClick={() => setIsOpenModal(true)}
           >
-            Create New Brand
+            Create New Coupon
           </Button>
         </div>
         <TableComponent
           data={couponsData}
-          columns={columns}
+          columns={CouponsTableColumns}
           loading={isLoading}
         />
       </article>
 
       <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
-        <h3 className="text-center mb-3">Add New Brand</h3>
+        <h3 className="text-center mb-3">Add New Coupon</h3>
 
         <form
           className="d-flex flex-column gap-3"
@@ -237,7 +216,7 @@ const Coupons = () => {
             <span>Name</span>
             <Input
               Id="name"
-              labelValue="Enter Brand Name"
+              labelValue="Enter Coupon Name"
               name="name"
               onChange={formik.handleChange("name")}
               value={formik.values.name}
@@ -254,10 +233,10 @@ const Coupons = () => {
               allowClear
             //   onBlur={formik.handleBlur("expiry")}
             /> */}
-            <span>Name</span>
+            <span>Expiry Date</span>
             <Input
               Id="expiry"
-              labelValue="Enter Brand Name"
+              labelValue="Choose an expiry date"
               type="date"
               name="expiry"
               onChange={formik.handleChange("expiry")}
@@ -267,10 +246,10 @@ const Coupons = () => {
           </div>
 
           <div>
-            <span>Name</span>
+            <span>Discount</span>
             <Input
               Id="discount"
-              labelValue="Enter Brand Name"
+              labelValue="Enter Discount Amount"
               name="discount"
               type="number"
               onChange={formik.handleChange("discount")}
@@ -313,7 +292,7 @@ const Coupons = () => {
             <span>Name</span>
             <Input
               Id="name"
-              labelValue="Enter Brand Name"
+              labelValue="Enter Coupon Name"
               name="name"
               onChange={formik.handleChange("name")}
               value={formik.values.name}
@@ -330,10 +309,10 @@ const Coupons = () => {
               allowClear
             //   onBlur={formik.handleBlur("expiry")}
             /> */}
-            <span>Name</span>
+            <span>Expiry Date</span>
             <Input
               Id="expiry"
-              labelValue="Enter Brand Name"
+              labelValue="Choose an expiry date"
               type="date"
               name="expiry"
               onChange={formik.handleChange("expiry")}
@@ -343,10 +322,10 @@ const Coupons = () => {
           </div>
 
           <div>
-            <span>Name</span>
+            <span>Discount</span>
             <Input
               Id="discount"
-              labelValue="Enter Brand Name"
+              labelValue="Enter Discount Amount"
               name="discount"
               type="number"
               onChange={formik.handleChange("discount")}

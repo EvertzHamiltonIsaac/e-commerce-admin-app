@@ -72,8 +72,7 @@ const Brand = () => {
   const showDeleteConfirm = (item) => {
     confirm({
       title: "Are you sure delete this brand?",
-      // icon: <ExclamationCircleFilled />,
-      content: "Some descriptions",
+      content: "Once it's deleted it can't be restored",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -198,7 +197,10 @@ const Brand = () => {
 
   return (
     <section className="brand-list">
-      <h3>Brands</h3>
+      <div className="mb-4">
+          <h1>Brands</h1>
+          <h6 className="text-muted">{`On this page you can view all the brands created in the project. In General there are a number of ${brands?.data?.length} brands.`}</h6>
+        </div>
       <article>
         <div className="d-flex justify-content-end mb-2">
           <Button

@@ -26,21 +26,8 @@ import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../../components/app/input/Input";
 import { toast } from "react-toastify";
+import {CategoryTableColumns} from '../../../utils/TableColums'
 const { confirm } = Modal;
-
-const CategoryColumns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    key: "actions",
-    fixed: "right",
-    width: 150,
-  },
-];
 
 const schemaForProductValidations = Yup.object().shape({
   name: Yup.string().required("name is required"),
@@ -65,9 +52,8 @@ const Category = () => {
 
   const showDeleteProductConfirm = (item) => {
     confirm({
-      title: "Are you sure delete this brand?",
-      // icon: <ExclamationCircleFilled />,
-      content: "Some descriptions",
+      title: "Are you sure delete this product category?",
+      content: "Once it's deleted it can't be restored",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -82,9 +68,8 @@ const Category = () => {
 
   const showDeleteBlogConfirm = (item) => {
     confirm({
-      title: "Are you sure delete this brand?",
-      // icon: <ExclamationCircleFilled />,
-      content: "Some descriptions",
+      title: "Are you sure delete this blog category?",
+      content: "Once it's deleted it can't be restored",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -111,7 +96,9 @@ const Category = () => {
         setItemId("");
       }
       if (isBUpdateOpenModal) {
-        dispatch(updateBlogCategory({ data: { title: values.name }, id: itemId }));
+        dispatch(
+          updateBlogCategory({ data: { title: values.name }, id: itemId })
+        );
         Bformik.resetForm();
         handleCancelBModal();
         setItemId("");
@@ -166,7 +153,9 @@ const Category = () => {
         setItemId("");
       }
       if (isPUpdateOpenModal) {
-        dispatch(updateProductCategory({ data: { title: values.name }, id: itemId }));
+        dispatch(
+          updateProductCategory({ data: { title: values.name }, id: itemId })
+        );
         Bformik.resetForm();
         handleCancelPModal();
         setItemId("");
@@ -260,7 +249,7 @@ const Category = () => {
         });
       }
     }
-  });
+  },[]);
 
   useEffect(() => {
     if (BCategory.BlogCategoryCreated && BCategory.isSuccess) {
@@ -323,8 +312,10 @@ const Category = () => {
 
   return (
     <section className="category-list">
-      <h2 className="mt-4 mb-5">Categories</h2>
-      <h3>Product</h3>
+      <div className="mb-4">
+        <h1>Product Categories</h1>
+        <h6 className="text-muted">{`These are the categories that belong to the products. In General there are ${productCategoryState?.length} Product Categories.`}</h6>
+      </div>
       <article>
         <div className="d-flex justify-content-end mb-2">
           <Button
@@ -339,11 +330,15 @@ const Category = () => {
         </div>
         <TableComponent
           data={ProductCategoryData}
-          columns={CategoryColumns}
+          columns={CategoryTableColumns}
           loading={PCategory.isLoading}
         />
       </article>
-      <h3>Blog</h3>
+      
+      <div className="mb-4">
+        <h1>Blog Categories</h1>
+        <h6 className="text-muted">{`On the other hand the Blog Categories are the categories that pertain to blogs only. In General there are a number of ${blogCategoryState?.length} Blog Categories`}</h6>
+      </div>
       <article>
         <div className="d-flex justify-content-end mb-2">
           <Button
@@ -358,7 +353,7 @@ const Category = () => {
         </div>
         <TableComponent
           data={BlogCategoryData}
-          columns={CategoryColumns}
+          columns={CategoryTableColumns}
           loading={BCategory.isLoading}
         />
       </article>
@@ -494,7 +489,7 @@ const Category = () => {
         onCancel={handleCancelBModal}
         footer={null}
       >
-        <h3 className="text-center mb-3">Update Product Category</h3>
+        <h3 className="text-center mb-3">Update Blog Category</h3>
 
         <form
           className="d-flex flex-column gap-3"

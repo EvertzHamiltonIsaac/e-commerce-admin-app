@@ -18,25 +18,8 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { Button } from "antd";
+import { ColorsTableColumns } from "../../../utils/TableColums";
 const { confirm } = Modal;
-
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Code HEX",
-    dataIndex: "code",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    key: "actions",
-    fixed: "right",
-    width: 150,
-  },
-];
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -51,9 +34,8 @@ const Color = () => {
 
   const showDeleteConfirm = (item) => {
     confirm({
-      title: "Are you sure delete this brand?",
-      // icon: <ExclamationCircleFilled />,
-      content: "Some descriptions",
+      title: "Are you sure delete this color?",
+      content: "Once it's deleted it can't be restored.",
       okText: "Yes",
       okType: "danger",
       cancelText: "No",
@@ -141,8 +123,8 @@ const Color = () => {
   const handleCancelModal = () => {
     setIsOpenModal(false);
     setIsUpdateOpenModal(false);
-    formik.values.name = '';
-    formik.values.color = '#000000';
+    formik.values.name = "";
+    formik.values.color = "#000000";
   };
 
   useEffect(() => {
@@ -177,7 +159,10 @@ const Color = () => {
 
   return (
     <section className="color-list">
-      <h3>Colors</h3>
+      <div className="mb-4">
+        <h1>Colors</h1>
+        <h6 className="text-muted">{`On this page you will find all the available colors of the project, more can be added and the existing ones can be edited and deleted. In General there is a quantity of ${colors?.data?.length} colors.`}</h6>
+      </div>
       <article>
         <div className="d-flex justify-content-end mb-2">
           <Button
@@ -192,7 +177,7 @@ const Color = () => {
         </div>
         <TableComponent
           data={colorData}
-          columns={columns}
+          columns={ColorsTableColumns}
           loading={isLoading}
         />
       </article>
