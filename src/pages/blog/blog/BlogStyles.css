@@ -19,15 +19,46 @@
 
 .images_blog_container {
     width: 100%;
-    height: 130px;
+    height: 110px;
     display: flex;
     flex-direction: column;
-    margin-top: 5em;
+    margin-top: 3em;
     /* background-color: red; */
     overflow-y: scroll;
 }
 
 .images_blog {
     display: flex;
+    /* background-color: #DDDDDD; */
     gap: 1em;
+}
+
+.images_card{
+    display: flex;
+    justify-content: center;
+}
+
+.modal_title_category{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.button_delete_img_update{
+    position: absolute;
+    top: 10;
+    right: 0;
+    cursor: pointer;
+    z-index: 1;
+    color: white;
+    background-color: red;
+    transition: background-color ease 500ms;
+    transition: color ease 500ms;
+}
+
+.button_delete_img_update:hover{
+    background-color: white;
+    color: red;
+    transition: background-color ease 500ms;
+    transition: color ease 500ms;
 }

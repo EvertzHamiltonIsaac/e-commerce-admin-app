@@ -1,18 +1,15 @@
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
-import {
-  faFileArrowUp,
-  faPlus,
-  faTrash,
-} from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash, faX } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Upload, Image } from "antd";
+import { Button, Image, Upload } from "antd";
 import Modal from "antd/es/modal/Modal";
 import DOMPurify from "dompurify";
 import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
 import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import * as Yup from "yup";
@@ -24,12 +21,11 @@ import {
   deleteBlogs,
   getBlogs,
   resetBlogState,
+  updateBlogs,
 } from "../../../features/blog/blogSlice";
 import { getBlogCategories } from "../../../features/blogCategory/blog.categorySlice";
-import { uploadImg, deleteImg } from "../../../features/upload/uploadSlice";
+import { deleteImg } from "../../../features/upload/uploadSlice";
 import { BlogsTableColumns } from "../../../utils/TableColums";
-import "react-quill/dist/quill.snow.css";
-import { useNavigate } from "react-router-dom";
 import "./BlogStyles.css";
 const { confirm } = Modal;
 
@@ -58,6 +54,7 @@ const Blog = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
   const [blogId, setBlogId] = useState("");
+  const [imagesOfBlog, setImagesOfBlog] = useState([]);
 
   const {
     isLoading,
@@ -84,7 +81,12 @@ const Blog = () => {
         handleCancelModal();
       }
       if (isUpdateOpenModal) {
-        dispatch(updateBrands({ data: values, id: blogId }));
+        dispatch(
+          updateBlogs({
+            data: { ...values, images: [...imagesOfBlog, ...values.images] },
+            id: blogId,
+          })
+        );
         formik.resetForm();
         handleCancelModal();
       }
@@ -134,7 +136,7 @@ const Blog = () => {
           <div className="img_title_container rounded">
             <img
               className="w-100"
-              src={`${blogs?.data[i]?.images[0]?.url}`}
+              src={blogs?.data[i]?.images[0]?.url ? `${blogs?.data[i]?.images[0]?.url}` : '/no-photo.jpg'}
               alt=""
             />
           </div>
@@ -173,6 +175,12 @@ const Blog = () => {
     });
   }
 
+  const handleDeleteImages = (imageId) => {
+    dispatch(deleteImg(imageId))
+    const result = imagesOfBlog.filter(image => image.public_id != imageId);
+    setImagesOfBlog(result);
+  }
+
   const handleCancelModal = () => {
     setIsOpenModal(false);
     setIsUpdateOpenModal(false);
@@ -184,8 +192,9 @@ const Blog = () => {
   };
 
   const handleOnEditButtonClick = (item) => {
-    // console.log(item.images);
     setIsUpdateOpenModal(true);
+    setImagesOfBlog(item?.images);
+    console.log(item?.images);
     setBlogId(item._id);
     formik.values.title = item.title;
     formik.values.description = item.description;
@@ -229,7 +238,7 @@ const Blog = () => {
       dispatch(getBlogs());
     }
     if (BlogUpdated && isSuccess) {
-      toast.success("Blog Added Succesfully!");
+      toast.success("Blog Updated Succesfully!");
       dispatch(resetBlogState());
       dispatch(getBlogs());
     }
@@ -274,7 +283,7 @@ const Blog = () => {
 
   useEffect(() => {
     dispatch(getBlogCategories());
-  }, [isOpenModal]);
+  }, [isOpenModal, isUpdateOpenModal]);
 
   useEffect(() => {
     dispatch(getBlogs());
@@ -428,28 +437,30 @@ const Blog = () => {
               className="d-flex flex-column gap-3"
               onSubmit={formik.handleSubmit}
             >
-              <div style={{ width: "100%" }}>
-                <span>Title</span>
-                <Input
-                  Id="title"
-                  labelValue="Enter the blog title"
-                  name="title"
-                  onChange={formik.handleChange("title")}
-                  value={formik.values.title}
-                  onBlur={formik.handleBlur("title")}
-                />
-              </div>
-              <div style={{ width: "100%" }}>
-                <span>Select a Blog Category</span>
-                <Select
-                  value={formik.values.category}
-                  id="category"
-                  name="category"
-                  className="form-select"
-                  options={BlogCategoryState}
-                  placeholder="Choose a Category"
-                  onChange={formik.handleChange("category")}
-                />
+              <div className="modal_title_category">
+                <div style={{width: '60%'}}>
+                  <span>Title</span>
+                  <Input
+                    Id="title"
+                    labelValue="Enter the blog title"
+                    name="title"
+                    onChange={formik.handleChange("title")}
+                    value={formik.values.title}
+                    onBlur={formik.handleBlur("title")}
+                  />
+                </div>
+                <div>
+                  <span>Select a Blog Category</span>
+                  <Select
+                    value={formik.values.category}
+                    id="category"
+                    name="category"
+                    className="form-select"
+                    options={BlogCategoryState}
+                    placeholder="Choose a Category"
+                    onChange={formik.handleChange("category")}
+                  />
+                </div>
               </div>
               <div>
                 <span>Description</span>
@@ -464,10 +475,9 @@ const Blog = () => {
                 />
               </div>
 
-              
               <div className="images_blog_container">
-              <span>Images of Blog</span>
-                <div className="images_blog">
+                <span>Images of Blog</span>
+                <div className="images_blog rounded">
                   <Image.PreviewGroup
                     preview={{
                       onChange: (current, prev) =>
@@ -476,16 +486,33 @@ const Blog = () => {
                         ),
                     }}
                   >
-                    {formik.values.images?.map((images) => (
-                      <div className="rounded" style={{width: '80px', height: '80px', overflow: 'hidden'}}>
-                        <Image style={{width: '100%', height: '100%', objectFit: 'cover'}} src={images?.url} />
+                    {imagesOfBlog?.map((images, index) => (
+                      <div
+                        key={index}
+                        className="rounded images_card"
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          overflow: "hidden",
+                          position: 'relative'
+                        }}
+                      >
+                        <div className="button_delete_img_update rounded" onClick={() => handleDeleteImages(images.public_id)}><FontAwesomeIcon style={{padding: '5px 5px 1px 5px'}} icon={faX}/></div>
+                        <Image
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                          src={images?.url}
+                        />
                       </div>
                     ))}
                   </Image.PreviewGroup>
                 </div>
               </div>
 
-              <div className="dropzone_container">
+              <div className="upload_container">
                 <span className="mb-5">Upload More Images</span>
                 <Upload
                   action="https://ginger-final-project.onrender.com/api/v1/image/upload"
@@ -508,7 +535,7 @@ const Blog = () => {
               </div>
 
               <div
-                style={{ marginTop: "3.2em" }}
+                style={{ marginTop: "1.2em" }}
                 className="d-flex justify-content-end gap-2"
               >
                 <button

@@ -10,7 +10,6 @@ import Modal from "antd/es/modal/Modal";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
-import Dropzone from "react-dropzone";
 import ReactQuill from "react-quill";
 import { useDispatch, useSelector } from "react-redux";
 import { Select as SelectAntd } from "antd";
@@ -252,7 +251,7 @@ const Products = () => {
         </div>
       </article>
 
-      <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
+      {/* <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
         <h3 className="text-center mb-3">Add New Product</h3>
         <form
           className="d-flex flex-column gap-3"
@@ -416,7 +415,7 @@ const Products = () => {
             </button>
           </div>
         </form>
-      </Modal>
+      </Modal> */}
     </section>
   );
 };
