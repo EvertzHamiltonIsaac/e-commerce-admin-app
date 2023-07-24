@@ -273,7 +273,6 @@ const Category = () => {
     if (BCategory.isError) {
       toast.error("Something Went Wrong!");
       dispatch(resetBlogState());
-      dispatch(getBlogCategories());
     }
   }, [BCategory.isSuccess, BCategory.isError, BCategory.isLoading]);
 

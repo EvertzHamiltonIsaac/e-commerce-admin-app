@@ -43,3 +43,13 @@ body{
 .add-btn:hover{
   background-color: var(--color-blue-secundary) !important;
 }
+
+div::-webkit-scrollbar{
+  width: 5px !important; 
+  height: 7px !important;
+}
+
+div::-webkit-scrollbar-thumb{
+  background-color: var(--color-blue-secundary) !important;
+  border-radius: 5px;
+}

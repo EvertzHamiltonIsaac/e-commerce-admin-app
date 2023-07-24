@@ -1,32 +1,31 @@
-import React from 'react'
-import './cardStyle.css'
+import React from "react";
+import "./cardStyle.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 /**
  * @typedef {Object} ICardHeader
  * @property {string} title
- * @property {number} amount 
+ * @property {string} subTitle
  * @property {string} comparedText
- * @property {number} porcent
- * @property {string} className
- * 
+ * @property {IconDefinition} icon
+ * @property {string} classNameColor
+ * @property {string} backgroundColor
+ * @property {string} classNameBackGroundColor
+ *
  * @param {ICardHeader} props
  */
 
-const CardHeader = ({ title, amount, comparedText, porcent, className }) => {
+const CardHeader = ({ title, subTitle, comparedText, icon, classNameColor, backgroundColor, color, classNameBackGroundColor }) => {
   return (
-    <article className={`cardHeader ${className}`}>
-      <header className='cardHeader_title'>
-        {title}
-      </header>
-      <div className='cardHeader_body'>
-        ${amount}
-        <span>% {porcent}</span>
+    <article className={`cardHeader`}>
+      <div>
+        <header className={`cardHeader_title ${classNameColor}`} style={{color: {backgroundColor}}}>{title}</header>
+        <div className="cardHeader_body">{subTitle}</div>
       </div>
-      <footer className='cardHeader_footer'>
-        {comparedText}
-      </footer>
+      <FontAwesomeIcon className={`fs-2 icon_card ${classNameColor}`} icon={icon}/>
+      <footer className={`cardHeader_footer ${classNameColor} ${classNameBackGroundColor}`} style={{backgroundColor: {backgroundColor}}}>{comparedText}</footer>
     </article>
-  )
-}
+  );
+};
 
-export default CardHeader
+export default CardHeader;
