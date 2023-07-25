@@ -75,7 +75,7 @@ const Enquiries = () => {
   } = useSelector((state) => state.enquiries);
 
   const showDeleteConfirm = (item) => {
-    confirm({
+    return confirm({
       title: "Are you sure delete this enquiry?",
       content: "Once it's deleted it can't be restored",
       okText: "Yes",
