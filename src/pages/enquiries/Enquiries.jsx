@@ -169,7 +169,7 @@ const Enquiries = () => {
             <FontAwesomeIcon
               icon={faTrash}
               className="icons-hover-delete"
-              onClick={showDeleteConfirm(enquiries.data[i])}
+              onClick={() => console.log(enquiries.data[i])}
             />
           </div>
         </React.Fragment>
