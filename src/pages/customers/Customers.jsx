@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TableComponent from "../../components/app/table/Table";
 import { useDispatch, useSelector } from "react-redux";
 import { getCustomers } from "../../features/customers/customersSlice";
 import {CustomersTableColumns} from "../../utils/TableColums";
+import { Input } from "antd";
 
 const Customers = () => {
+  const [searchText, setSearchText] = useState("");
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -36,7 +39,13 @@ const Customers = () => {
           <h6 className="text-muted">{`On this page you can see all created non-admin users in the project.. In General there are a number of ${customers?.length} users.`}</h6>
         </div>
       <article>
-        <TableComponent data={customersData} columns={CustomersTableColumns} loading={isLoading}/>
+      <Input.Search
+          placeholder="Search here..."
+          style={{ marginBottom: 8, width: "300px" }}
+          onSearch={(value) => setSearchText(value.trim())}
+          onChange={(e) => setSearchText(e.target.value.trim())}
+        />
+        <TableComponent data={customersData} columns={CustomersTableColumns(searchText)} loading={isLoading}/>
       </article>
     </section>
   );

@@ -25,7 +25,6 @@ import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/Car
 import Swal from "sweetalert2";
 import "./enquiriesStyles.css";
 import { useNavigate } from "react-router-dom";
-const { confirm } = Modal;
 
 const OptionSelectStatus = [
   {

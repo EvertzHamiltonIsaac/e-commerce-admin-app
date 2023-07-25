@@ -46,80 +46,156 @@ export const BlogsTableColumns = (SearchValue) => {
 };
 
 //! Customers Table Columns
-export const CustomersTableColumns = [
-  {
-    title: "First Name",
-    dataIndex: "firstName",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => a.firstName.length - b.firstName.length,
-    key: "firstName",
-    fixed: "left",
-    width: 100,
-  },
-  {
-    title: "Last Name",
-    dataIndex: "lastName",
-    defaultSortOrder: "descend",
-    sorter: (a, b) => a.lastName.length - b.lastName.length,
-    key: "lastName",
-    // fixed: 'left',
-    width: 110,
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    width: 160,
-  },
-  {
-    title: "Phone",
-    dataIndex: "phone",
-    width: 110,
-  },
-  {
-    title: "Postal Code",
-    dataIndex: "postalCode",
-    width: 90,
-  },
-  {
-    title: "Address",
-    dataIndex: "address",
-    width: 300,
-  },
-];
+export const CustomersTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "First Name",
+      dataIndex: "firstName",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.firstName.length - b.firstName.length,
+      key: "firstName",
+      fixed: "left",
+      width: 100,
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return (
+          String(record.firstName)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.lastName)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.email)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.phone)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.postalCode)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.address)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        );
+      },
+    },
+    {
+      title: "Last Name",
+      dataIndex: "lastName",
+      defaultSortOrder: "descend",
+      sorter: (a, b) => a.lastName.length - b.lastName.length,
+      key: "lastName",
+      // fixed: 'left',
+      width: 110,
+    },
+    {
+      title: "Email",
+      dataIndex: "email",
+      width: 160,
+    },
+    {
+      title: "Phone",
+      dataIndex: "phone",
+      width: 110,
+    },
+    {
+      title: "Postal Code",
+      dataIndex: "postalCode",
+      width: 90,
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      width: 300,
+    },
+  ];
+};
 
-//! Category Table Columns
-export const CategoryTableColumns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    key: "actions",
-    fixed: "right",
-    width: 150,
-  },
-];
+//! Product Category Table Columns
+export const ProductCategoryTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "Name",
+      dataIndex: "name",
+      width: 750,
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return String(record.name)
+          .toLocaleLowerCase()
+          .includes(value.toLocaleLowerCase());
+      },
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
+      fixed: "right",
+      width: 150,
+    },
+  ];
+};
+
+//! Blog Category Table Columns
+export const BlogCategoryTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "Name",
+      dataIndex: "name",
+      width: 750,
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return String(record.name)
+          .toLocaleLowerCase()
+          .includes(value.toLocaleLowerCase());
+      },
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
+      fixed: "right",
+      width: 150,
+    },
+  ];
+};
 
 //! Colors Table Columns
-export const ColorsTableColumns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Code HEX",
-    dataIndex: "code",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    key: "actions",
-    fixed: "right",
-    width: 150,
-  },
-];
+export const ColorsTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "Name",
+      dataIndex: "name",
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.code.props.children);
+        return (
+          String(record.name)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.code.props.children)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        );
+      },
+    },
+    {
+      title: "Code HEX",
+      dataIndex: "code",
+      width: 250,
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      key: "actions",
+      fixed: "right",
+      width: 150,
+    },
+  ];
+};
 
 //!Coupons Table Columns
 export const CouponsTableColumns = (SearchValue) => {
@@ -204,6 +280,31 @@ export const EnquiriesTableColumns = (SearchValue) => {
       key: "actions",
       fixed: "right",
       width: 80,
+    },
+  ];
+};
+
+//! Brand Table Columns
+export const BrandTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "Name",
+      dataIndex: "name",
+      sorter: (a, b) => a.name.length - b.name.length,
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return String(record.name)
+          .toLocaleLowerCase()
+          .includes(value.toLocaleLowerCase());
+      },
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      width: 150,
+      key: "actions",
+      fixed: "right",
     },
   ];
 };

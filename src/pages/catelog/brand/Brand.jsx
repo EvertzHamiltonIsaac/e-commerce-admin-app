@@ -6,7 +6,7 @@ import {
   createBrands,
   resetBrandState,
   updateBrands,
-  deleteBrands
+  deleteBrands,
 } from "../../../features/brand/brandSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
@@ -16,26 +16,12 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
-const { confirm } = Modal;
 import Input from "../../../components/app/input/Input";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    width: 150,
-    key: "actions",
-    fixed: "right",
-  },
-];
+import { Input as antdInput } from "antd";
+import { BrandTableColumns } from "../../../utils/TableColums";
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -44,7 +30,7 @@ const schemaForValidations = Yup.object().shape({
 const Brand = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
-
+  const [searchText, setSearchText] = useState("");
   const [brandId, setBrandId] = useState("");
 
   const dispatch = useDispatch();
@@ -198,11 +184,20 @@ const Brand = () => {
   return (
     <section className="brand-list">
       <div className="mb-4">
-          <h1>Brands</h1>
-          <h6 className="text-muted">{`On this page you can view all the brands created in the project. In General there are a number of ${brands?.data?.length} brands.`}</h6>
-        </div>
+        <h1>Brands</h1>
+        <h6 className="text-muted">{`On this page you can view all the brands created in the project. In General there are a number of ${brands?.data?.length} brands.`}</h6>
+      </div>
       <article>
-        <div className="d-flex justify-content-end mb-2">
+        <div
+          className="d-flex mb-1"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
+          <antdInput.Search
+            placeholder="Search here..."
+            style={{ marginBottom: 8, width: "300px" }}
+            onSearch={(value) => setSearchText(value.trim())}
+            onChange={(e) => setSearchText(e.target.value.trim())}
+          />
           <Button
             type="primary"
             size={"large"}
@@ -215,8 +210,9 @@ const Brand = () => {
         </div>
         <TableComponent
           data={brandsData}
-          columns={columns}
+          columns={BrandTableColumns(searchText)}
           loading={isLoading}
+          width={900}
         />
       </article>
 
@@ -304,7 +300,6 @@ const Brand = () => {
           </div>
         </form>
       </Modal>
-
     </section>
   );
 };

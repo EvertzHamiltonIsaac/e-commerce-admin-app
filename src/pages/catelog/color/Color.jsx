@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import TableComponent from "../../../components/app/table/Table";
-import Select from "../../../components/app/select/Select";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../../components/app/input/Input";
 import {
@@ -20,6 +19,7 @@ import { toast } from "react-toastify";
 import { Button } from "antd";
 import { ColorsTableColumns } from "../../../utils/TableColums";
 import Swal from "sweetalert2";
+import { Input as antdInput } from "antd";
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -29,6 +29,7 @@ const Color = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
   const [colorId, setColorId] = useState("");
+  const [searchText, setSearchText] = useState("");
 
   const dispatch = useDispatch();
 
@@ -84,12 +85,43 @@ const Color = () => {
     // validationSchema: schemaForValidations,
   });
 
+  const getBrightness = (color) => {
+    const r = parseInt(color.substr(1, 2), 16);
+    const g = parseInt(color.substr(3, 2), 16);
+    const b = parseInt(color.substr(5, 2), 16);
+
+    return (r * 299 + g * 587 + b * 114) / 1000;
+  };
+
+  const handleChangeTextColor = (backgroundColor) => {
+    return getBrightness(backgroundColor) > 128 ? "black" : "white";
+  };
+
   const colorData = [];
   for (let i = 0; i < colors.data?.length; i++) {
     colorData.push({
       key: i + 1,
       name: colors.data[i]?.name,
-      code: colors.data[i]?.code.toUpperCase(),
+      code: (
+        <div
+          className="text-center"
+          style={{
+            color: `${handleChangeTextColor(
+              colors.data[i]?.code.toUpperCase()
+            )}`,
+            border: `${
+              colors.data[i]?.code.toUpperCase() === "#FFFFFF"
+                ? "solid 1px black"
+                : ""
+            }`,
+            borderRadius: "5px",
+            width: "150px",
+            backgroundColor: `${colors.data[i]?.code.toUpperCase()}`,
+          }}
+        >
+          {colors.data[i]?.code.toUpperCase()}
+        </div>
+      ),
       actions: (
         <React.Fragment>
           <div
@@ -164,7 +196,16 @@ const Color = () => {
         <h6 className="text-muted">{`On this page you will find all the available colors of the project, more can be added and the existing ones can be edited and deleted. In General there is a quantity of ${colors?.data?.length} colors.`}</h6>
       </div>
       <article>
-        <div className="d-flex justify-content-end mb-2">
+        <div
+          className="d-flex mb-1"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
+          <antdInput.Search
+            placeholder="Search here..."
+            style={{ marginBottom: 8, width: "300px" }}
+            onSearch={(value) => setSearchText(value.trim())}
+            onChange={(e) => setSearchText(e.target.value.trim())}
+          />
           <Button
             type="primary"
             size={"large"}
@@ -177,8 +218,9 @@ const Color = () => {
         </div>
         <TableComponent
           data={colorData}
-          columns={ColorsTableColumns}
+          columns={ColorsTableColumns(searchText)}
           loading={isLoading}
+          width={900}
         />
       </article>
 

@@ -26,8 +26,11 @@ import { Button } from "antd";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../../components/app/input/Input";
 import { toast } from "react-toastify";
-import {CategoryTableColumns} from '../../../utils/TableColums'
-const { confirm } = Modal;
+import {
+  ProductCategoryTableColumns,
+  BlogCategoryTableColumns,
+} from "../../../utils/TableColums";
+import { Input as antdInput } from "antd";
 
 const schemaForProductValidations = Yup.object().shape({
   name: Yup.string().required("name is required"),
@@ -45,10 +48,12 @@ const Category = () => {
   const [isBOpenModal, setIsBOpenModal] = useState(false);
   const [isBUpdateOpenModal, setIsBUpdateOpenModal] = useState(false);
   const [itemId, setItemId] = useState("");
+  const [BsearchText, setBsearchText] = useState("");
 
   //* Product
   const [isPOpenModal, setIsPOpenModal] = useState(false);
   const [isPUpdateOpenModal, setIsPUpdateOpenModal] = useState(false);
+  const [PsearchText, setPsearchText] = useState("");
 
   const showDeleteProductConfirm = (item) => {
     Swal.fire({
@@ -249,7 +254,7 @@ const Category = () => {
         });
       }
     }
-  },[]);
+  }, [PCategory.isError, BCategory.isError, PCategory.message, BCategory.message]);
 
   useEffect(() => {
     if (BCategory.BlogCategoryCreated && BCategory.isSuccess) {
@@ -316,7 +321,16 @@ const Category = () => {
         <h6 className="text-muted">{`These are the categories that belong to the products. In General there are ${productCategoryState?.length} Product Categories.`}</h6>
       </div>
       <article>
-        <div className="d-flex justify-content-end mb-2">
+        <div
+          className="d-flex mb-1"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
+          <antdInput.Search
+            placeholder="Search here..."
+            style={{ marginBottom: 8, width: "300px" }}
+            onSearch={(value) => setPsearchText(value.trim())}
+            onChange={(e) => setPsearchText(e.target.value.trim())}
+          />
           <Button
             type="primary"
             size={"large"}
@@ -329,17 +343,27 @@ const Category = () => {
         </div>
         <TableComponent
           data={ProductCategoryData}
-          columns={CategoryTableColumns}
+          columns={ProductCategoryTableColumns(PsearchText)}
           loading={PCategory.isLoading}
+          width={900}
         />
       </article>
-      
+
       <div className="mb-4">
         <h1>Blog Categories</h1>
         <h6 className="text-muted">{`On the other hand the Blog Categories are the categories that pertain to blogs only. In General there are a number of ${blogCategoryState?.length} Blog Categories`}</h6>
       </div>
       <article>
-        <div className="d-flex justify-content-end mb-2">
+        <div
+          className="d-flex mb-1"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
+          <antdInput.Search
+            placeholder="Search here..."
+            style={{ marginBottom: 8, width: "300px" }}
+            onSearch={(value) => setBsearchText(value.trim())}
+            onChange={(e) => setBsearchText(e.target.value.trim())}
+          />
           <Button
             type="primary"
             size={"large"}
@@ -352,8 +376,9 @@ const Category = () => {
         </div>
         <TableComponent
           data={BlogCategoryData}
-          columns={CategoryTableColumns}
+          columns={BlogCategoryTableColumns(BsearchText)}
           loading={BCategory.isLoading}
+          width={900}
         />
       </article>
 
