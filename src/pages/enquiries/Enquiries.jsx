@@ -13,7 +13,7 @@ import {
   faPaperPlane,
   faAddressBook,
   faSpinner,
-  faCircleCheck
+  faCircleCheck,
 } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { EnquiriesTableColumns } from "../../utils/TableColums";
@@ -23,11 +23,8 @@ import Select from "../../components/app/select/Select";
 import { Input } from "antd";
 import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/CardHeader";
 import Swal from "sweetalert2";
-import './enquiriesStyles.css'
+import "./enquiriesStyles.css";
 import { useNavigate } from "react-router-dom";
-const { confirm } = Modal;
-
-
 
 const OptionSelectStatus = [
   {
@@ -49,6 +46,8 @@ const OptionSelectStatus = [
 ];
 
 const Enquiries = () => {
+  const { confirm } = Modal;
+
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [enquiry, setEnquiry] = useState({});
   const [status, setStatus] = useState("");
@@ -59,7 +58,6 @@ const Enquiries = () => {
   const ContactedEnquiries = [];
   const InProgressEnquiries = [];
   const ResolvedEnquiries = [];
-
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -75,7 +73,7 @@ const Enquiries = () => {
   } = useSelector((state) => state.enquiries);
 
   const showDeleteConfirm = (item) => {
-    return confirm({
+    confirm({
       title: "Are you sure delete this enquiry?",
       content: "Once it's deleted it can't be restored",
       okText: "Yes",
@@ -112,7 +110,6 @@ const Enquiries = () => {
     setIsOpenModal(false);
   };
 
-  
   const enquiryData = [];
   for (let i = 0; i < enquiries.data?.length; i++) {
     enquiryData.push({
@@ -131,9 +128,7 @@ const Enquiries = () => {
               : ""
           }
           ${
-            enquiries.data[i]?.status === "Contacted"
-              ? "bg-info text-dark"
-              : ""
+            enquiries.data[i]?.status === "Contacted" ? "bg-info text-dark" : ""
           }
           ${
             enquiries.data[i]?.status === "In Progress"
@@ -169,24 +164,24 @@ const Enquiries = () => {
             <FontAwesomeIcon
               icon={faTrash}
               className="icons-hover-delete"
-              onClick={() => console.log(enquiries.data[i])}
+              onClick={() => showDeleteConfirm()}
             />
           </div>
         </React.Fragment>
       ),
     });
 
-    if(enquiries.data[i]?.status === 'Submitted'){
-      SubmittedEnquiries.push(enquiries.data[i]); 
+    if (enquiries.data[i]?.status === "Submitted") {
+      SubmittedEnquiries.push(enquiries.data[i]);
     }
-    if(enquiries.data[i]?.status === 'Contacted'){
-      ContactedEnquiries.push(enquiries.data[i]); 
+    if (enquiries.data[i]?.status === "Contacted") {
+      ContactedEnquiries.push(enquiries.data[i]);
     }
-    if(enquiries.data[i]?.status === 'In Progress'){
-      InProgressEnquiries.push(enquiries.data[i]); 
+    if (enquiries.data[i]?.status === "In Progress") {
+      InProgressEnquiries.push(enquiries.data[i]);
     }
-    if(enquiries.data[i]?.status === 'Resolved'){
-      ResolvedEnquiries.push(enquiries.data[i]); 
+    if (enquiries.data[i]?.status === "Resolved") {
+      ResolvedEnquiries.push(enquiries.data[i]);
     }
   }
 
@@ -195,32 +190,32 @@ const Enquiries = () => {
       title: "Submitted",
       subTitle: `Total Submitted Enquieries: ${SubmittedEnquiries.length}`,
       icon: faPaperPlane,
-      classNameColor: 'text-secondary',
-      classNameBackGroundColor: 'bg-secondary'
+      classNameColor: "text-secondary",
+      classNameBackGroundColor: "bg-secondary",
     },
     {
       title: "Contacted",
       subTitle: `Total Contacted Enquieries: ${ContactedEnquiries.length}`,
       icon: faAddressBook,
-      classNameColor: 'text-info',
-      classNameBackGroundColor: 'bg-info'
+      classNameColor: "text-info",
+      classNameBackGroundColor: "bg-info",
     },
     {
       title: "In Progress",
       subTitle: `Total In Progress Enquieries: ${InProgressEnquiries.length}`,
       icon: faSpinner,
-      classNameColor: 'text-warning',
-      classNameBackGroundColor: 'bg-warning'
+      classNameColor: "text-warning",
+      classNameBackGroundColor: "bg-warning",
     },
     {
       title: "Resolved",
       subTitle: `Total Resolved Enquieries: ${ResolvedEnquiries.length}`,
       icon: faCircleCheck,
-      classNameColor: 'text-success',
-      classNameBackGroundColor: 'bg-success'
+      classNameColor: "text-success",
+      classNameBackGroundColor: "bg-success",
     },
   ];
-  
+
   useEffect(() => {
     if (EnquiryUpdated && isSuccess) {
       toast.success("Enquiry Updated Succesfully!");
@@ -264,7 +259,7 @@ const Enquiries = () => {
         });
       }
     }
-  },[isError, message]);
+  }, [isError, message]);
 
   return (
     <section className="enquiries">
@@ -274,14 +269,14 @@ const Enquiries = () => {
       </div>
       <article className="card_header">
         {CardHeaderInformation.map((item, index) => (
-            <CardHeader 
+          <CardHeader
             key={index}
             title={item.title}
             subTitle={item.subTitle}
             classNameColor={item.classNameColor}
             icon={item.icon}
             classNameBackGroundColor={item.classNameBackGroundColor}
-            />
+          />
         ))}
       </article>
       <article>
