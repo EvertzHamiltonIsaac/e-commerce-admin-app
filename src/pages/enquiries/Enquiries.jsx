@@ -25,6 +25,7 @@ import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/Car
 import Swal from "sweetalert2";
 import "./enquiriesStyles.css";
 import { useNavigate } from "react-router-dom";
+const { confirm } = Modal;
 
 const OptionSelectStatus = [
   {
@@ -46,8 +47,6 @@ const OptionSelectStatus = [
 ];
 
 const Enquiries = () => {
-  const { confirm } = Modal;
-
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [enquiry, setEnquiry] = useState({});
   const [status, setStatus] = useState("");
@@ -73,18 +72,18 @@ const Enquiries = () => {
   } = useSelector((state) => state.enquiries);
 
   const showDeleteConfirm = (item) => {
-    confirm({
-      title: "Are you sure delete this enquiry?",
-      content: "Once it's deleted it can't be restored",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
         dispatch(deleteEnquiry(item?._id));
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
+      }
     });
   };
 
@@ -164,7 +163,7 @@ const Enquiries = () => {
             <FontAwesomeIcon
               icon={faTrash}
               className="icons-hover-delete"
-              onClick={() => showDeleteConfirm()}
+              onClick={() => showDeleteConfirm(enquiries.data[i])}
             />
           </div>
         </React.Fragment>
