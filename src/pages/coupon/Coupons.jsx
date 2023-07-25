@@ -71,18 +71,18 @@ const Coupons = () => {
   };
 
   const showDeleteConfirm = (item) => {
-    confirm({
-      title: "Are you sure delete this coupon?",
-      content: "Once it's deleted it can't be restored",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
         dispatch(deleteCoupons(item._id));
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
+      }
     });
   };
 

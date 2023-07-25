@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 import { toast } from "react-toastify";
 import { Button } from "antd";
 import { ColorsTableColumns } from "../../../utils/TableColums";
-const { confirm } = Modal;
+import Swal from "sweetalert2";
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -33,18 +33,18 @@ const Color = () => {
   const dispatch = useDispatch();
 
   const showDeleteConfirm = (item) => {
-    confirm({
-      title: "Are you sure delete this color?",
-      content: "Once it's deleted it can't be restored.",
-      okText: "Yes",
-      okType: "danger",
-      cancelText: "No",
-      onOk() {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
         dispatch(deleteColors(item._id));
-      },
-      onCancel() {
-        console.log("Cancel");
-      },
+      }
     });
   };
 
