@@ -27,6 +27,8 @@ import { getBlogCategories } from "../../../features/blogCategory/blog.categoryS
 import { deleteImg } from "../../../features/upload/uploadSlice";
 import { BlogsTableColumns } from "../../../utils/TableColums";
 import "./BlogStyles.css";
+import { Input as AntdInput } from "antd";
+
 const { confirm } = Modal;
 
 const getBase64 = (file) =>
@@ -55,6 +57,7 @@ const Blog = () => {
   const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
   const [blogId, setBlogId] = useState("");
   const [imagesOfBlog, setImagesOfBlog] = useState([]);
+  const [searchText, setSearchText] = useState("");
 
   const {
     isLoading,
@@ -136,7 +139,11 @@ const Blog = () => {
           <div className="img_title_container rounded">
             <img
               className="w-100"
-              src={blogs?.data[i]?.images[0]?.url ? `${blogs?.data[i]?.images[0]?.url}` : '/no-photo.jpg'}
+              src={
+                blogs?.data[i]?.images[0]?.url
+                  ? `${blogs?.data[i]?.images[0]?.url}`
+                  : "/no-photo.jpg"
+              }
               alt=""
             />
           </div>
@@ -176,10 +183,10 @@ const Blog = () => {
   }
 
   const handleDeleteImages = (imageId) => {
-    dispatch(deleteImg(imageId))
-    const result = imagesOfBlog.filter(image => image.public_id != imageId);
+    dispatch(deleteImg(imageId));
+    const result = imagesOfBlog.filter((image) => image.public_id != imageId);
     setImagesOfBlog(result);
-  }
+  };
 
   const handleCancelModal = () => {
     setIsOpenModal(false);
@@ -300,7 +307,13 @@ const Blog = () => {
 
         {/* Create Button */}
         <div>
-          <div className="d-flex justify-content-end mb-2">
+          <div className="d-flex mb-1" style={{justifyContent: 'space-between', alignItems: 'center'}}>
+          <AntdInput.Search
+            placeholder="Search here..."
+            style={{ marginBottom: 8, width: "300px" }}
+            onSearch={(value) => setSearchText(value)}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
             <Button
               type="primary"
               size={"large"}
@@ -311,9 +324,10 @@ const Blog = () => {
               Create New Blog
             </Button>
           </div>
+          
           <TableComponent
             data={blogsData}
-            columns={BlogsTableColumns}
+            columns={BlogsTableColumns(searchText)}
             loading={isLoading}
           />
         </div>
@@ -438,7 +452,7 @@ const Blog = () => {
               onSubmit={formik.handleSubmit}
             >
               <div className="modal_title_category">
-                <div style={{width: '60%'}}>
+                <div style={{ width: "60%" }}>
                   <span>Title</span>
                   <Input
                     Id="title"
@@ -494,10 +508,18 @@ const Blog = () => {
                           width: "80px",
                           height: "80px",
                           overflow: "hidden",
-                          position: 'relative'
+                          position: "relative",
                         }}
                       >
-                        <div className="button_delete_img_update rounded" onClick={() => handleDeleteImages(images.public_id)}><FontAwesomeIcon style={{padding: '5px 5px 1px 5px'}} icon={faX}/></div>
+                        <div
+                          className="button_delete_img_update rounded"
+                          onClick={() => handleDeleteImages(images.public_id)}
+                        >
+                          <FontAwesomeIcon
+                            style={{ padding: "5px 5px 1px 5px" }}
+                            icon={faX}
+                          />
+                        </div>
                         <Image
                           style={{
                             width: "100%",

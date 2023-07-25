@@ -1,35 +1,49 @@
 //! Blogs Table Columns
-export const BlogsTableColumns = [
-  {
-    title: "Title",
-    dataIndex: "title",
-    value: "title",
-    width: 190,
-    fixed: "left",
-  },
-  {
-    title: "Description",
-    dataIndex: "description",
-  },
-  {
-    title: "Category",
-    dataIndex: "category",
-  },
-  {
-    title: "Dislikes",
-    dataIndex: "dislikes",
-  },
-  {
-    title: "Likes",
-    dataIndex: "likes",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    width: 80,
-    fixed: "right",
-  },
-];
+export const BlogsTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
+      width: 190,
+      fixed: "left",
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return (
+          String(record.title.props.children[1])
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.category)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        );
+      },
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+    },
+    {
+      title: "Dislikes",
+      dataIndex: "dislikes",
+    },
+    {
+      title: "Likes",
+      dataIndex: "likes",
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      width: 80,
+      fixed: "right",
+    },
+  ];
+};
 
 //! Customers Table Columns
 export const CustomersTableColumns = [
@@ -108,30 +122,44 @@ export const ColorsTableColumns = [
 ];
 
 //!Coupons Table Columns
-export const CouponsTableColumns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-  {
-    title: "Expiry",
-    dataIndex: "expiry",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-  {
-    title: "Discount",
-    dataIndex: "discount",
-    sorter: (a, b) => a.name.length - b.name.length,
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-    width: 150,
-    key: "actions",
-    fixed: "right",
-  },
-];
+export const CouponsTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "Name",
+      dataIndex: "name",
+      sorter: (a, b) => a.name.length - b.name.length,
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return (
+          String(record.name)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.expiry)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        );
+      },
+    },
+    {
+      title: "Expiry",
+      dataIndex: "expiry",
+      sorter: (a, b) => a.name.length - b.name.length,
+    },
+    {
+      title: "Discount",
+      dataIndex: "discount",
+      sorter: (a, b) => a.name.length - b.name.length,
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      width: 150,
+      key: "actions",
+      fixed: "right",
+    },
+  ];
+};
 
 //! Enquiries Table Columns
 export const EnquiriesTableColumns = (SearchValue) => {

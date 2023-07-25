@@ -8,12 +8,12 @@ import {
   updateCoupons,
 } from "../../features/coupons/couponSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faTrash, faHourglassStart, faHourglassEnd} from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import * as Yup from "yup";
 import { useState } from "react";
 import { useFormik } from "formik";
-import { Button, DatePicker } from "antd";
+import { Button, DatePicker, Input as AntdInput } from "antd";
 import Modal from "antd/es/modal/Modal";
 import Input from "../../components/app/input/Input";
 import { toast } from "react-toastify";
@@ -22,8 +22,10 @@ import { useNavigate } from "react-router-dom";
 import TableComponent from "../../components/app/table/Table";
 import moment from "moment/moment";
 import { CouponsTableColumns } from "../../utils/TableColums";
-const { confirm } = Modal;
+import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/CardHeader";
+import './couponsStyle.css'
 
+const { confirm } = Modal;
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -33,14 +35,20 @@ const Coupons = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
   const [couponId, setCouponId] = useState("");
-  
+  const [searchText, setSearchText] = useState("");
+
+
+  //Coupons Expired and Not Expired
+  const CouponsExpired = []
+  const CouponsNotExpired = []
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   //? Functions
   const handleCancelModal = () => {
     setIsOpenModal(false);
-    setIsUpdateOpenModal(false)
+    setIsUpdateOpenModal(false);
     formik.values.name = "";
     formik.values.expiry = "";
     formik.values.discount = "";
@@ -50,10 +58,10 @@ const Coupons = () => {
     setIsUpdateOpenModal(true);
     setCouponId(item._id);
     formik.values.name = item.name;
-    formik.values.expiry = handleFormatDateTime(item.expiry, 'YYYY-MM-DD');
-    console.log(formik.values.expiry);
-    formik.values.discount = item.discount
-  }
+    formik.values.expiry = handleFormatDateTime(item.expiry, "YYYY-MM-DD");
+    // console.log(formik.values.expiry);
+    formik.values.discount = item.discount;
+  };
 
   const handleFormatDateTime = (dateTimeIsoFormat, format) => {
     const momentObj = moment(dateTimeIsoFormat);
@@ -99,8 +107,16 @@ const Coupons = () => {
     // validationSchema: schemaForValidations,
   });
 
-  const { isSuccess, isError, CouponCreated, CouponDeleted, CouponUpdated, message, isLoading, coupons } =
-    useSelector((state) => state.coupons);
+  const {
+    isSuccess,
+    isError,
+    CouponCreated,
+    CouponDeleted,
+    CouponUpdated,
+    message,
+    isLoading,
+    coupons,
+  } = useSelector((state) => state.coupons);
 
   //? Get All Brands Selector
   const couponsData = [];
@@ -108,7 +124,7 @@ const Coupons = () => {
     couponsData.push({
       key: i + 1,
       name: coupons.data[i].name,
-      expiry: handleFormatDateTime(coupons?.data[i].expiry, 'MMMM Do YYYY'),
+      expiry: handleFormatDateTime(coupons?.data[i].expiry, "MMMM Do YYYY"),
       discount: coupons?.data[i].discount,
       actions: (
         <React.Fragment>
@@ -121,12 +137,43 @@ const Coupons = () => {
               className="icons-hover-update"
               onClick={() => handleOnClickEditCoupon(coupons.data[i])}
             />
-            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" onClick={() => showDeleteConfirm(coupons.data[i])}/>
+            <FontAwesomeIcon
+              icon={faTrash}
+              className="icons-hover-delete"
+              onClick={() => showDeleteConfirm(coupons.data[i])}
+            />
           </div>
         </React.Fragment>
       ),
     });
+
+    const ExpiryDate = handleFormatDateTime(coupons?.data[i].expiry, "YYYY/MM/DD");
+    const Today = handleFormatDateTime(new Date(Date.now()).toISOString(), 'YYYY/MM/DD');
+    
+    if(ExpiryDate < Today){
+      CouponsExpired.push(coupons?.data[i]); 
+    }
+    if(ExpiryDate > Today){
+      CouponsNotExpired.push(coupons?.data[i]); 
+    }
   }
+
+  const CardHeaderInformation = [
+    {
+      title: "Not Expired",
+      subTitle: `Total Not Expired Coupons: ${CouponsNotExpired.length}`,
+      icon: faHourglassStart,
+      classNameColor: 'text-success',
+      classNameBackGroundColor: 'bg-success'
+    },
+    {
+      title: "Expired",
+      subTitle: `Total Expired Coupons: ${CouponsExpired.length}`,
+      icon: faHourglassEnd,
+      classNameColor: 'text-danger',
+      classNameBackGroundColor: 'bg-danger'
+    },
+  ];
 
   //? useEffects
   useEffect(() => {
@@ -186,8 +233,26 @@ const Coupons = () => {
         <h1>Coupons</h1>
         <h6 className="text-muted">{`These are all the coupons that can be used in the project. There is a number of ${coupons.data?.length} coupons created.`}</h6>
       </div>
+      <article className="card_header">
+        {CardHeaderInformation.map((item, index) => (
+            <CardHeader 
+            key={index}
+            title={item.title}
+            subTitle={item.subTitle}
+            classNameColor={item.classNameColor}
+            icon={item.icon}
+            classNameBackGroundColor={item.classNameBackGroundColor}
+            />
+        ))}
+      </article>
       <article>
-        <div className="d-flex justify-content-end mb-2">
+        <div className="d-flex mb-1" style={{justifyContent: 'space-between', alignItems: 'center'}}>
+          <AntdInput.Search
+            placeholder="Search here..."
+            style={{ marginBottom: 8, width: "300px" }}
+            onSearch={(value) => setSearchText(value.trim())}
+            onChange={(e) => setSearchText(e.target.value.trim())}
+          />
           <Button
             type="primary"
             size={"large"}
@@ -200,7 +265,7 @@ const Coupons = () => {
         </div>
         <TableComponent
           data={couponsData}
-          columns={CouponsTableColumns}
+          columns={CouponsTableColumns(searchText)}
           loading={isLoading}
         />
       </article>
@@ -241,7 +306,7 @@ const Coupons = () => {
               name="expiry"
               onChange={formik.handleChange("expiry")}
               value={formik.values.expiry}
-            //   onBlur={formik.handleBlur("expiry")}
+              //   onBlur={formik.handleBlur("expiry")}
             />
           </div>
 
@@ -281,7 +346,11 @@ const Coupons = () => {
         </form>
       </Modal>
 
-      <Modal open={isUpdateOpenModal} onCancel={handleCancelModal} footer={null}>
+      <Modal
+        open={isUpdateOpenModal}
+        onCancel={handleCancelModal}
+        footer={null}
+      >
         <h3 className="text-center mb-3">Update Coupon</h3>
 
         <form
@@ -317,7 +386,7 @@ const Coupons = () => {
               name="expiry"
               onChange={formik.handleChange("expiry")}
               value={formik.values.expiry}
-            //   onBlur={formik.handleBlur("expiry")}
+              //   onBlur={formik.handleBlur("expiry")}
             />
           </div>
 
