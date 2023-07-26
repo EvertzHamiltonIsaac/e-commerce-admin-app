@@ -29,8 +29,6 @@ import { BlogsTableColumns } from "../../../utils/TableColums";
 import "./BlogStyles.css";
 import { Input as AntdInput } from "antd";
 
-const { confirm } = Modal;
-
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -114,7 +112,7 @@ const Blog = () => {
   };
 
   //? Images Selector
-  const imgState = useSelector((state) => state.images.img.data);
+  // const imgState = useSelector((state) => state.images.img.data);
   const imgArray = [];
   if (fileList instanceof Array) {
     fileList?.forEach((element) => {
@@ -329,6 +327,7 @@ const Blog = () => {
             data={blogsData}
             columns={BlogsTableColumns(searchText)}
             loading={isLoading}
+            width={1100}
           />
         </div>
       </article>

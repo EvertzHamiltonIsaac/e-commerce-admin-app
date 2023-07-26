@@ -22,3 +22,21 @@
 .dropzone:hover{
     background-color: #FFFFFF;
 }
+
+.title_container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.img_title_container {
+    width: 40px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.img_title_container img {
+    width: 10%;
+    height: 100%;
+    object-fit: cover;
+}

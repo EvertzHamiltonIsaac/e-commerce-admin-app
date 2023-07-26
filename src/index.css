@@ -44,6 +44,10 @@ body{
   background-color: var(--color-blue-secundary) !important;
 }
 
+.ant-table-cell{
+  padding: 13px !important;
+}
+
 div::-webkit-scrollbar{
   width: 5px !important; 
   height: 7px !important;

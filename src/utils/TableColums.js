@@ -308,3 +308,68 @@ export const BrandTableColumns = (SearchValue) => {
     },
   ];
 };
+
+//! Product Table Columns
+export const ProductTableColumns = (SearchValue) => {
+  return [
+    {
+      title: "Title",
+      dataIndex: "title",
+      fixed: "left",
+      width: 150,
+      sorter: (a, b) => a.title.length - b.title.length,
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return (
+          String(record.title)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.category)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.brand)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.color)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        );
+      },
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      width: 500,
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      sorter: (a, b) => a.category.length - b.category.length,
+    },
+    {
+      title: "Brand",
+      dataIndex: "brand",
+      sorter: (a, b) => a.brand.length - b.brand.length,
+    },
+    {
+      title: "Color",
+      dataIndex: "color",
+      sorter: (a, b) => a.color.length - b.color.length,
+    },
+    {
+      title: "Quantity",
+      dataIndex: "quantity",
+    },
+    {
+      title: "Price",
+      dataIndex: "price",
+    },
+    {
+      title: "Actions",
+      dataIndex: "actions",
+      width: 80,
+      fixed: "right",
+    },
+  ];
+};

@@ -5,7 +5,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "antd";
+import { Button, Upload } from "antd";
 import Modal from "antd/es/modal/Modal";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -22,11 +22,15 @@ import { getColors } from "../../../features/color/colorSlice";
 import {
   getProducts,
   createProducts,
-  resetProductState
+  resetProductState,
 } from "../../../features/product/productSlice";
 import { getProductCategories } from "../../../features/productCategory/product.categorySlice";
 import { deleteImg, uploadImg } from "../../../features/upload/uploadSlice";
+import { ProductTableColumns } from "../../../utils/TableColums";
 import "./productStyles.css";
+import { Input as antdInput } from "antd";
+import DOMPurify from "dompurify";
+import Swal from "sweetalert2";
 
 const TagOptions = [
   {
@@ -43,44 +47,13 @@ const TagOptions = [
   },
 ];
 
-const columns = [
-  {
-    title: "Title",
-    dataIndex: "title",
-    sorter: (a, b) => a.title.length - b.title.length,
-  },
-  {
-    title: "Description",
-    dataIndex: "description",
-  },
-  {
-    title: "Category",
-    dataIndex: "category",
-    sorter: (a, b) => a.category.length - b.category.length,
-  },
-  {
-    title: "Brand",
-    dataIndex: "brand",
-    sorter: (a, b) => a.brand.length - b.brand.length,
-  },
-  {
-    title: "Color",
-    dataIndex: "color",
-    sorter: (a, b) => a.color.length - b.color.length,
-  },
-  {
-    title: "Quantity",
-    dataIndex: "quantity",
-  },
-  {
-    title: "Price",
-    dataIndex: "price",
-  },
-  {
-    title: "Actions",
-    dataIndex: "actions",
-  },
-];
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const schemaForValidations = Yup.object().shape({
   title: Yup.string().required("Title is required"),
@@ -98,6 +71,11 @@ const schemaForValidations = Yup.object().shape({
 const Products = () => {
   //TODO: Statement
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+  const [fileList, setFileList] = useState([]);
   const [color, setColor] = useState([]);
   const dispatch = useDispatch();
 
@@ -115,12 +93,31 @@ const Products = () => {
       images: [],
     },
     onSubmit: (values) => {
-      dispatch(createProducts(values));
-      formik.resetForm();
-      handleCancelModal();
+      if (isOpenModal) {
+        dispatch(createProducts(values));
+        formik.resetForm();
+        handleCancelModal();
+      }
     },
     // validationSchema: schemaForValidations,
   });
+
+  const showDeleteConfirm = (item) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(item._id);
+        // dispatch(deleteBlogs(item._id));
+      }
+    });
+  };
 
   //TODO: Selectors
 
@@ -129,17 +126,71 @@ const Products = () => {
     (state) => state.products
   );
 
+  const getBrightness = (color) => {
+    const r = parseInt(color.substr(1, 2), 16);
+    const g = parseInt(color.substr(3, 2), 16);
+    const b = parseInt(color.substr(5, 2), 16);
+
+    return (r * 299 + g * 587 + b * 114) / 1000;
+  };
+
+  const handleChangeTextColor = (backgroundColor) => {
+    return getBrightness(backgroundColor) > 128 ? "black" : "white";
+  };
+
   //? Product Selector
   const productState = useSelector((state) => state.products.products.data);
   const productsData = [];
   for (let i = 0; i < productState?.length; i++) {
     productsData.push({
       key: productState[i]?._id,
-      title: productState[i]?.title,
-      description: productState[i]?.description,
+      title: (
+        <div className="title_container">
+          <div className="img_title_container rounded">
+            <img
+              className=""
+              src={
+                productState[i]?.images[0]?.url
+                  ? `${productState[i]?.images[0]?.url}`
+                  : "/no-photo.jpg"
+              }
+              alt=""
+            />
+          </div>
+          {productState[i]?.title}
+        </div>),
+      description: (
+        <div
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(productState[i]?.description),
+          }}
+        ></div>
+      ),
       category: productState[i]?.category,
       brand: productState[i]?.brand,
-      color: productState[i]?.color,
+      color: (
+        <div className="d-flex gap-1 flex-column p-0">
+          {productState[i]?.color.map((item, index) => (
+            <div
+              key={index}
+              className="text-center"
+              style={{
+                color: `${handleChangeTextColor(item?.code.toUpperCase())}`,
+                border: `${
+                  item?.code.toUpperCase() === "#FFFFFF"
+                    ? "solid 1px black"
+                    : ""
+                }`,
+                borderRadius: "5px",
+                width: "90px",
+                backgroundColor: `${item?.code.toUpperCase()}`,
+              }}
+            >
+              {item?.code.toUpperCase()}
+            </div>
+          ))}
+        </div>
+      ),
       quantity: productState[i]?.quantity,
       price: productState[i]?.price,
       actions: (
@@ -152,7 +203,11 @@ const Products = () => {
               icon={faPenToSquare}
               className="icons-hover-update"
             />
-            <FontAwesomeIcon icon={faTrash} className="icons-hover-delete" />
+            <FontAwesomeIcon
+              icon={faTrash}
+              className="icons-hover-delete"
+              onClick={() => showDeleteConfirm(productState[i])}
+            />
           </div>
         </React.Fragment>
       ),
@@ -161,7 +216,7 @@ const Products = () => {
 
   //? Brand Selector
   const brandState = useSelector((state) => state.brands.brands.data);
-  
+
   const productCategoryState = useSelector(
     (state) => state.productCategories.productCategories.data
   );
@@ -178,13 +233,13 @@ const Products = () => {
   });
 
   //? Images Selector
-  const imgState = useSelector((state) => state.images.img.data);
+  // const imgState = useSelector((state) => state.images.img.data);
   const imgArray = [];
-  if (imgState instanceof Array) {
-    imgState?.forEach((element) => {
+  if (fileList instanceof Array) {
+    fileList?.forEach((element) => {
       imgArray.push({
-        public_id: element?.public_id,
-        url: element?.url,
+        public_id: element?.response?.data[0]?.public_id,
+        url: element?.response?.data[0]?.url,
       });
     });
   }
@@ -192,12 +247,50 @@ const Products = () => {
   //TODO: Functions
   const handleCancelModal = () => {
     setIsOpenModal(false);
+    // setIsUpdateOpenModal(false);
+    setFileList([]);
+    formik.values.title = "";
+    formik.values.description = "";
+    formik.values.category = "";
+    formik.values.brand = "";
+    formik.values.color = [];
+    formik.values.quantity = "";
+    formik.values.price = "";
+    formik.values.images = [];
   };
-  
+
   const handleColors = (e) => {
     setColor(e);
-    console.log(color);
   };
+
+  const handleCancel = () => setPreviewOpen(false);
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewOpen(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
+  const handleChange = ({ fileList: newFileList }) => {
+    setFileList(newFileList);
+  };
+
+  const uploadButton = (
+    <div>
+      <FontAwesomeIcon icon={faPlus} />
+      <div
+        style={{
+          marginTop: 8,
+        }}
+      >
+        Upload
+      </div>
+    </div>
+  );
 
   //TODO: UseEffects
   useEffect(() => {
@@ -209,7 +302,7 @@ const Products = () => {
   useEffect(() => {
     dispatch(resetProductState());
     dispatch(getProducts());
-  },[])
+  }, []);
 
   useEffect(() => {
     formik.values.images = imgArray;
@@ -229,9 +322,21 @@ const Products = () => {
 
   return (
     <section className="product-list">
-      <h1>Products</h1>
+      <div className="mb-4">
+        <h1>Products</h1>
+        <h6 className="text-muted">{`The following records refer to all the products of the project. In general there is a quantity of ${productState?.length} products.`}</h6>
+      </div>
       <article>
-        <div className="d-flex justify-content-end mb-2">
+        <div
+          className="d-flex mb-1"
+          style={{ justifyContent: "space-between", alignItems: "center" }}
+        >
+          <antdInput.Search
+            placeholder="Search here..."
+            style={{ marginBottom: 8, width: "300px" }}
+            onSearch={(value) => setSearchText(value.trim())}
+            onChange={(e) => setSearchText(e.target.value.trim())}
+          />
           <Button
             type="primary"
             size={"large"}
@@ -245,19 +350,19 @@ const Products = () => {
         <div className="table-container">
           <TableComponent
             data={productsData}
-            columns={columns}
+            columns={ProductTableColumns(searchText)}
             loading={isLoading}
           />
         </div>
       </article>
 
-      {/* <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
+      <Modal open={isOpenModal} onCancel={handleCancelModal} footer={null}>
         <h3 className="text-center mb-3">Add New Product</h3>
         <form
-          className="d-flex flex-column gap-3"
+          className="d-flex flex-column gap-2"
           onSubmit={formik.handleSubmit}
         >
-          <div className="d-flex gap-3">
+          <div className="d-flex gap-2">
             <div style={{ width: "70%" }}>
               <span>Title</span>
               <Input
@@ -281,9 +386,8 @@ const Products = () => {
               />
             </div>
           </div>
-
-          <div className="d-flex gap-3">
-            <div style={{ width: "50%" }}>
+          <div className="d-flex gap-2">
+            <div style={{ width: "35%" }}>
               <span>Select a Brand</span>
               <Select
                 value={formik.values.brand}
@@ -295,7 +399,7 @@ const Products = () => {
                 onChange={formik.handleChange("brand")}
               />
             </div>
-            <div style={{ width: "50%" }}>
+            <div style={{ width: "40%" }}>
               <span>Select a Category</span>
               <Select
                 value={formik.values.category}
@@ -307,19 +411,19 @@ const Products = () => {
                 onChange={formik.handleChange("category")}
               />
             </div>
+            <div style={{ width: "25%" }}>
+              <span>Select a Tag</span>
+              <Select
+                value={formik.values.tags}
+                id="tags"
+                name="tags"
+                className="form-select"
+                options={TagOptions}
+                placeholder="Choose a Tag"
+                onChange={formik.handleChange("tags")}
+              />
+            </div>
           </div>
-
-          <span>Select a Tag</span>
-          <Select
-            value={formik.values.tags}
-            id="tags"
-            name="tags"
-            className="form-select"
-            options={TagOptions}
-            placeholder="Choose a Tag"
-            onChange={formik.handleChange("tags")}
-          />
-
           <div className="d-flex gap-2 align-items-center">
             <div style={{ width: "70%" }}>
               <span>Select Colors</span>
@@ -345,7 +449,6 @@ const Products = () => {
               />
             </div>
           </div>
-
           <div>
             <span>Description</span>
             <ReactQuill
@@ -358,42 +461,25 @@ const Products = () => {
               value={formik?.values?.description}
             />
           </div>
-
           <div className="dropzone_container">
-            <Dropzone
-              onDrop={(acceptedFiles) => dispatch(uploadImg(acceptedFiles))}
+            <span className="mb-5">Upload Images</span>
+            <Upload
+              action="https://ginger-final-project.onrender.com/api/v1/image/upload"
+              headers={{
+                Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+              }}
+              onRemove={(file) =>
+                dispatch(deleteImg(file?.response?.data[0]?.public_id))
+              }
+              // onDrop={(acceptedFiles) => console.log(acceptedFiles)}
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
             >
-              {({ getRootProps, getInputProps }) => (
-                <section className="dropzone" {...getRootProps()}>
-                  <div className="">
-                    <FontAwesomeIcon
-                      icon={faFileArrowUp}
-                      style={{ height: "40px", padding: "15px" }}
-                    />
-                    <input {...getInputProps()} />
-                    <p>
-                      Drag 'n' drop some files here, or click to select files
-                    </p>
-                  </div>
-                </section>
-              )}
-            </Dropzone>
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
           </div>
-
-          <div className="showImages d-flex flex-wrap gap-3">
-            {imgArray.map((item, index) => (
-              <div className="position-relative" key={index}>
-                <button
-                  type="button"
-                  onClick={() => dispatch(deleteImg(item?.public_id))}
-                  className="btn-close position-absolute"
-                  style={{ top: "10px", right: "10px" }}
-                ></button>
-                <img src={item?.url} alt="" width={100} height={100} />
-              </div>
-            ))}
-          </div>
-
           <div
             style={{ marginTop: "3.2em" }}
             className="d-flex justify-content-end gap-2"
@@ -415,7 +501,22 @@ const Products = () => {
             </button>
           </div>
         </form>
-      </Modal> */}
+      </Modal>
+
+      <Modal
+        open={previewOpen}
+        title={previewTitle}
+        footer={null}
+        onCancel={handleCancel}
+      >
+        <img
+          alt="example"
+          style={{
+            width: "100%",
+          }}
+          src={previewImage}
+        />
+      </Modal>
     </section>
   );
 };

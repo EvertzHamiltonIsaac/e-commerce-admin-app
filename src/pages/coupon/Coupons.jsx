@@ -267,6 +267,7 @@ const Coupons = () => {
           data={couponsData}
           columns={CouponsTableColumns(searchText)}
           loading={isLoading}
+          width={1000}
         />
       </article>
 
