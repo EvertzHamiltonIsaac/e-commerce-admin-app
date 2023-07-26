@@ -16,9 +16,39 @@ const createProducts = async (data) => {
     return res.data
 };
 
+const updateProducts = async ({ data, id }) => {
+  try {
+    const res = await axios.put(`${URL}product/update/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const deleteProducts = async (id) => {
+  try {
+    const res = await axios.delete(`${URL}product/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const productService = {
     getProducts,
-    createProducts
+    createProducts,
+    updateProducts,
+    deleteProducts
 };
 
 export default productService

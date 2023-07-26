@@ -246,7 +246,7 @@ const Coupons = () => {
         ))}
       </article>
       <article>
-        <div className="d-flex mb-1" style={{justifyContent: 'space-between', alignItems: 'center'}}>
+        <div className="d-flex mb-1 flex-wrap" style={{justifyContent: 'space-between', alignItems: 'center'}}>
           <AntdInput.Search
             placeholder="Search here..."
             style={{ marginBottom: 8, width: "300px" }}

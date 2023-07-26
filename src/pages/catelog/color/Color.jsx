@@ -197,7 +197,7 @@ const Color = () => {
       </div>
       <article>
         <div
-          className="d-flex mb-1"
+          className="d-flex mb-1 flex-wrap" 
           style={{ justifyContent: "space-between", alignItems: "center" }}
         >
           <antdInput.Search

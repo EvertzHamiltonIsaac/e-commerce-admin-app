@@ -68,7 +68,7 @@ const MainLayout = () => {
   return (
     <Layout>
       <Sider
-        className={`shadow-sm ${collapsed && 'sider'}`}
+        className={`shadow-sm sider_responsive ${collapsed && 'sider'}`}
          trigger={null}
         // collapsible
         collapsed={collapsed}
@@ -80,7 +80,7 @@ const MainLayout = () => {
         onCollapse={(collapsed, type) => {
           setCollapsed(collapsed);
         }}
-        style={{ backgroundColor: "var(--color-blue-secundary)" }}
+        style={{ backgroundColor: "var(--color-blue-secundary)"}}
       >
         <div className="logo shadow-sm p-1">
           <img

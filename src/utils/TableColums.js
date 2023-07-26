@@ -6,7 +6,7 @@ export const BlogsTableColumns = (SearchValue) => {
       dataIndex: "title",
       key: "title",
       width: 190,
-      fixed: "left",
+      // fixed: "left",
       filteredValue: [SearchValue],
       onFilter: (value, record) => {
         // console.log(record.title.props.children[1]);
@@ -54,7 +54,7 @@ export const CustomersTableColumns = (SearchValue) => {
       defaultSortOrder: "descend",
       sorter: (a, b) => a.firstName.length - b.firstName.length,
       key: "firstName",
-      fixed: "left",
+      // fixed: "left",
       width: 100,
       filteredValue: [SearchValue],
       onFilter: (value, record) => {
@@ -133,7 +133,7 @@ export const ProductCategoryTableColumns = (SearchValue) => {
       dataIndex: "actions",
       key: "actions",
       fixed: "right",
-      width: 150,
+      width: 80,
     },
   ];
 };
@@ -158,7 +158,7 @@ export const BlogCategoryTableColumns = (SearchValue) => {
       dataIndex: "actions",
       key: "actions",
       fixed: "right",
-      width: 150,
+      width: 80,
     },
   ];
 };
@@ -182,6 +182,7 @@ export const ColorsTableColumns = (SearchValue) => {
         );
       },
     },
+    
     {
       title: "Code HEX",
       dataIndex: "code",
@@ -192,7 +193,7 @@ export const ColorsTableColumns = (SearchValue) => {
       dataIndex: "actions",
       key: "actions",
       fixed: "right",
-      width: 150,
+      width: 80,
     },
   ];
 };
@@ -230,7 +231,7 @@ export const CouponsTableColumns = (SearchValue) => {
     {
       title: "Actions",
       dataIndex: "actions",
-      width: 150,
+      width: 80,
       key: "actions",
       fixed: "right",
     },
@@ -244,7 +245,7 @@ export const EnquiriesTableColumns = (SearchValue) => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      fixed: "left",
+      // fixed: "left",
       width: 150,
       filteredValue: [SearchValue],
       onFilter: (value, record) => {
@@ -302,7 +303,7 @@ export const BrandTableColumns = (SearchValue) => {
     {
       title: "Actions",
       dataIndex: "actions",
-      width: 150,
+      width: 80,
       key: "actions",
       fixed: "right",
     },
@@ -315,7 +316,7 @@ export const ProductTableColumns = (SearchValue) => {
     {
       title: "Title",
       dataIndex: "title",
-      fixed: "left",
+      // fixed: "left",
       width: 150,
       sorter: (a, b) => a.title.length - b.title.length,
       filteredValue: [SearchValue],

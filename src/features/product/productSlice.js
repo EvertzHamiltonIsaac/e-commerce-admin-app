@@ -22,6 +22,28 @@ export const createProducts = createAsyncThunk(
   }
 );
 
+export const updateProducts = createAsyncThunk(
+  `product/update/:id`,
+  async ({data, id}, { rejectWithValue }) => {
+    try {
+      return await productService.updateProducts({data, id});
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const deleteProducts = createAsyncThunk(
+  `product/delete/:id`,
+  async (id, { rejectWithValue }) => {
+    try {
+      return await productService.deleteProducts(id);
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
   products: [],
   isError: false,
@@ -65,7 +87,38 @@ export const productSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
-      }).addCase(resetProductState, () => initialState)
+      })
+      .addCase(updateProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.productUpdated = action.payload;
+      })
+      .addCase(updateProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(deleteProducts.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(deleteProducts.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.productDeleted = action.payload;
+      })
+      .addCase(deleteProducts.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(resetProductState, () => initialState)
   },
 });
 
