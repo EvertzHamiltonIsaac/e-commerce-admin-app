@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Upload, Image } from "antd";
 import Modal from "antd/es/modal/Modal";
-import { useFormik } from "formik";
+import { Formik, useFormik } from "formik";
 import { toast } from "react-toastify";
 import React, { useEffect, useState } from "react";
 import ReactQuill from "react-quill";
@@ -274,6 +274,8 @@ const Products = () => {
     formik.values.quantity = "";
     formik.values.price = "";
     formik.values.images = [];
+    formik.values.tags = "";
+    setColor([]);
   };
 
   const handleDeleteImages = (imageId) => {
@@ -285,18 +287,23 @@ const Products = () => {
   const handleOnEditButtonClick = (item) => {
     setIsUpdateOpenModal(true);
     setImagesOfProduct(item?.images);
-    // console.log(item?.color);
-    setColor(item.color);
     setProductId(item._id);
+
+    // const colorsEdit = []
+    // item.color.map((color) => (colorsEdit.push(color._id)))
+    // setColor(colorsEdit);
+    
     formik.values.title = item.title;
     formik.values.description = item.description;
     formik.values.category = item.category;
     formik.values.brand = item.brand;
-    formik.values.color = item.color;
+    // formik.values.color = color;
     formik.values.quantity = item.quantity;
     formik.values.price = item.price;
+    formik.values.tags = item.tags;
     formik.values.images = item.images
   };
+
 
   const handleColors = (e) => {
     setColor(e);
@@ -333,7 +340,7 @@ const Products = () => {
     dispatch(getBrands());
     dispatch(getProductCategories());
     dispatch(getColors());
-  }, [isOpenModal]);
+  }, [isOpenModal, isUpdateOpenModal]);
 
   useEffect(() => {
     dispatch(resetProductState());
@@ -342,8 +349,8 @@ const Products = () => {
 
   useEffect(() => {
     formik.values.images = imgArray;
-    formik.values.color = color ? color : " ";
-  }, [color, imgArray]);
+    formik.values.color = color ? color : "";
+  }, [imgArray, color]);
 
   useEffect(() => {
     if (productCreated && isSuccess) {
@@ -369,6 +376,7 @@ const Products = () => {
     }
   }, [isError, productUpdated, productDeleted, productCreated]);
 
+  console.log(formik.values.color);
   return (
     <section className="product-list">
       <div className="mb-4">
@@ -647,9 +655,10 @@ const Products = () => {
               <SelectAntd
                 mode="multiple"
                 allowClear
-                className="w-100"
+                className="w-100" 
                 placeholder="Select colors"
-                defaultValue={color}
+                defaultValue={formik.values.color}
+                // value={formik.values.color}
                 onChange={(item) => handleColors(item)}
                 options={colors}
               />
