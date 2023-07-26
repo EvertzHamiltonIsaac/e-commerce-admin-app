@@ -3,9 +3,10 @@ import {
   faFileArrowUp,
   faPlus,
   faTrash,
+  faX
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Upload } from "antd";
+import { Button, Upload, Image } from "antd";
 import Modal from "antd/es/modal/Modal";
 import { useFormik } from "formik";
 import { toast } from "react-toastify";
@@ -77,7 +78,11 @@ const Products = () => {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
+  const [imagesOfProduct, setImagesOfProduct] = useState([]);
+  const [productId, setProductId] = useState("");
+
   const [fileList, setFileList] = useState([]);
+  const [isUpdateOpenModal, setIsUpdateOpenModal] = useState(false);
   const [color, setColor] = useState([]);
   const dispatch = useDispatch();
 
@@ -97,6 +102,16 @@ const Products = () => {
     onSubmit: (values) => {
       if (isOpenModal) {
         dispatch(createProducts(values));
+        formik.resetForm();
+        handleCancelModal();
+      }
+      if (isUpdateOpenModal) {
+        dispatch(
+          updateProducts({
+            data: { ...values, images: [...imagesOfProduct, ...values.images] },
+            id: productId,
+          })
+        );
         formik.resetForm();
         handleCancelModal();
       }
@@ -203,6 +218,7 @@ const Products = () => {
             <FontAwesomeIcon
               icon={faPenToSquare}
               className="icons-hover-update"
+              onClick={() => handleOnEditButtonClick(productState[i])}
             />
             <FontAwesomeIcon
               icon={faTrash}
@@ -248,7 +264,7 @@ const Products = () => {
   //TODO: Functions
   const handleCancelModal = () => {
     setIsOpenModal(false);
-    // setIsUpdateOpenModal(false);
+    setIsUpdateOpenModal(false);
     setFileList([]);
     formik.values.title = "";
     formik.values.description = "";
@@ -258,6 +274,28 @@ const Products = () => {
     formik.values.quantity = "";
     formik.values.price = "";
     formik.values.images = [];
+  };
+
+  const handleDeleteImages = (imageId) => {
+    dispatch(deleteImg(imageId));
+    const result = imagesOfProduct.filter((image) => image.public_id != imageId);
+    setImagesOfProduct(result);
+  };
+
+  const handleOnEditButtonClick = (item) => {
+    setIsUpdateOpenModal(true);
+    setImagesOfProduct(item?.images);
+    // console.log(item?.color);
+    setColor(item.color);
+    setProductId(item._id);
+    formik.values.title = item.title;
+    formik.values.description = item.description;
+    formik.values.category = item.category;
+    formik.values.brand = item.brand;
+    formik.values.color = item.color;
+    formik.values.quantity = item.quantity;
+    formik.values.price = item.price;
+    formik.values.images = item.images
   };
 
   const handleColors = (e) => {
@@ -527,6 +565,335 @@ const Products = () => {
           }}
           src={previewImage}
         />
+      </Modal>
+
+      <Modal
+        open={isUpdateOpenModal}
+        onCancel={handleCancelModal}
+        footer={null}
+      >
+        <article>
+          <h3 className="d-flex justify-content-center mb-3">Update Product</h3>
+          <div>
+          <form
+          className="d-flex flex-column gap-2"
+          onSubmit={formik.handleSubmit}
+        >
+          <div className="d-flex gap-2">
+            <div style={{ width: "70%" }}>
+              <span>Title</span>
+              <Input
+                Id="title"
+                labelValue="Enter Product Title"
+                name="title"
+                onChange={formik.handleChange("title")}
+                value={formik.values.title}
+                onBlur={formik.handleBlur("title")}
+              />
+            </div>
+            <div>
+              <span>Price</span>
+              <Input
+                Id="price"
+                labelValue="Enter Product Price"
+                name="price"
+                onChange={formik.handleChange("price")}
+                value={formik.values.price}
+                onBlur={formik.handleBlur("price")}
+              />
+            </div>
+          </div>
+          <div className="d-flex gap-2">
+            <div style={{ width: "35%" }}>
+              <span>Select a Brand</span>
+              <Select
+                value={formik.values.brand}
+                id="brand"
+                name="brand"
+                className="form-select"
+                options={brandState}
+                placeholder="Choose a Brand"
+                onChange={formik.handleChange("brand")}
+              />
+            </div>
+            <div style={{ width: "40%" }}>
+              <span>Select a Category</span>
+              <Select
+                value={formik.values.category}
+                id="category"
+                name="category"
+                className="form-select"
+                options={productCategoryState}
+                placeholder="Choose a Category"
+                onChange={formik.handleChange("category")}
+              />
+            </div>
+            <div style={{ width: "25%" }}>
+              <span>Select a Tag</span>
+              <Select
+                value={formik.values.tags}
+                id="tags"
+                name="tags"
+                className="form-select"
+                options={TagOptions}
+                placeholder="Choose a Tag"
+                onChange={formik.handleChange("tags")}
+              />
+            </div>
+          </div>
+          <div className="d-flex gap-2 align-items-center">
+            <div style={{ width: "70%" }}>
+              <span>Select Colors</span>
+              <SelectAntd
+                mode="multiple"
+                allowClear
+                className="w-100"
+                placeholder="Select colors"
+                defaultValue={color}
+                onChange={(item) => handleColors(item)}
+                options={colors}
+              />
+            </div>
+            <div style={{ width: "30%" }}>
+              <span>Quantity</span>
+              <Input
+                Id="quantity"
+                labelValue="Enter Quantity"
+                name="quantity"
+                onChange={formik.handleChange("quantity")}
+                value={formik.values.quantity}
+                onBlur={formik.handleBlur("quantity")}
+              />
+            </div>
+          </div>
+          <div>
+            <span>Description</span>
+            <ReactQuill
+              style={{ height: "100px" }}
+              theme="snow"
+              name="description"
+              id="description"
+              placeholder="Enter Product Description"
+              onChange={formik.handleChange("description")}
+              value={formik?.values?.description}
+            />
+          </div>
+          <div className="images_blog_container">
+                <span>Images of Blog</span>
+                <div className="images_blog rounded">
+                  <Image.PreviewGroup
+                    preview={{
+                      onChange: (current, prev) =>
+                        console.log(
+                          `current index: ${current}, prev index: ${prev}`
+                        ),
+                    }}
+                  >
+                    {imagesOfProduct?.map((images, index) => (
+                      <div
+                        key={index}
+                        className="rounded images_card"
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          overflow: "hidden",
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          className="button_delete_img_update rounded"
+                          onClick={() => handleDeleteImages(images.public_id)}
+                        >
+                          <FontAwesomeIcon
+                            style={{ padding: "5px 5px 1px 5px" }}
+                            icon={faX}
+                          />
+                        </div>
+                        <Image
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                          src={images?.url}
+                        />
+                      </div>
+                    ))}
+                  </Image.PreviewGroup>
+                </div>
+              </div>
+          <div className="dropzone_container">
+            <span className="mb-5">Upload Images</span>
+            <Upload
+              action="https://ginger-final-project.onrender.com/api/v1/image/upload"
+              headers={{
+                Authorization: `Bearer ${localStorage.getItem("sessionToken")}`,
+              }}
+              onRemove={(file) =>
+                dispatch(deleteImg(file?.response?.data[0]?.public_id))
+              }
+              // onDrop={(acceptedFiles) => console.log(acceptedFiles)}
+              listType="picture-card"
+              fileList={fileList}
+              onPreview={handlePreview}
+              onChange={handleChange}
+            >
+              {fileList.length >= 8 ? null : uploadButton}
+            </Upload>
+          </div>
+          <div
+            style={{ marginTop: "3.2em" }}
+            className="d-flex justify-content-end gap-2"
+          >
+            <button
+              onClick={handleCancelModal}
+              type="button"
+              className="btn btn-secondary"
+              style={{ backgroundColor: "var(--color-gray-main)" }}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ backgroundColor: "var(--color-blue-main)" }}
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+            {/* <form
+              className="d-flex flex-column gap-3"
+              onSubmit={formik.handleSubmit}
+            >
+              <div className="modal_title_category">
+                <div style={{ width: "60%" }}>
+                  <span>Title</span>
+                  <Input
+                    Id="title"
+                    labelValue="Enter the blog title"
+                    name="title"
+                    onChange={formik.handleChange("title")}
+                    value={formik.values.title}
+                    onBlur={formik.handleBlur("title")}
+                  />
+                </div>
+                <div>
+                  <span>Select a Blog Category</span>
+                  <Select
+                    value={formik.values.category}
+                    id="category"
+                    name="category"
+                    className="form-select"
+                    options={BlogCategoryState}
+                    placeholder="Choose a Category"
+                    onChange={formik.handleChange("category")}
+                  />
+                </div>
+              </div>
+              <div>
+                <span>Description</span>
+                <ReactQuill
+                  style={{ height: "100px" }}
+                  theme="snow"
+                  name="description"
+                  id="description"
+                  placeholder="Enter Product Description"
+                  onChange={formik.handleChange("description")}
+                  value={formik?.values?.description}
+                />
+              </div>
+
+              <div className="images_blog_container">
+                <span>Images of Blog</span>
+                <div className="images_blog rounded">
+                  <Image.PreviewGroup
+                    preview={{
+                      onChange: (current, prev) =>
+                        console.log(
+                          `current index: ${current}, prev index: ${prev}`
+                        ),
+                    }}
+                  >
+                    {imagesOfBlog?.map((images, index) => (
+                      <div
+                        key={index}
+                        className="rounded images_card"
+                        style={{
+                          width: "80px",
+                          height: "80px",
+                          overflow: "hidden",
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          className="button_delete_img_update rounded"
+                          onClick={() => handleDeleteImages(images.public_id)}
+                        >
+                          <FontAwesomeIcon
+                            style={{ padding: "5px 5px 1px 5px" }}
+                            icon={faX}
+                          />
+                        </div>
+                        <Image
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            objectFit: "cover",
+                          }}
+                          src={images?.url}
+                        />
+                      </div>
+                    ))}
+                  </Image.PreviewGroup>
+                </div>
+              </div>
+
+              <div className="upload_container">
+                <span className="mb-5">Upload More Images</span>
+                <Upload
+                  action="https://ginger-final-project.onrender.com/api/v1/image/upload"
+                  headers={{
+                    Authorization: `Bearer ${localStorage.getItem(
+                      "sessionToken"
+                    )}`,
+                  }}
+                  onRemove={(file) =>
+                    dispatch(deleteImg(file?.response?.data[0]?.public_id))
+                  }
+                  // onDrop={(acceptedFiles) => console.log(acceptedFiles)}
+                  listType="picture-card"
+                  fileList={fileList}
+                  onPreview={handlePreview}
+                  onChange={handleChange}
+                >
+                  {fileList.length >= 8 ? null : uploadButton}
+                </Upload>
+              </div>
+
+              <div
+                style={{ marginTop: "1.2em" }}
+                className="d-flex justify-content-end gap-2"
+              >
+                <button
+                  onClick={handleCancelModal}
+                  type="button"
+                  className="btn btn-secondary"
+                  style={{ backgroundColor: "var(--color-gray-main)" }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  style={{ backgroundColor: "var(--color-blue-main)" }}
+                >
+                  Submit
+                </button>
+              </div>
+            </form> */}
+          </div>
+        </article>
       </Modal>
     </section>
   );
