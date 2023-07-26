@@ -23,6 +23,8 @@ import {
   getProducts,
   createProducts,
   resetProductState,
+  deleteProducts,
+  updateProducts
 } from "../../../features/product/productSlice";
 import { getProductCategories } from "../../../features/productCategory/product.categorySlice";
 import { deleteImg, uploadImg } from "../../../features/upload/uploadSlice";
@@ -113,8 +115,7 @@ const Products = () => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(item._id);
-        // dispatch(deleteBlogs(item._id));
+        dispatch(deleteProducts(item._id));
       }
     });
   };
@@ -122,7 +123,7 @@ const Products = () => {
   //TODO: Selectors
 
   //? States of Create Product Selector
-  const { isSuccess, isError, isLoading, productCreated } = useSelector(
+  const { isSuccess, isError, isLoading, productCreated, productUpdated, productDeleted } = useSelector(
     (state) => state.products
   );
 
@@ -262,7 +263,6 @@ const Products = () => {
   const handleColors = (e) => {
     setColor(e);
   };
-
   const handleCancel = () => setPreviewOpen(false);
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -274,11 +274,9 @@ const Products = () => {
       file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
     );
   };
-
   const handleChange = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
-
   const uploadButton = (
     <div>
       <FontAwesomeIcon icon={faPlus} />
@@ -315,10 +313,23 @@ const Products = () => {
       dispatch(resetProductState());
       dispatch(getProducts());
     }
+
+    if (productUpdated && isSuccess) {
+      toast.success("Product Updated Succesfully!");
+      dispatch(resetProductState());
+      dispatch(getProducts());
+    }
+
+    if (productDeleted && isSuccess) {
+      toast.success("Product Deleted Succesfully!");
+      dispatch(resetProductState());
+      dispatch(getProducts());
+    }
+
     if (isError) {
       toast.error("Something Went Wrong!");
     }
-  }, [isSuccess, isError, isLoading]);
+  }, [isError, productUpdated, productDeleted, productCreated]);
 
   return (
     <section className="product-list">
@@ -328,7 +339,7 @@ const Products = () => {
       </div>
       <article>
         <div
-          className="d-flex mb-1"
+          className="d-flex mb-1 flex-wrap"
           style={{ justifyContent: "space-between", alignItems: "center" }}
         >
           <antdInput.Search
