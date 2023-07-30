@@ -5,6 +5,11 @@
   --color-gray-main: #CCCCCC;
   --color-yellow-main: #FBA20C;
   --color-red-main: #922B21;
+
+
+  /* Card Dashboard Colors */
+  --color-purple-admin: #8b5cf6;
+  --color-green-admin: #14b8a6;
 }
 *{
   margin: 0;

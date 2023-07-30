@@ -6,13 +6,14 @@ import { Column } from '@ant-design/plots';
  * 
  * @typedef {Object} IGraphicColumn
  * @property {Object} config
+ * @property {boolean} isLoading
  * 
  * @param {IGraphicColumn} props
  */
 
-const GraphicColumns = ({config}) => {
+const GraphicColumns = ({config, isLoading}) => {
  
-  return <Column {...config} />;
+  return <Column loading={isLoading} {...config} />;
 };
 
 export default GraphicColumns

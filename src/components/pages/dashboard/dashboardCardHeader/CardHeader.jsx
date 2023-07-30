@@ -19,11 +19,11 @@ const CardHeader = ({ title, subTitle, comparedText, icon, classNameColor, backg
   return (
     <article className={`cardHeader`}>
       <div>
-        <header className={`cardHeader_title ${classNameColor}`} style={{color: {backgroundColor}}}>{title}</header>
+        <header className={`cardHeader_title ${classNameColor}`} style={{color: backgroundColor}}>{title}</header>
         <div className="cardHeader_body">{subTitle}</div>
       </div>
-      <FontAwesomeIcon className={`fs-2 icon_card ${classNameColor}`} icon={icon}/>
-      <footer className={`cardHeader_footer ${classNameColor} ${classNameBackGroundColor}`} style={{backgroundColor: {backgroundColor}}}>{comparedText}</footer>
+      <FontAwesomeIcon className={`fs-2 icon_card ${classNameColor}`} icon={icon} style={{color: backgroundColor}}/>
+      <footer className={`cardHeader_footer ${classNameColor} ${classNameBackGroundColor}`} style={{backgroundColor: backgroundColor}}>{comparedText}</footer>
     </article>
   );
 };

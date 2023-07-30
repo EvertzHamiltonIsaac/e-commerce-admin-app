@@ -9,11 +9,12 @@ import { SearchOutlined } from '@ant-design/icons';
  * @property {Array} columns
  * @property {number} width
  * @property {boolean} loading
+ * @property {(record) => ()} expandedFunction
  *
  * @param {ITable} props
  */
 
-const TableComponent = ({ data = [], columns = [], loading, width = 1300}) => {
+const TableComponent = ({ data = [], columns = [], loading, width = 1300, expandedFunction}) => {
   
   return (
     <Table
@@ -21,6 +22,9 @@ const TableComponent = ({ data = [], columns = [], loading, width = 1300}) => {
       loading={loading}
       columns={columns}
       dataSource={data}
+      expandable={{
+        expandedRowRender: expandedFunction
+      }}
       scroll={{
         x: width,
       }}

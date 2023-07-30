@@ -5,38 +5,44 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders } from "../../features/orders/orderSlice";
+import { Table } from 'antd';
 
 const columns = [
+  // {
+  //   title: "No.",
+  //   dataIndex: "key",
+  // },
   {
-    title: "No.",
-    dataIndex: "key",
+    title: "Products",
+    dataIndex: "Products",
   },
   {
-    title: "Name",
-    dataIndex: "name",
+    title: "Order By",
+    dataIndex: "orderBy",
   },
-  {
-    title: "Product",
-    dataIndex: "product",
-  },
+  Table.EXPAND_COLUMN,
   {
     title: "Status",
-    dataIndex: "status",
+    dataIndex: "orderStatus",
   },
 ];
+
+
 
 const Orders = () => {
   const dispatch = useDispatch();
 
   const {isLoading, orders} = useSelector((state) => state.orders);
-  
+  console.log(orders.data);
   const OrdersData = [];
   for (let i = 0; i < orders.data?.length; i++) {
     OrdersData.push({
       key: i,
-      name: `Poner las columnas que van ${i}`,
-      product: `Cambio de Dise;o ${i}`,
-      status: `Arregla la APi ${i}`,
+      IdProducts: `${orders?.data[i]?.products[0]?._id}`,
+      count: `Poner las columnas que van ${i}`,
+      color: 'Hola',
+      orderBy: `${orders?.data[i]?.orderBy.firstName} ${orders?.data[i]?.orderBy.lastName}`,
+      orderStatus: `${orders?.data[i]?.orderStatus}`,
     });
   }
 

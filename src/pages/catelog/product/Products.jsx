@@ -287,7 +287,7 @@ const Products = () => {
   const handleOnEditButtonClick = (item) => {
     setIsUpdateOpenModal(true);
     setImagesOfProduct(item?.images);
-    setProductId(item._id);
+    setProductId(item?._id);
 
     // const colorsEdit = []
     // item.color.map((color) => (colorsEdit.push(color._id)))
@@ -376,7 +376,6 @@ const Products = () => {
     }
   }, [isError, productUpdated, productDeleted, productCreated]);
 
-  console.log(formik.values.color);
   return (
     <section className="product-list">
       <div className="mb-4">
@@ -711,7 +710,7 @@ const Products = () => {
                       >
                         <div
                           className="button_delete_img_update rounded"
-                          onClick={() => handleDeleteImages(images.public_id)}
+                          onClick={() => handleDeleteImages(images?.public_id)}
                         >
                           <FontAwesomeIcon
                             style={{ padding: "5px 5px 1px 5px" }}

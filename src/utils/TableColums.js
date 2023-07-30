@@ -374,3 +374,54 @@ export const ProductTableColumns = (SearchValue) => {
     },
   ];
 };
+
+//! Orders Table Columns
+export const OrdersTableColumns = () => {
+  return [
+    {
+      title: "Order By",
+      dataIndex: "orderBy",
+      // fixed: "left",
+      // sorter: isSearchEnabled ? (a, b) => a.title.length - b.title.length : () => {},
+      // filteredValue: isSearchEnabled && [SearchValue],
+      // onFilter: isSearchEnabled ? (value, record) => {
+      //   // console.log(record.title.props.children[1]);
+      //   return (
+      //     String(record.title)
+      //       .toLocaleLowerCase()
+      //       .includes(value.toLocaleLowerCase()) ||
+      //     String(record.category)
+      //       .toLocaleLowerCase()
+      //       .includes(value.toLocaleLowerCase()) ||
+      //     String(record.brand)
+      //       .toLocaleLowerCase()
+      //       .includes(value.toLocaleLowerCase()) || 
+      //     String(record.color)
+      //       .toLocaleLowerCase()
+      //       .includes(value.toLocaleLowerCase())
+      //   );
+      // } : () => {} 
+    },
+    {
+      title: "Product Count",
+      dataIndex: "productCount",
+    },
+    {
+      title: "Total Price",
+      dataIndex: "totalPrice",
+      sorter: (a, b) => a.category.length - b.category.length,
+    },
+    {
+      title: "Total Price After Discount",
+      dataIndex: "totalPriceAfterDiscount",
+      sorter: (a, b) => a.brand.length - b.brand.length,
+      width: 200
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      sorter: (a, b) => a.color.length - b.color.length,
+    },
+  ];
+};
+

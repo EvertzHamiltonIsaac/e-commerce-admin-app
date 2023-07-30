@@ -1,23 +1,21 @@
-.dashboard{
+.dashboard {
   width: 1440px;
   max-width: 100%;
   margin: auto;
 }
 
-.dashboardHeader{
+.dashboardHeader {
   width: 100%;
   height: auto;
   margin: auto;
   /* background-color: aqua; */
 }
 
-.dashboardHeader__card-container{
-  width: 100%;
-  height: auto;
+.dashboardHeader__card-container {
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 2em;
-  /*! Reparar esto flex-wrap: wrap; */
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 
