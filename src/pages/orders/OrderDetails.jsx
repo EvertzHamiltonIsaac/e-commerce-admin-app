@@ -79,7 +79,10 @@ const OrderDetails = () => {
     <React.Fragment>
       {isLoading ? (
         <div className="d-flex justify-content-center align-items-center h-100 gap-3">
-          <div style={{width: '3rem', height: '3rem'}} className="spinner-grow text-primary fs-2"></div>
+          <div
+            style={{ width: "3rem", height: "3rem" }}
+            className="spinner-grow text-primary fs-2"
+          ></div>
           <span className="fw-bold fs-4">Loading...</span>
         </div>
       ) : (
@@ -324,7 +327,15 @@ const OrderDetails = () => {
                       </div>
                       <div className="total_price_container fs-6">
                         <div className="text-muted">Total Price In Order</div>
-                        <div className="fs-6">{item.price}</div>
+                        <div className="fs-6">
+                          {(item.price * item.quantity).toLocaleString(
+                            undefined,
+                            {
+                              style: "decimal",
+                              minimumFractionDigits: 2,
+                            }
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
