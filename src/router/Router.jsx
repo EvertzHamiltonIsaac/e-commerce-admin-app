@@ -16,6 +16,7 @@ import Blog from "../pages/blog/blog/Blog";
 import BlogCategory from "../pages/blog/blog-category/BlogCategory";
 import ProtecterRoutes from "../components/protectedRoutes/ProtecterRoutes";
 import Coupons from "../pages/coupon/Coupons";
+import OrderDetails from "../pages/orders/OrderDetails"
 
 const Router = () => {
   return (
@@ -52,6 +53,7 @@ const Router = () => {
 
             {/* Orders */}
             <Route path="orders" element={<Orders />} />
+            <Route path="orders/:id" element={<OrderDetails />} />
 
             {/* Blog pages */}
             <Route path="blogs" element={<Blog />} />

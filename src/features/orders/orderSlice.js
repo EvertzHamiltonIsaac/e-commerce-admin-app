@@ -4,16 +4,16 @@ import orderService from "./orderService";
 export const resetOrdersState = createAction('resetOrdersState');
 
 
-export const getOrders = createAsyncThunk(
-  "user/cart/get-all-orders",
-  async (thunkAPI) => {
-    try {
-      return await orderService.getOrders();
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error);
-    }
-  }
-);
+// export const getOrders = createAsyncThunk(
+//   "user/cart/get-all-orders",
+//   async (thunkAPI) => {
+//     try {
+//       return await orderService.getOrders();
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error);
+//     }
+//   }
+// );
 
 export const getMonthlyOrdersIncome = createAsyncThunk(
   "order/get-month-wise-order-income",
@@ -48,8 +48,30 @@ export const getAllOrders = createAsyncThunk(
   }
 );
 
+export const getOrderById = createAsyncThunk(
+  "order/:id",
+  async (id , { rejectWithValue }) => {
+    try {
+      return await orderService.getOrderById(id);
+    } catch (error) {
+      throw rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const updateOrder = createAsyncThunk(
+  "order/updateOrder/:id",
+  async ({id, data}, { rejectWithValue }) => {
+    try {
+      return await orderService.updateOrder(id, data);
+    } catch (error) {
+      throw rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 const initialState = {
-  orders: [],
+  AllOrders: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
@@ -62,16 +84,31 @@ export const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getOrders.pending, (state) => {
+      .addCase(getOrderById.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getOrders.fulfilled, (state, action) => {
+      .addCase(getOrderById.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.orders = action.payload;
+        state.order = action.payload;
       })
-      .addCase(getOrders.rejected, (state, action) => {
+      .addCase(getOrderById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
+      .addCase(updateOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.orderUpdated = action.payload;
+      })
+      .addCase(updateOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;

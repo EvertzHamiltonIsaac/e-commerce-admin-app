@@ -1,63 +1,131 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import TableComponent from "../../components/app/table/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare } from "@fortawesome/free-regular-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrders } from "../../features/orders/orderSlice";
-import { Table } from 'antd';
-
-const columns = [
-  // {
-  //   title: "No.",
-  //   dataIndex: "key",
-  // },
-  {
-    title: "Products",
-    dataIndex: "Products",
-  },
-  {
-    title: "Order By",
-    dataIndex: "orderBy",
-  },
-  Table.EXPAND_COLUMN,
-  {
-    title: "Status",
-    dataIndex: "orderStatus",
-  },
-];
-
-
+import { getAllOrders } from "../../features/orders/orderSlice";
+import { OrdersTableColumns } from "../../utils/TableColums";
+import { Input } from "antd";
+import {
+  faSackDollar,
+  faCartShopping,
+  faTruckFast,
+  faHouseCircleCheck,
+  faCartFlatbed,
+  faEye,
+  faClipboardCheck
+} from "@fortawesome/free-solid-svg-icons";
+import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/CardHeader";
+import { Link } from "react-router-dom";
+import './orderStyles.css'
 
 const Orders = () => {
   const dispatch = useDispatch();
 
-  const {isLoading, orders} = useSelector((state) => state.orders);
-  console.log(orders.data);
+  const [searchText, setSearchText] = useState("");
+  const { isLoading, AllOrders } = useSelector((state) => state.orders);
   const OrdersData = [];
-  for (let i = 0; i < orders.data?.length; i++) {
+  for (let index = 0; index < AllOrders?.data?.length; index++) {
     OrdersData.push({
-      key: i,
-      IdProducts: `${orders?.data[i]?.products[0]?._id}`,
-      count: `Poner las columnas que van ${i}`,
-      color: 'Hola',
-      orderBy: `${orders?.data[i]?.orderBy.firstName} ${orders?.data[i]?.orderBy.lastName}`,
-      orderStatus: `${orders?.data[i]?.orderStatus}`,
+      key: index + 1,
+      id: `${AllOrders?.data[index]?._id}`,
+      orderBy: `${AllOrders?.data[index]?.user.firstName} ${AllOrders?.data[index]?.user.lastName}`,
+      productCount: AllOrders?.data[index]?.orderItems?.length,
+      totalPrice: AllOrders?.data[index]?.totalPrice.toLocaleString(undefined, {
+        style: "decimal",
+        minimumFractionDigits: 0,
+      }),
+      totalPriceAfterDiscount: AllOrders?.data[
+        index
+      ]?.totalPriceAfterDiscount.toLocaleString(undefined, {
+        style: "decimal",
+        minimumFractionDigits: 0,
+      }),
+      status: <div style={{color: 'white'}} className="rounded d-flex justify-content-center p-1 gap-1 align-items-center bg-dark">{AllOrders?.data[index]?.orderStatus}</div>,
+      viewOrderDetails: (
+        <Link
+        to={`./${AllOrders?.data[index]?._id}`}
+          className="orderView_btn rounded d-flex justify-content-center p-1 gap-1 align-items-center"
+        >
+          <FontAwesomeIcon icon={faEye} />
+          <span>View Order Details</span>
+        </Link>
+      ),
     });
   }
 
+  const CardHeaderInformation = [
+    {
+      title: "Ordered",
+      subTitle: `Total Orders Ordered: `,
+      icon: faCartShopping,
+      classNameBackGroundColor: "bg-dark",
+      classNameColor: 'text-black'
+    },
+    {
+      title: "Processed",
+      subTitle: `Total Orders Processed:  `,
+      icon: faClipboardCheck,
+      classNameBackGroundColor: "bg-secondary",
+      classNameColor: 'text-secondary'
+    },
+    {
+      title: "Shipped",
+      subTitle: `Total Orders Shipped: `,
+      icon: faCartFlatbed,
+      classNameBackGroundColor: "bg-primary",
+      classNameColor: 'text-primary'
+    },
+    {
+      title: "Out for Delivery",
+      subTitle: `Orders Out for Delivery: `,
+      icon: faTruckFast,
+      classNameBackGroundColor: "bg-warning",
+      classNameColor: 'text-warning'
+    },
+    {
+      title: "Delivered",
+      subTitle: `Total Orders Delivered: `,
+      icon: faHouseCircleCheck,
+      classNameBackGroundColor: "bg-success",
+      classNameColor: 'text-success'
+    },
+  ];
+
   useEffect(() => {
-    dispatch(getOrders());
-  },[])
+    dispatch(getAllOrders());
+  }, []);
 
   return (
     <section className="orders">
-      <div className="mb-4">
-          <h1>Orders</h1>
-          <h6 className="text-muted">{`On this page are all the orders made in the project. In General there are ${orders.data?.length} amount of orders.`}</h6>
-        </div>
+      <article className="mb-4">
+        <h1>Orders</h1>
+        <h6 className="text-muted">{`On this page are all the orders made in the project. In General there are ${AllOrders?.data?.length} amount of orders.`}</h6>
+      </article>
+      <article className="dashboardHeader__card-container mt-3">
+        {CardHeaderInformation.map((item, index) => (
+          <CardHeader
+            key={index}
+            title={item.title}
+            subTitle={item.subTitle}
+            classNameColor={item.classNameColor}
+            icon={item.icon}
+            classNameBackGroundColor={item?.classNameBackGroundColor}
+            backgroundColor={item.backgroundColor}
+          />
+        ))}
+      </article>
       <article>
-        <TableComponent data={OrdersData} columns={columns} loading={isLoading}/>
+        <Input.Search
+          placeholder="Search here..."
+          style={{ marginBottom: 8, width: "300px" }}
+          onSearch={(value) => setSearchText(value.trim())}
+          onChange={(e) => setSearchText(e.target.value.trim())}
+        />
+        <TableComponent
+          data={OrdersData}
+          columns={OrdersTableColumns(searchText)}
+          loading={isLoading}
+        />
       </article>
     </section>
   );

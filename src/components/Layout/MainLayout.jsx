@@ -62,7 +62,6 @@ const MainLayout = () => {
     }
   };
 
-
   //! En la linea 33 debes hacer una logica para que coja la inicial del primer nombre y el primer apellido.
   //! Centrarlo un poco mas tambien.
   return (
@@ -132,8 +131,8 @@ const MainLayout = () => {
               onClick={() => setshowDropDown(!showDropDown)}
               // role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
             >
-              <h6>Evertz Hamilton</h6>
-              <p>EvertzHamilton@gmail.com</p>
+              <h6>Igor Omar Molina</h6>
+              <p>igormolina06@gmail.com</p>
             </div>
             {showDropDown && <DropDown items={DropDownItems} />}
           </div>

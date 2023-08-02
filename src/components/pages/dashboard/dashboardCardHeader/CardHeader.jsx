@@ -15,7 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
  * @param {ICardHeader} props
  */
 
-const CardHeader = ({ title, subTitle, comparedText, icon, classNameColor, backgroundColor, color, classNameBackGroundColor }) => {
+const CardHeader = ({ title, subTitle, comparedText, icon, classNameColor, backgroundColor = '', color, classNameBackGroundColor }) => {
   return (
     <article className={`cardHeader`}>
       <div>

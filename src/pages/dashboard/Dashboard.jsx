@@ -27,48 +27,6 @@ import { OrdersTableColumns } from "../../utils/TableColums";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-//! Card of Header
-const CardHeaderInfo = [
-  {
-    title: "Total",
-    amount: 1000,
-    comparedText: "compared to Abril 2021",
-    porcent: 47.7,
-  },
-  {
-    title: "Total",
-    amount: 2000,
-    comparedText: "compared to Abril 2021",
-    porcent: 47.7,
-  },
-  {
-    title: "Total",
-    amount: 3000,
-    comparedText: "compared to Abril 2021",
-    porcent: 47.7,
-  },
-];
-
-//! Data for Table
-const columns = [
-  {
-    title: "No.",
-    dataIndex: "key",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-  },
-  {
-    title: "Product",
-    dataIndex: "product",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-  },
-];
-
 const Dashboard = () => {
   const [monthlyData, setMonthlyData] = useState([]);
   const [monthlyDataIncome, setMonthlyDataIncome] = useState([]);
@@ -78,7 +36,6 @@ const Dashboard = () => {
 
   const { customers } = useSelector((state) => state.customers);
   const {
-    orders,
     isError,
     isSuccess,
     isLoading,
@@ -121,12 +78,14 @@ const Dashboard = () => {
   const AllOrdersArray = [];
   for (let index = 0; index < AllOrders?.data?.length; index++) {
     AllOrdersArray.push({
-      key: index++,
+      key: index + 1,
+      id: `${AllOrders?.data[index]?._id}`,
       orderBy: `${AllOrders?.data[index]?.user.firstName} ${AllOrders?.data[index]?.user.lastName}`,
       productCount: AllOrders?.data[index]?.orderItems?.length,
-      totalPrice: AllOrders?.data[index]?.totalPrice,
-      totalPriceAfterDiscount: AllOrders?.data[index]?.totalPriceAfterDiscount,
+      totalPrice: AllOrders?.data[index]?.totalPrice.toLocaleString(undefined,{ style: "decimal", minimumFractionDigits: 0 }),
+      totalPriceAfterDiscount: AllOrders?.data[index]?.totalPriceAfterDiscount.toLocaleString(undefined,{ style: "decimal", minimumFractionDigits: 0 }),
       status: AllOrders?.data[index]?.orderStatus,
+      viewOrderDetails: 'Hola',
     });
   }
 

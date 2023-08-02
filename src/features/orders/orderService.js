@@ -1,14 +1,14 @@
 import axios from "axios";
 import {URL} from "../../utils/BaseURL"
 
-const getOrders = async () => {
-    const res = await axios.get(`${URL}user/cart/get-all-orders`,{
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("sessionToken")}`
-        }
-    });
-    return res.data
-};
+// const getOrders = async () => {
+//     const res = await axios.get(`${URL}user/cart/get-all-orders`,{
+//         headers: {
+//             Authorization: `Bearer ${localStorage.getItem("sessionToken")}`
+//         }
+//     });
+//     return res.data
+// };
 
 const getMonthlyOrders = async () => {
     const res = await axios.get(`${URL}order/get-month-wise-order-income`,{
@@ -37,12 +37,31 @@ const getAllOrders = async () => {
     return res.data
 };
 
+const getOrderById = async (id) => {
+    const res = await axios.get(`${URL}order/${id}`,{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("sessionToken")}`
+        }
+    });
+    return res.data
+};
+
+const updateOrder = async (id, data) => {
+    const res = await axios.put(`${URL}order/updateOrder/${id}`, data ,{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("sessionToken")}`
+        }
+    });
+    return res.data
+};
 
 const orderService = {
-    getOrders,
+    // getOrders,
     getMonthlyOrders,
     getYearlyOrdersStats,
-    getAllOrders
+    getAllOrders,
+    getOrderById,
+    updateOrder
 };
 
 export default orderService

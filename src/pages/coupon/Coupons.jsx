@@ -25,7 +25,6 @@ import { CouponsTableColumns } from "../../utils/TableColums";
 import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/CardHeader";
 import './couponsStyle.css'
 
-const { confirm } = Modal;
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),

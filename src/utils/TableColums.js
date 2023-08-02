@@ -376,31 +376,33 @@ export const ProductTableColumns = (SearchValue) => {
 };
 
 //! Orders Table Columns
-export const OrdersTableColumns = () => {
+export const OrdersTableColumns = (SearchValue = "") => {
   return [
+    {
+      title: "Id",
+      dataIndex: "id",
+      filteredValue: [SearchValue],
+      onFilter: (value, record) => {
+        // console.log(record.title.props.children[1]);
+        return (
+          String(record.orderBy)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.totalPrice)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.status)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase()) ||
+          String(record.id)
+            .toLocaleLowerCase()
+            .includes(value.toLocaleLowerCase())
+        );
+      }  
+    },
     {
       title: "Order By",
       dataIndex: "orderBy",
-      // fixed: "left",
-      // sorter: isSearchEnabled ? (a, b) => a.title.length - b.title.length : () => {},
-      // filteredValue: isSearchEnabled && [SearchValue],
-      // onFilter: isSearchEnabled ? (value, record) => {
-      //   // console.log(record.title.props.children[1]);
-      //   return (
-      //     String(record.title)
-      //       .toLocaleLowerCase()
-      //       .includes(value.toLocaleLowerCase()) ||
-      //     String(record.category)
-      //       .toLocaleLowerCase()
-      //       .includes(value.toLocaleLowerCase()) ||
-      //     String(record.brand)
-      //       .toLocaleLowerCase()
-      //       .includes(value.toLocaleLowerCase()) || 
-      //     String(record.color)
-      //       .toLocaleLowerCase()
-      //       .includes(value.toLocaleLowerCase())
-      //   );
-      // } : () => {} 
     },
     {
       title: "Product Count",
@@ -409,18 +411,21 @@ export const OrdersTableColumns = () => {
     {
       title: "Total Price",
       dataIndex: "totalPrice",
-      sorter: (a, b) => a.category.length - b.category.length,
     },
     {
       title: "Total Price After Discount",
       dataIndex: "totalPriceAfterDiscount",
-      sorter: (a, b) => a.brand.length - b.brand.length,
       width: 200
     },
     {
       title: "Status",
       dataIndex: "status",
-      sorter: (a, b) => a.color.length - b.color.length,
+      
+    },
+    {
+      title: "",
+      dataIndex: "viewOrderDetails",
+      width: 180
     },
   ];
 };
