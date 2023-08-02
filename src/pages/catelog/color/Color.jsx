@@ -20,6 +20,7 @@ import { Button } from "antd";
 import { ColorsTableColumns } from "../../../utils/TableColums";
 import Swal from "sweetalert2";
 import { Input as antdInput } from "antd";
+import { useTokenExpired } from "../../../hooks/useTokenExpired";
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -189,6 +190,8 @@ const Color = () => {
     }
   }, [isSuccess, isError, isLoading]);
 
+  const isTokenExpired = useTokenExpired(message, isError);
+  
   return (
     <section className="color-list">
       <div className="mb-4">

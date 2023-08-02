@@ -8,7 +8,7 @@ import {
   getMonthlyOrdersIncome,
   getYearlyOrdersStats,
   getAllOrders,
-  resetOrdersState
+  resetOrdersState,
 } from "../../features/orders/orderSlice";
 import { useState } from "react";
 import {
@@ -26,13 +26,13 @@ import { getCustomers } from "../../features/customers/customersSlice";
 import { OrdersTableColumns } from "../../utils/TableColums";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useTokenExpired } from "../../hooks/useTokenExpired";
 
 const Dashboard = () => {
   const [monthlyData, setMonthlyData] = useState([]);
   const [monthlyDataIncome, setMonthlyDataIncome] = useState([]);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { customers } = useSelector((state) => state.customers);
   const {
@@ -44,6 +44,8 @@ const Dashboard = () => {
     YearlyOrdersStats,
     AllOrders,
   } = useSelector((state) => state.orders);
+
+  const isTokenExpired = useTokenExpired(message, isError);
 
   const CardHeaderInformation = [
     {
@@ -82,13 +84,20 @@ const Dashboard = () => {
       id: `${AllOrders?.data[index]?._id}`,
       orderBy: `${AllOrders?.data[index]?.user.firstName} ${AllOrders?.data[index]?.user.lastName}`,
       productCount: AllOrders?.data[index]?.orderItems?.length,
-      totalPrice: AllOrders?.data[index]?.totalPrice.toLocaleString(undefined,{ style: "decimal", minimumFractionDigits: 0 }),
-      totalPriceAfterDiscount: AllOrders?.data[index]?.totalPriceAfterDiscount.toLocaleString(undefined,{ style: "decimal", minimumFractionDigits: 0 }),
+      totalPrice: AllOrders?.data[index]?.totalPrice.toLocaleString(undefined, {
+        style: "decimal",
+        minimumFractionDigits: 0,
+      }),
+      totalPriceAfterDiscount: AllOrders?.data[
+        index
+      ]?.totalPriceAfterDiscount.toLocaleString(undefined, {
+        style: "decimal",
+        minimumFractionDigits: 0,
+      }),
       status: AllOrders?.data[index]?.orderStatus,
-      viewOrderDetails: 'Hola',
+      viewOrderDetails: "Hola",
     });
   }
-
 
   useEffect(() => {
     const monthsName = [
@@ -124,29 +133,6 @@ const Dashboard = () => {
     setMonthlyData(MonthlyOrderCount);
     setMonthlyDataIncome(MonthlyOrderIncome);
   }, [MonthlyOrders]);
-
-
-  useEffect(() => {
-    if (typeof message === "string" && isError) {
-      if (
-        message.includes("token") ||
-        message.includes("expired") ||
-        message.includes("log again")
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: `${message}`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(resetOrdersState());
-            localStorage.clear();
-            navigate("/auth/sign-in");
-          }
-        });
-      }
-    }
-  }, [message, isError]);
 
   useEffect(() => {
     dispatch(getMonthlyOrdersIncome());
@@ -191,7 +177,10 @@ const Dashboard = () => {
         <section className="mt-3 p-4 bg-white rounded">
           <h3 className="mb-4">Recent Orders</h3>
           <article>
-            <TableComponent data={AllOrdersArray} columns={OrdersTableColumns()} />
+            <TableComponent
+              data={AllOrdersArray}
+              columns={OrdersTableColumns()}
+            />
           </article>
         </section>
       </div>

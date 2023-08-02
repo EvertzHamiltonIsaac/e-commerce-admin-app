@@ -17,12 +17,13 @@ import {
 import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/CardHeader";
 import { Link } from "react-router-dom";
 import './orderStyles.css'
+import { useTokenExpired } from "../../hooks/useTokenExpired";
 
 const Orders = () => {
   const dispatch = useDispatch();
 
   const [searchText, setSearchText] = useState("");
-  const { isLoading, AllOrders } = useSelector((state) => state.orders);
+  const { isLoading, AllOrders, isError, message } = useSelector((state) => state.orders);
   const OrdersData = [];
   for (let index = 0; index < AllOrders?.data?.length; index++) {
     OrdersData.push({
@@ -90,7 +91,7 @@ const Orders = () => {
       classNameColor: 'text-success'
     },
   ];
-
+  const isTokenExpired = useTokenExpired(message, isError);
   useEffect(() => {
     dispatch(getAllOrders());
   }, []);

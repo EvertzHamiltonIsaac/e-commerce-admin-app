@@ -28,6 +28,7 @@ import { deleteImg } from "../../../features/upload/uploadSlice";
 import { BlogsTableColumns } from "../../../utils/TableColums";
 import "./BlogStyles.css";
 import { Input as AntdInput } from "antd";
+import { useTokenExpired } from "../../../hooks/useTokenExpired";
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -257,30 +258,32 @@ const Blog = () => {
     }
   }, [isSuccess, isError, isLoading]);
 
-  useEffect(() => {
-    if (
-      (typeof message === "string" && isError) ||
-      (typeof message === "string" && isError)
-    ) {
-      if (
-        message.includes("token") ||
-        message.includes("expired") ||
-        message.includes("log again")
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: `${message}`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(resetBlogState());
-            localStorage.clear();
-            navigate("/auth/sign-in");
-          }
-        });
-      }
-    }
-  }, [isError, message]);
+  // useEffect(() => {
+  //   if (
+  //     (typeof message === "string" && isError) ||
+  //     (typeof message === "string" && isError)
+  //   ) {
+  //     if (
+  //       message.includes("token") ||
+  //       message.includes("expired") ||
+  //       message.includes("log again")
+  //     ) {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: `${message}`,
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           dispatch(resetBlogState());
+  //           localStorage.clear();
+  //           navigate("/auth/sign-in");
+  //         }
+  //       });
+  //     }
+  //   }
+  // }, [isError, message]);
+
+  const isTokenExpired = useTokenExpired(message, isError);
 
   useEffect(() => {
     formik.values.images = imgArray;

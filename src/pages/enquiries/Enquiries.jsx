@@ -25,6 +25,7 @@ import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/Car
 import Swal from "sweetalert2";
 import "./enquiriesStyles.css";
 import { useNavigate } from "react-router-dom";
+import { useTokenExpired } from "../../hooks/useTokenExpired";
 
 const OptionSelectStatus = [
   {
@@ -233,32 +234,34 @@ const Enquiries = () => {
     }
   }, [isSuccess, isError, isLoading]);
 
+  const isTokenExpired = useTokenExpired(message, isError);
+
   useEffect(() => {
     dispatch(getEnquiries());
   }, []);
 
-  useEffect(() => {
-    if (typeof message === "string" && isError) {
-      if (
-        message.includes("token") ||
-        message.includes("expired") ||
-        message.includes("log again")
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: `${message}`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(resetEnquiryState());
-            localStorage.clear();
-            navigate("/auth/sign-in");
-          }
-        });
-      }
-    }
-  }, [isError, message]);
-
+  // useEffect(() => {
+  //   if (typeof message === "string" && isError) {
+  //     if (
+  //       message.includes("token") ||
+  //       message.includes("expired") ||
+  //       message.includes("log again")
+  //     ) {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: `${message}`,
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           dispatch(resetEnquiryState());
+  //           localStorage.clear();
+  //           navigate("/auth/sign-in");
+  //         }
+  //       });
+  //     }
+  //   }
+  // }, [isError, message]);
+  
   return (
     <section className="enquiries">
       <div className="mb-4">

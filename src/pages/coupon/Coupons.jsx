@@ -24,6 +24,7 @@ import moment from "moment/moment";
 import { CouponsTableColumns } from "../../utils/TableColums";
 import CardHeader from "../../components/pages/dashboard/dashboardCardHeader/CardHeader";
 import './couponsStyle.css'
+import { useTokenExpired } from "../../hooks/useTokenExpired";
 
 
 const schemaForValidations = Yup.object().shape({
@@ -116,6 +117,7 @@ const Coupons = () => {
     isLoading,
     coupons,
   } = useSelector((state) => state.coupons);
+  const isTokenExpired = useTokenExpired(message, isError);
 
   //? Get All Brands Selector
   const couponsData = [];
@@ -204,27 +206,27 @@ const Coupons = () => {
     }
   }, [isSuccess, isError, isLoading]);
 
-  useEffect(() => {
-    if (typeof message === "string" && isError) {
-      if (
-        message.includes("token") ||
-        message.includes("expired") ||
-        message.includes("log again")
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: `${message}`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(resetCouponState());
-            localStorage.clear();
-            navigate("/auth/sign-in");
-          }
-        });
-      }
-    }
-  }, [message, isError]);
+  // useEffect(() => {
+  //   if (typeof message === "string" && isError) {
+  //     if (
+  //       message.includes("token") ||
+  //       message.includes("expired") ||
+  //       message.includes("log again")
+  //     ) {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: `${message}`,
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           dispatch(resetCouponState());
+  //           localStorage.clear();
+  //           navigate("/auth/sign-in");
+  //         }
+  //       });
+  //     }
+  //   }
+  // }, [message, isError]);
 
   return (
     <section className="brand-list">

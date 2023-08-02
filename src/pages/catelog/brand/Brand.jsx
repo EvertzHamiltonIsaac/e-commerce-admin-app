@@ -22,6 +22,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { Input as antdInput } from "antd";
 import { BrandTableColumns } from "../../../utils/TableColums";
+import { useTokenExpired } from "../../../hooks/useTokenExpired";
 
 const schemaForValidations = Yup.object().shape({
   name: Yup.string().required("Title is required"),
@@ -159,27 +160,29 @@ const Brand = () => {
     }
   }, [isSuccess, isError, isLoading]);
 
-  useEffect(() => {
-    if (typeof message === "string" && isError) {
-      if (
-        message.includes("token") ||
-        message.includes("expired") ||
-        message.includes("log again")
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: `${message}`,
-        }).then((result) => {
-          if (result.isConfirmed) {
-            dispatch(resetBrandState());
-            localStorage.clear();
-            navigate("/auth/sign-in");
-          }
-        });
-      }
-    }
-  });
+  // useEffect(() => {
+  //   if (typeof message === "string" && isError) {
+  //     if (
+  //       message.includes("token") ||
+  //       message.includes("expired") ||
+  //       message.includes("log again")
+  //     ) {
+  //       Swal.fire({
+  //         icon: "error",
+  //         title: "Oops...",
+  //         text: `${message}`,
+  //       }).then((result) => {
+  //         if (result.isConfirmed) {
+  //           dispatch(resetBrandState());
+  //           localStorage.clear();
+  //           navigate("/auth/sign-in");
+  //         }
+  //       });
+  //     }
+  //   }
+  // });
+
+  const isTokenExpired = useTokenExpired(message, isError);
 
   return (
     <section className="brand-list">

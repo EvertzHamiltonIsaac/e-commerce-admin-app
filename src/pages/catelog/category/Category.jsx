@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import TableComponent from "../../../components/app/table/Table";
 import {
   getProductCategories,
-  resetProductState,
+  resetProductCategoryState,
   createProductCategories,
   updateProductCategory,
   deleteProductCategory,
@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getBlogCategories,
   createBlogCategories,
-  resetBlogState,
+  resetBlogCategoryState,
   updateBlogCategory,
   deleteBlogCategory,
 } from "../../../features/blogCategory/blog.categorySlice";
@@ -31,6 +31,7 @@ import {
   BlogCategoryTableColumns,
 } from "../../../utils/TableColums";
 import { Input as antdInput } from "antd";
+import { useTokenExpired } from "../../../hooks/useTokenExpired";
 
 const schemaForProductValidations = Yup.object().shape({
   name: Yup.string().required("name is required"),
@@ -230,7 +231,11 @@ const Category = () => {
   };
 
   //! UseEffect Needing Refactoring.
-  useEffect(() => {
+  const isTokenPExpired = useTokenExpired(PCategory.message, PCategory.isError);
+  const isTokenBExpired = useTokenExpired(BCategory.message, BCategory.isError);
+
+
+  // useEffect(() => {
     if (
       (typeof PCategory.message === "string" && PCategory.isError) ||
       (typeof BCategory.message === "string" && BCategory.isError)
@@ -246,63 +251,63 @@ const Category = () => {
           text: `${PCategory.message}`,
         }).then((result) => {
           if (result.isConfirmed) {
-            dispatch(resetBlogState());
-            dispatch(resetProductState());
+            dispatch(resetBlogCategoryState());
+            dispatch(resetProductCategoryState());
             localStorage.clear();
             navigate("/auth/sign-in");
           }
         });
       }
     }
-  }, [PCategory.isError, BCategory.isError, PCategory.message, BCategory.message]);
+  // }, [PCategory.isError, BCategory.isError, PCategory.message, BCategory.message]);
 
   useEffect(() => {
     if (BCategory.BlogCategoryCreated && BCategory.isSuccess) {
       toast.success("Blog Category Succesfully!");
-      dispatch(resetBlogState());
+      dispatch(resetBlogCategoryState());
       dispatch(getBlogCategories());
     }
 
     if (BCategory.BlogCategoryUpdated && BCategory.isSuccess) {
       toast.success("Blog Category Updated Succesfully!");
-      dispatch(resetBlogState());
+      dispatch(resetBlogCategoryState());
       dispatch(getBlogCategories());
     }
 
     if (BCategory.BlogCategoryDeleted && BCategory.isSuccess) {
       toast.success("Blog Category Deleted Succesfully!");
-      dispatch(resetBlogState());
+      dispatch(resetBlogCategoryState());
       dispatch(getBlogCategories());
     }
 
     if (BCategory.isError) {
       toast.error("Something Went Wrong!");
-      dispatch(resetBlogState());
+      dispatch(resetBlogCategoryState());
     }
   }, [BCategory.isSuccess, BCategory.isError, BCategory.isLoading]);
 
   useEffect(() => {
     if (PCategory.ProductCategoryCreated && PCategory.isSuccess) {
       toast.success("Product Category Succesfully!");
-      dispatch(resetProductState());
+      dispatch(resetProductCategoryState());
       dispatch(getProductCategories());
     }
 
     if (PCategory.ProductCategoryUpdated && PCategory.isSuccess) {
       toast.success("Product Category Updated Succesfully!");
-      dispatch(resetProductState());
+      dispatch(resetProductCategoryState());
       dispatch(getProductCategories());
     }
 
     if (PCategory.ProductCategoryDeleted && PCategory.isSuccess) {
       toast.success("Product Category Deleted Succesfully!");
-      dispatch(resetProductState());
+      dispatch(resetProductCategoryState());
       dispatch(getProductCategories());
     }
 
     if (PCategory.isError) {
       toast.error("Something Went Wrong!");
-      dispatch(resetProductState());
+      dispatch(resetProductCategoryState());
     }
   }, [PCategory.isSuccess, PCategory.isError, PCategory.isLoading]);
 

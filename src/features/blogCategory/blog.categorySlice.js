@@ -9,7 +9,7 @@ const initialState = {
   message: "",
 };
 
-export const resetBlogState = createAction('resetBlogState');
+export const resetBlogCategoryState = createAction('resetBlogCategoryState');
 
 export const getBlogCategories = createAsyncThunk(
   "blogCategory/getAllCategories/",
@@ -121,7 +121,7 @@ export const blogCategorySlice = createSlice({
         state.isSuccess = false;
         state.message = action.payload;
       })
-      .addCase(resetBlogState, () => initialState);
+      .addCase(resetBlogCategoryState, () => initialState);
   },
 });
 
