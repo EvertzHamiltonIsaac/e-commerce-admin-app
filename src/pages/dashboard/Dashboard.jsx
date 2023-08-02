@@ -15,7 +15,7 @@ import {
   getConfigOfGraphic,
   getConfigOfGraphicPie,
 } from "../../utils/configGraphic";
-import GraphicPie from "../../components/pages/dashboard/dashboardGraphic/GraphicPie.JSX";
+import GraphicPie from "../../components/pages/dashboard/dashboardGraphic/GraphicPie";
 import {
   faSackDollar,
   faAddressBook,
