@@ -40,10 +40,9 @@
     transition: background-color ease 500ms;
 }
 
-
 .user_info{
     width: 100%;
-    height: 600px;
+    height: 100%;
     background-color: white;
     border-radius: 2px;
     display: flex;
@@ -52,7 +51,7 @@
     align-items: center;
     justify-items: start;
     gap: 1em;
-    grid-row: 1/4;
+    grid-row: 1/2;
 
 }
 
@@ -83,6 +82,7 @@
     grid-template-columns: 35% 60%;
     /* grid-template-columns: repeat(auto-fill, minmax(min(100%, 35%), 1fr)); */
     gap: 2em;
+    
 }
 
 .short_details_container{
@@ -92,6 +92,7 @@
 
 .short_details{
     display: grid;
+    gap: .4em;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
@@ -105,12 +106,13 @@
 
 .shipping_info{
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 1em;
     background-color: white;
     border-radius: 2px;
+    grid-column: 1/2;
+    grid-row: 2/3;
 }
 
 .shipping_info_items{
@@ -122,13 +124,14 @@
 
 .order_container{
     overflow: hidden;
+    
 }
 
 .order_items_container{
+    width: 100%;
     height: 400px;
     background-color: white;
     overflow-y: scroll;
-    width: 100%;
     position: relative !important;
 }
 
@@ -194,6 +197,28 @@
     justify-content: center;
     align-items: center;
 }
+
+.payment_info_container{
+    background-color: white;
+    
+}
+
+.payment_info{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Tamaño mínimo de 150px, y máximo de 1fr en dispositivos móviles */
+    height: 84%;
+    width: 100%;
+    gap: 1em;
+    padding: 10px;
+}
+
+.payment_general_info{
+}
+
+.card_detail{
+}
+
+
 @media (max-width: 768px) {
     .order_details_panels_container {
       grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); /* Tamaño mínimo de 150px, y máximo de 1fr en dispositivos móviles */
