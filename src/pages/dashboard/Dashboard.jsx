@@ -51,19 +51,19 @@ const Dashboard = () => {
   const CardHeaderInformation = [
     {
       title: "Total Sales",
-      subTitle: `Total Sales Yearly: ${YearlyOrdersStats?.data[0].count.toLocaleString(
+      subTitle: `Total Sales Yearly: ${YearlyOrdersStats?.data[0]?.count ? YearlyOrdersStats?.data[0]?.count.toLocaleString(
         undefined,
         { style: "decimal", minimumFractionDigits: 0 }
-      )}`,
+      ) : 0 }`,
       icon: faTags,
       backgroundColor: "var(--color-blue-secundary)",
     },
     {
       title: "Total Income",
-      subTitle: `Total Incomes Yearly: ${YearlyOrdersStats?.data[0].amount.toLocaleString(
+      subTitle: `Total Incomes Yearly: ${YearlyOrdersStats?.data[0]?.amount ? YearlyOrdersStats?.data[0]?.amount.toLocaleString(
         undefined,
         { style: "decimal", minimumFractionDigits: 2 }
-      )}`,
+      ) : 0}`,
       icon: faSackDollar,
       backgroundColor: "var(--color-yellow-main)",
     },
