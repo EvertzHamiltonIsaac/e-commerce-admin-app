@@ -125,8 +125,8 @@ const MainLayout = () => {
               <FontAwesomeIcon icon={faBars} className="fs-1" />
             </div>
           )}
-          <div className="layout-header-user-info-container dropdown user-select-none" ref={ref} onClick={() => setVisible(!isVisible)}>
-            <div className="image_profile" style={{ cursor: "pointer" }}>
+          <div className="layout-header-user-info-container dropdown user-select-none" ref={ref} >
+            <div className="image_profile" style={{ cursor: "pointer" }} onClick={() => setVisible(!isVisible)}>
               {user?.images ? (
                 <img
                   src={user?.images[0].url ? user?.images[0].url : "/persona-e1533759204552.jpg"}
@@ -153,6 +153,7 @@ const MainLayout = () => {
             <div
               className="header-user-info-container"
               style={{ cursor: "pointer" }}
+              onClick={() => setVisible(!isVisible)}
             >
               <span className="fw-bold text-light">{`${user?.firstName} ${user?.lastName}`}</span>
               <span className="text-light">{user?.email}</span>
