@@ -48,7 +48,7 @@ const OrderDetails = () => {
     useSelector((state) => state.orders);
 
   const handleChangeStatus = (e) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     setInitials(e.target.value);
 
     dispatch(

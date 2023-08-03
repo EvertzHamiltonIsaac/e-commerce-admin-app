@@ -12,6 +12,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getInitials } from "../../utils/GetInitials";
+import useHideContainer from "../../hooks/useHideContainer";
 const { Header, Sider, Content } = Layout;
 
 /**
@@ -22,13 +24,13 @@ const { Header, Sider, Content } = Layout;
  */
 
 const DropDownItems = [
-  {
-    className: "dropdown_item_link",
-    title: "View Profile",
-    href: "",
-    isSeparator: false,
-    icon: <FontAwesomeIcon icon={faUser} />,
-  },
+  // {
+  //   className: "dropdown_item_link",
+  //   title: "View Profile",
+  //   href: "",
+  //   isSeparator: false,
+  //   icon: <FontAwesomeIcon icon={faUser} />,
+  // },
   {
     className: "",
     title: "",
@@ -39,7 +41,10 @@ const DropDownItems = [
   {
     className: "dropdown_item_link",
     title: "Sign Out",
-    href: "",
+    href: "/auth/sign-in",
+    onClick: () => {
+      localStorage.clear();
+    },
     isSeparator: false,
     icon: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
   },
@@ -47,8 +52,12 @@ const DropDownItems = [
 
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [isBroken, setIsBroken] = useState(false)
+  const [isBroken, setIsBroken] = useState(false);
   const [showDropDown, setshowDropDown] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+
+  const {ref, isVisible, setVisible} = useHideContainer();
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -56,19 +65,18 @@ const MainLayout = () => {
 
   const handleOnClick = ({ key }) => {
     if (key === "signout") {
+      console.log(key);
       //! Nada Todavia
     } else {
       navigate(key);
     }
   };
 
-  //! En la linea 33 debes hacer una logica para que coja la inicial del primer nombre y el primer apellido.
-  //! Centrarlo un poco mas tambien.
   return (
     <Layout>
       <Sider
-        className={`shadow-sm sider_responsive ${collapsed && 'sider'}`}
-         trigger={null}
+        className={`shadow-sm sider_responsive ${collapsed && "sider"}`}
+        trigger={null}
         // collapsible
         collapsed={collapsed}
         breakpoint="lg"
@@ -79,7 +87,7 @@ const MainLayout = () => {
         onCollapse={(collapsed, type) => {
           setCollapsed(collapsed);
         }}
-        style={{ backgroundColor: "var(--color-blue-secundary)"}}
+        style={{ backgroundColor: "var(--color-blue-secundary)" }}
       >
         <div className="logo shadow-sm p-1">
           <img
@@ -102,39 +110,111 @@ const MainLayout = () => {
       </Sider>
       <Layout>
         <Header className="layout-header shadow-sm">
-          {
-            isBroken &&
-            <div onClick={() => setCollapsed(!collapsed)}
-            style={{width: '30px', margin:'10px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-              <FontAwesomeIcon icon={faBars} className="fs-1"/>
-            </div>
-          }
-          <div className="layout-header-user-info-container dropdown user-select-none">
-            {/* <div className="header-notification-icon-container position-relative">
-              <IoIosNotifications className="fs-4" />
-              <span className="badge rounded-circle p-1 position-absolute">
-                3
-              </span>
-            </div> */}
-
+          {isBroken && (
             <div
-              className="header-user-info-img-container"
-              style={{ cursor: "pointer" }}
-              onClick={() => setshowDropDown(!showDropDown)}
+              onClick={() => setCollapsed(!collapsed)}
+              style={{
+                width: "30px",
+                margin: "10px",
+                color: "white",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <img src="/persona-e1533759204552.jpg" alt="" />
+              <FontAwesomeIcon icon={faBars} className="fs-1" />
+            </div>
+          )}
+          <div className="layout-header-user-info-container dropdown user-select-none" ref={ref} onClick={() => setVisible(!isVisible)}>
+            <div className="image_profile" style={{ cursor: "pointer" }}>
+              {user?.images ? (
+                <img
+                  src={user?.images[0].url ? user?.images[0].url : "/persona-e1533759204552.jpg"}
+                  alt=""
+                />
+              ) : (
+                <div className="circle">
+                  <span
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                    className="fs-6 fw-bold"
+                  >
+                    {getInitials(`${user?.firstName} ${user?.lastName}`)}
+                  </span>
+                </div>
+              )}
             </div>
 
             <div
               className="header-user-info-container"
               style={{ cursor: "pointer" }}
-              onClick={() => setshowDropDown(!showDropDown)}
-              // role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false"
             >
-              <h6>Igor Omar Molina</h6>
-              <p>igormolina06@gmail.com</p>
+              <span className="fw-bold text-light">{`${user?.firstName} ${user?.lastName}`}</span>
+              <span className="text-light">{user?.email}</span>
             </div>
-            {showDropDown && <DropDown items={DropDownItems} />}
+            {isVisible && (
+              <DropDown
+                items={DropDownItems}
+                render={
+                  <div
+                    style={{
+                      display: "flex",
+                      backgroundColor: '#EEEEEE',
+                      alignItems: "center",
+                      gap: ".5em",
+                      height: "70px",
+                      padding: '10px'
+                    }}
+                  >
+                    <div className="image_profile">
+                      {user?.images ? (
+                        <img
+                          src={
+                            user?.images ? "" : "/persona-e1533759204552.jpg"
+                          }
+                          alt=""
+                        />
+                      ) : (
+                        <div
+                          className="circle"
+                          style={{
+                            backgroundColor: "var(--color-blue-secundary)",
+                          }}
+                        >
+                          <span
+                            style={{
+                              width: "100%",
+                              height: "100%",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                            className="fs-6 fw-bold text-light"
+                          >
+                            {getInitials(
+                              `${user?.firstName} ${user?.lastName}`
+                            )}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div
+                      className="dropdown-user-info-container"
+                      style={{ cursor: "pointer" }}
+                    >
+                      <span className="fw-bold ">{`${user?.firstName} ${user?.lastName}`}</span>
+                      <span className="">{user?.email}</span>
+                    </div>
+                  </div>
+                }
+              />
+            )}
           </div>
         </Header>
 

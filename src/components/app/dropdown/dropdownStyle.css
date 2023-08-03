@@ -11,7 +11,7 @@ a{
 }
 
 .dropdown_container{
-    width: 235px;
+    width: 300px;
     display: flex;
     height: auto;
     z-index: 1;
@@ -19,6 +19,7 @@ a{
     position: absolute;
     /* padding: 10px; */
     top: 100%;
+    right: -8%;
     border-radius: 2px;
     background-color: white;
 }

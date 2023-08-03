@@ -13,13 +13,16 @@ import "./dropdownStyle.css";
  *
  * @typedef {Object} IDropdown
  * @property {Iitems[]} items
+ * @property {ReactNode} render
+ * @property {React.MutableRefObject<null>} ref
  *
  * @param {IDropdown} props
  */
 
-const DropDown = ({ items }) => {
+const DropDown = ({ items, render, ref }) => {
   return (
-    <div className="dropdown_container shadow-sm">
+    <div className="dropdown_container shadow-sm" ref={ref}>
+      <div style={{}}>{render}</div>
       {items.map((item, index) => (
         <div
           key={index}
@@ -33,8 +36,27 @@ const DropDown = ({ items }) => {
               }}
             ></div>
           ) : (
-            <Link className={`${item?.className}`} to={`${item?.href}`} style={{gap: `${typeof(item?.icon) === "string" ? '' : '.8em'}`}}>
-              <div style={{width: `${typeof(item?.icon) === "string" ? '50px' : 'auto'}`}}>{typeof(item?.icon) === "string" ? <img  style={{width: '100%', objectFit:'cover'}} src="/logo_g.png" alt="logo" /> : <div>{item?.icon}</div> }</div>
+            <Link
+              className={`${item?.className}`}
+              to={`${item?.href}`}
+              style={{ gap: `${typeof item?.icon === "string" ? "" : ".8em"}` }}
+              onClick={item.onClick}
+            >
+              <div
+                style={{
+                  width: `${typeof item?.icon === "string" ? "50px" : "auto"}`,
+                }}
+              >
+                {typeof item?.icon === "string" ? (
+                  <img
+                    style={{ width: "100%", objectFit: "cover" }}
+                    src="/logo_g.png"
+                    alt="logo"
+                  />
+                ) : (
+                  <div>{item?.icon}</div>
+                )}
+              </div>
               <div>{item?.title}</div>
             </Link>
           )}
