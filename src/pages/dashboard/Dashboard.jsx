@@ -7,8 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getMonthlyOrdersIncome,
   getYearlyOrdersStats,
+  getRecentOrders,
   getAllOrders,
-  resetOrdersState,
 } from "../../features/orders/orderSlice";
 import { useState } from "react";
 import {
@@ -23,9 +23,9 @@ import {
   faTags,
 } from "@fortawesome/free-solid-svg-icons";
 import { getCustomers } from "../../features/customers/customersSlice";
-import { OrdersTableColumns } from "../../utils/TableColums";
+import { OrdersTableColumns, RecentOrdersColumns } from "../../utils/TableColums";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useTokenExpired } from "../../hooks/useTokenExpired";
 
 const Dashboard = () => {
@@ -43,8 +43,9 @@ const Dashboard = () => {
     MonthlyOrders,
     YearlyOrdersStats,
     AllOrders,
+    recentOrders
   } = useSelector((state) => state.orders);
-
+  console.log(recentOrders);
   const isTokenExpired = useTokenExpired(message, isError);
 
   const CardHeaderInformation = [
@@ -78,24 +79,70 @@ const Dashboard = () => {
   ];
 
   const AllOrdersArray = [];
-  for (let index = 0; index < AllOrders?.data?.length; index++) {
+  for (let index = 0; index < recentOrders?.data?.length; index++) {
     AllOrdersArray.push({
       key: index + 1,
-      id: `${AllOrders?.data[index]?._id}`,
-      orderBy: `${AllOrders?.data[index]?.user.firstName} ${AllOrders?.data[index]?.user.lastName}`,
-      productCount: AllOrders?.data[index]?.orderItems?.length,
-      totalPrice: AllOrders?.data[index]?.totalPrice.toLocaleString(undefined, {
+      id: `${recentOrders?.data[index]?._id}`,
+      orderBy: `${recentOrders?.data[index]?.user.firstName} ${recentOrders?.data[index]?.user.lastName}`,
+      productCount: recentOrders?.data[index]?.orderItems?.length,
+      totalPrice: recentOrders?.data[index]?.totalPrice.toLocaleString(undefined, {
         style: "decimal",
         minimumFractionDigits: 0,
       }),
-      totalPriceAfterDiscount: AllOrders?.data[
+      totalPriceAfterDiscount: recentOrders?.data[
         index
       ]?.totalPriceAfterDiscount.toLocaleString(undefined, {
         style: "decimal",
         minimumFractionDigits: 0,
       }),
-      status: AllOrders?.data[index]?.orderStatus,
-      viewOrderDetails: "Hola",
+      status: (
+        <div
+          className={`
+          rounded 
+          d-flex 
+          justify-content-center 
+          p-1 
+          gap-1 
+          align-items-center 
+          ${
+            recentOrders?.data[index]?.orderStatus === 'Ordered'
+            ? 'bg-dark text-light'
+            : ''
+          }
+          ${
+            recentOrders?.data[index]?.orderStatus === 'Processed'
+            ? 'bg-secondary text-light'
+            : ''
+          }
+          ${
+            recentOrders?.data[index]?.orderStatus === 'Shipped'
+            ? 'bg-primary text-light'
+            : ''
+          }
+          ${
+            recentOrders?.data[index]?.orderStatus === 'Out for Delivery'
+            ? 'bg-warning text-dark'
+            : ''
+          }
+          ${
+            recentOrders?.data[index]?.orderStatus === 'Delivered'
+            ? 'bg-success text-light'
+            : ''
+          }
+          `}
+        >
+          {recentOrders?.data[index]?.orderStatus}
+        </div>
+      ),
+      viewOrderDetails: ('hola'
+        // <Link
+        //   to={`./${recentOrders?.data[index]?._id}`}
+        //   className="orderView_btn rounded d-flex justify-content-center p-1 gap-1 align-items-center"
+        // >
+        //   <FontAwesomeIcon icon={faEye} />
+        //   <span>View Order Details</span>
+        // </Link>
+      ),
     });
   }
 
@@ -139,6 +186,7 @@ const Dashboard = () => {
     dispatch(getYearlyOrdersStats());
     dispatch(getAllOrders());
     dispatch(getCustomers());
+    dispatch(getRecentOrders({limit: 10}));
   }, []);
 
   return (
@@ -179,7 +227,7 @@ const Dashboard = () => {
           <article>
             <TableComponent
               data={AllOrdersArray}
-              columns={OrdersTableColumns()}
+              columns={RecentOrdersColumns()}
             />
           </article>
         </section>

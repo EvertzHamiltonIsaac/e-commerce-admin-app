@@ -430,3 +430,34 @@ export const OrdersTableColumns = (SearchValue = "") => {
   ];
 };
 
+export const RecentOrdersColumns = () => {
+  return [
+    {
+      title: "Id",
+      dataIndex: "id",  
+    },
+    {
+      title: "Order By",
+      dataIndex: "orderBy",
+    },
+    {
+      title: "Product Count",
+      dataIndex: "productCount",
+    },
+    {
+      title: "Total Price",
+      dataIndex: "totalPrice",
+    },
+    {
+      title: "Total Price After Discount",
+      dataIndex: "totalPriceAfterDiscount",
+      width: 200
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      
+    },
+  ];
+}
+

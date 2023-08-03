@@ -37,6 +37,15 @@ const getAllOrders = async () => {
     return res.data
 };
 
+const getRecentOrders = async (limit) => {
+    const res = await axios.get(`${URL}order/get-recent/${limit}`,{
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("sessionToken")}`
+        }
+    });
+    return res.data
+};
+
 const getOrderById = async (id) => {
     const res = await axios.get(`${URL}order/${id}`,{
         headers: {
@@ -56,7 +65,7 @@ const updateOrder = async (id, data) => {
 };
 
 const orderService = {
-    // getOrders,
+    getRecentOrders,
     getMonthlyOrders,
     getYearlyOrdersStats,
     getAllOrders,
