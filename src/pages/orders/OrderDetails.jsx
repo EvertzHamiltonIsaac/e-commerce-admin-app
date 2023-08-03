@@ -422,13 +422,13 @@ const OrderDetails = () => {
                         <div className="product_img_container">
                           <img
                             style={{ width: "100%", height: "100%" }}
-                            src={item.product.images[0].url}
+                            src={item?.product?.images[0]?.url}
                             alt=""
                           />
                         </div>
                         <div className="product_text_info">
                           <span className="fs-6 fw-bold">
-                            {item.product.title}
+                            {item?.product?.title}
                           </span>
                           <div className="d-flex gap-2">
                             <span className="d-flex align-items-center gap-2">
@@ -446,7 +446,7 @@ const OrderDetails = () => {
                               <span className="text-muted">
                                 Price of Unit:{" "}
                               </span>
-                              {item.product.price}
+                              {item?.product?.price}
                             </span>
                           </div>
                           <span>
