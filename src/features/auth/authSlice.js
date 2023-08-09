@@ -28,6 +28,28 @@ export const signIn = createAsyncThunk(
   }
 );
 
+export const forgotPassword = createAsyncThunk(
+  `user/forgotPassword`,
+  async (email, { rejectWithValue }) => {
+    try {
+      return await authService.forgotPassword(email);
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  `user/resetPassword/:token`,
+  async ({token, password}, { rejectWithValue }) => {
+    try {
+      return await authService.resetPassword({token, password});
+    } catch (error) {
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -43,6 +65,36 @@ export const authSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(signIn.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.message = action.payload;
+    });
+    builder.addCase(forgotPassword.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(forgotPassword.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = true;
+      state.ForgotPasswordPayload = action.payload;
+    });
+    builder.addCase(forgotPassword.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.message = action.payload;
+    });
+    builder.addCase(resetPassword.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(resetPassword.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+      state.isSuccess = true;
+      state.ResetPasswordPayload = action.payload;
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.isSuccess = false;

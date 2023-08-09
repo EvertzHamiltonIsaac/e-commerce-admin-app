@@ -11,12 +11,34 @@ const signIn = async (userData) => {
     }
     return res.data;
   } catch (error) {
-    throw error.response.data.fields.message
+    throw error.response.data.fields.message;
   }
 };
 
+const forgotPassword = async (email) => {
+  try {
+    const res = await axios.post(`${URL}user/forgotPassword`, email);
+    return res.data;
+  } catch (error) {
+    throw error.response.data.fields.message;
+  }
+};
+
+const resetPassword = async ({ token, password }) => {
+  try {
+    const res = await axios.put(`${URL}user/resetPassword/${token}`, password);
+    return res.data;
+  } catch (error) {
+    throw error.response.data.fields.message;
+  }
+};
+
+
+
 const authService = {
   signIn,
+  resetPassword,
+  forgotPassword
 };
 
 export default authService;

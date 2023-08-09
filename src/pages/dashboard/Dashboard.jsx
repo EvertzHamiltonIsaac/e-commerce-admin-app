@@ -45,7 +45,7 @@ const Dashboard = () => {
     AllOrders,
     recentOrders
   } = useSelector((state) => state.orders);
-  // console.log(recentOrders);
+  
   const isTokenExpired = useTokenExpired(message, isError);
 
   const CardHeaderInformation = [
