@@ -1,70 +1,113 @@
 import React, { useCallback, useState } from "react";
 import Input from "../../components/app/input/Input";
-import './login/login-styles.css'
+import "./login/login-styles.css";
 import LoginContainer from "../../components/pages/login/loginContainer/LoginContainer";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useFormik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import * as Yup from "yup";
+import { resetPassword } from "../../features/auth/authSlice";
+import { useEffect } from "react";
+
+const schemaForValidations = Yup.object().shape({
+  password: Yup.string().required("Password is required"),
+  confirmPassword: Yup.string().required("Confirm password is required"),
+});
 
 const ResetPassword = () => {
-  const [formData, setFormData] = useState({ password1: '', password2: '' });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { token } = useParams();
+
+  
+
+  const {isLoading, isSuccess, ResetPasswordPayload} = useSelector(state => state.auth);
+  
+  const formik = useFormik({
+    initialValues: {
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema: schemaForValidations,
+    onSubmit: (values) => {
+      if (values.password === values.confirmPassword) {
+        dispatch(resetPassword({token, password: values.password})).then(() => navigate('/auth/sign-in'))
+      }
+    },
+  });
 
   const InputsArray = [
     {
-      Id: "password1",
+      Id: "password",
       type: "password",
       classNameInput: "form-control",
-      labelValue: "Enter your old password",
-      name: "password1",
+      labelValue: "Enter new password",
+      name: "password",
     },
     {
-      Id: "password2",
+      Id: "confirmPassword",
       type: "password",
       classNameInput: "form-control",
-      labelValue: "Enter your new password",
-      name: "password2",
+      labelValue: "Confirm password",
+      name: "confirmPassword",
     },
-  ];
-
-  const handleFormData = (option, data) => {
-    const writeInFormData = {
-      password1: () => setFormData({...formData, password1: data}),
-      password2: () => setFormData({...formData, password2: data}),
-    };
-    writeInFormData[`${option}`]();
-  };
-
-  const handleOnSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
-
-  const handleOnChange = (target) => {
-    handleFormData(target.name, target.value);
-  };
-
+  ];  
   return (
-    <LoginContainer 
-    title="Reset Password" 
-    backgroundColor="#EEEEEE"
-    rightMessageTitle="Reset your password"
-    rightMessage="To reset your password, please enter your new password below. Make sure to choose a strong password that is at least 8 characters long and includes a combination of letters, numbers, and special characters."
-    image="/Logo_CL.png" 
-    rightImage="/Logo_CL.png"
+    <LoginContainer
+      title="Reset Password"
+      backgroundColor="#EEEEEE"
+      rightMessageTitle="Reset your password"
+      rightMessage="To reset your password, please enter your new password below. Make sure to choose a strong password that is at least 8 characters long and includes a combination of letters, numbers, and special characters."
+      image="/Logo_CL.png"
+      rightImage="/Logo_CL.png"
     >
-      <form onSubmit={handleOnSubmit}>
+      <form onSubmit={formik.handleSubmit}>
+        <div
+          className={`${
+            isSuccess
+              ? "alert alert-success error_invalid"
+              : "none_error_invalid"
+          }`}
+          role="alert"
+        >
+          <h6>{ResetPasswordPayload?.message}</h6>
+          <p>
+            {typeof ResetPasswordPayload?.message === "string"
+              ? "Password Updated"
+              : ""}
+          </p>
+        </div>
         <p>Fill in both fields</p>
-        {
-          InputsArray.map((item, index) => (
+        {InputsArray.map((item, index) => (
+          <div key={index}>
             <Input
               key={index}
               Id={item.Id}
               type={item.type}
               name={item.name}
               classNameInput={item.classNameInput}
+              value={formik.values[`${item?.name}`]}
               labelValue={item.labelValue}
-              onChange={(target) => handleOnChange(target)}
+              onChange={formik.handleChange(`${item?.name}`)}
             />
-          ))
-        }
+            <div
+              className="erros_validations mb-1"
+              style={{
+                height: `${
+                  formik.touched[`${item?.name}`] &&
+                  formik.errors[`${item?.name}`]
+                    ? "20px"
+                    : "0px"
+                }`,
+              }}
+            >
+              {formik.touched[`${item?.name}`] &&
+              formik.errors[`${item?.name}`] ? (
+                <div>{formik.errors[`${item?.name}`]}*</div>
+              ) : null}
+            </div>
+          </div>
+        ))}
 
         <div className="login-forgot__container">
           <input
@@ -73,7 +116,6 @@ const ResetPassword = () => {
             className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"
           />
         </div>
-
       </form>
     </LoginContainer>
   );

@@ -5,7 +5,7 @@ import LoginContainer from "../../components/pages/login/loginContainer/LoginCon
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { forgotPassword } from "../../features/auth/authSlice";
 
 const schemaForValidations = Yup.object().shape({
@@ -16,13 +16,16 @@ const ForgotPassword = () => {
   // const [formData, setFormData] = useState({ email: "" });
   const dispatch = useDispatch();
 
+  const { isSuccess, ForgotPasswordPayload } = useSelector(
+    (state) => state.auth
+  );
   const formik = useFormik({
     initialValues: {
       email: "",
     },
     validationSchema: schemaForValidations,
     onSubmit: (values) => {
-      dispatch(forgotPassword({email: values.email.toLowerCase()}));
+      dispatch(forgotPassword({ email: values.email.toLowerCase() }));
     },
   });
   const InputsArray = [
@@ -61,6 +64,22 @@ const ForgotPassword = () => {
       rightImage="/Logo_CL.png"
     >
       <form onSubmit={formik.handleSubmit}>
+        <div
+          className={`${
+            isSuccess
+              ? "alert alert-success error_invalid"
+              : "none_error_invalid"
+          }`}
+          role="alert"
+        >
+          <h6>{ForgotPasswordPayload?.message}</h6>
+          <p>
+            {typeof ForgotPasswordPayload?.message === "string"
+              ? "Go to Gmail and follow the steps"
+              : ""}
+          </p>
+        </div>
+
         <p>Please enter you e-mail to send reset password mail</p>
         {InputsArray.map((item, index) => (
           <div key={index}>
@@ -95,6 +114,7 @@ const ForgotPassword = () => {
 
         <div className="login-forgot__container">
           <input
+            disabled={isSuccess}
             type="submit"
             value="Send Email"
             className="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3"

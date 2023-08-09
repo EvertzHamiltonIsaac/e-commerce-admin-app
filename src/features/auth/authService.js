@@ -24,9 +24,10 @@ const forgotPassword = async (email) => {
   }
 };
 
-const resetPassword = async ({ token, password }) => {
+const resetPassword = async (obj) => {
+  console.log(obj);
   try {
-    const res = await axios.put(`${URL}user/resetPassword/${token}`, password);
+    const res = await axios.put(`${URL}user/resetPassword/${obj.token}`, {password: obj.password});
     return res.data;
   } catch (error) {
     throw error.response.data.fields.message;
